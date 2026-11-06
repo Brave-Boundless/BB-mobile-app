@@ -6,7 +6,9 @@ import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
+import { View } from 'react-native';
 
+import { Grain } from '@/components/grain';
 import { useBackgroundSync } from '@/features/drill/use-sync';
 import { queryClient } from '@/lib/query-client';
 import { appFonts, palette } from '@/theme';
@@ -27,6 +29,7 @@ export default function RootLayout() {
   return (
     <QueryClientProvider client={queryClient}>
       <StatusBar style="light" />
+      <View style={{ flex: 1, backgroundColor: palette.charcoal[950] }}>
       <Stack
         screenOptions={{
           headerShown: false,
@@ -47,6 +50,9 @@ export default function RootLayout() {
         />
         <Stack.Screen name="milestone/[part]" options={{ presentation: 'fullScreenModal', gestureEnabled: false, animation: 'fade' }} />
       </Stack>
+      {/* Film grain over the whole app, above content, never catching touches. */}
+      <Grain />
+      </View>
     </QueryClientProvider>
   );
 }

@@ -51,7 +51,7 @@ export function RuleDetailScreen() {
 
         <Section title={copy.detail.drills} index={1}>
           {DRILL_TIERS.map((tier) => (
-            <View key={tier} className="mb-3 rounded-xl bg-charcoal-900 p-4">
+            <View key={tier} className="mb-3 bg-charcoal-900 p-4">
               <Text className="font-medium text-sm text-ember-soft">{todayCopy.drill.tier[tier]}</Text>
               <Text className="mt-1 font-sans text-lg text-bone">{rule.drills[tier]}</Text>
             </View>

@@ -100,7 +100,7 @@ function PushSection() {
 
   return (
     <Section title={copy.push.title}>
-      <View className="rounded-xl bg-charcoal-900 p-5">
+      <View className=" bg-charcoal-900 p-5">
         <Text className="font-medium text-base text-bone">{copy.push.timeLabel}</Text>
         <TimeField value={notifyAt} onChange={onChange} />
         {asked && allowed === false ? (
@@ -199,7 +199,7 @@ function SignIn() {
 
       {step.kind === 'email' ? (
         <Rise>
-        <View className="mt-5 rounded-xl bg-charcoal-900 p-5">
+        <View className="mt-5 bg-charcoal-900 p-5">
           <Text nativeID="email-label" className="font-medium text-base text-bone">
             {copy.account.emailLabel}
           </Text>
@@ -216,7 +216,7 @@ function SignIn() {
             keyboardType="email-address"
             textContentType="emailAddress"
             placeholderTextColor={palette.ash}
-            className="mt-2 min-h-12 rounded-lg border border-charcoal-700 bg-charcoal-950 px-3 font-sans text-lg text-bone"
+            className="mt-2 min-h-12 border border-charcoal-700 bg-charcoal-950 px-3 font-sans text-lg text-bone"
             testID="email-input"
           />
           <Message text={error} tone="error" />
@@ -238,7 +238,7 @@ function SignIn() {
 
       {step.kind === 'code' ? (
         <Rise>
-        <View className="mt-5 rounded-xl bg-charcoal-900 p-5">
+        <View className="mt-5 bg-charcoal-900 p-5">
           <Text className="font-sans text-base text-bone">{copy.account.codeSent(step.email)}</Text>
           <Text nativeID="code-label" className="mt-4 font-medium text-base text-bone">
             {copy.account.codeLabel}
@@ -254,7 +254,7 @@ function SignIn() {
             keyboardType="number-pad"
             autoComplete="one-time-code"
             textContentType="oneTimeCode"
-            className="mt-2 min-h-12 rounded-lg border border-charcoal-700 bg-charcoal-950 px-3 font-bold text-2xl tracking-widest text-bone"
+            className="mt-2 min-h-12 border border-charcoal-700 bg-charcoal-950 px-3 font-bold text-2xl tracking-widest text-bone"
             testID="code-input"
           />
           <Message text={error} tone="error" />

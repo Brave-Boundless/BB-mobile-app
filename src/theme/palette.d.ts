@@ -3,5 +3,7 @@ export declare const palette: {
   readonly bone: string;
   readonly ash: string;
   readonly ember: { readonly DEFAULT: string; readonly soft: string; readonly mid: string; readonly dim: string };
+  readonly crimson: string;
+  readonly gold: string;
 };
 export declare const TEXT_PAIRS: readonly (readonly [string, string])[];

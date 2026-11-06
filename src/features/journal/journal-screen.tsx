@@ -69,7 +69,7 @@ function Chip({ label, selected, onPress }: { label: string; selected: boolean; 
       accessibilityState={{ selected }}
       accessibilityLabel={copy.filter.a11y(label, selected)}
       onPress={onPress}
-      className={`min-h-11 justify-center rounded-full border px-4 ${
+      className={`min-h-11 justify-center border px-4 ${
         selected ? 'border-ember bg-ember' : 'border-charcoal-700 bg-charcoal-900'
       }`}>
       <Text className={`font-medium text-base ${selected ? 'text-charcoal-950' : 'text-bone'}`}>{label}</Text>
@@ -101,7 +101,7 @@ function Entry({ item: { entry, drill } }: { item: JournalItem }) {
   const onDelete = () => confirmDestructive({ ...copy.confirmDelete, onConfirm: () => deleteReport(entry.id) });
 
   return (
-    <View className="mb-4 rounded-xl bg-charcoal-900 p-5" testID={`entry-${entry.id}`}>
+    <View className="mb-4 bg-charcoal-900 p-5" testID={`entry-${entry.id}`}>
       <Text className="font-medium text-sm text-ash">{formatEntryDate(entry.createdAt)}</Text>
       <Text className="mt-1 font-medium text-sm text-ember-soft">{copy.meta(drill.day, drill.ruleId, outcome)}</Text>
       <Text className="mt-3 font-medium text-sm text-ash">{prompt}</Text>
@@ -118,7 +118,7 @@ function Entry({ item: { entry, drill } }: { item: JournalItem }) {
             multiline
             maxLength={1000}
             placeholderTextColor={palette.ash}
-            className="mt-2 min-h-24 rounded-lg border border-charcoal-700 bg-charcoal-950 p-3 font-sans text-lg text-bone"
+            className="mt-2 min-h-24 border border-charcoal-700 bg-charcoal-950 p-3 font-sans text-lg text-bone"
             testID="entry-input"
           />
           {error ? (

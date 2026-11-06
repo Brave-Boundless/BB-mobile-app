@@ -50,13 +50,13 @@ export function ProgressScreen() {
 
         <Rise index={0}>
         <View className="mt-8 flex-row gap-3">
-          <View className="flex-1 rounded-xl bg-charcoal-900 p-4">
+          <View className="flex-1 bg-charcoal-900 p-4">
             <Heading>{copy.day.label}</Heading>
             <Text className="mt-2 font-bold text-2xl text-bone" testID="progress-day">
               {positionText(pos)}
             </Text>
           </View>
-          <View className="flex-1 rounded-xl bg-charcoal-900 p-4">
+          <View className="flex-1 bg-charcoal-900 p-4">
             <Heading>{copy.streak.label}</Heading>
             <Text className="mt-2 font-bold text-2xl text-bone" testID="progress-streak">
               {run > 0 ? copy.streak.value(run) : copy.streak.zero}
@@ -81,7 +81,7 @@ export function ProgressScreen() {
           <View className="mt-4 flex-row flex-wrap gap-x-4 gap-y-2" accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
             {(['all', 'most', 'some', 'none'] as const).map((s) => (
               <View key={s} className="flex-row items-center gap-2">
-                <View className={`h-4 w-4 rounded ${CELL[s].box}`} />
+                <View className={`h-4 w-4 ${CELL[s].box}`} />
                 <Text className="font-sans text-sm text-ash">{copy.map.legend[s]}</Text>
               </View>
             ))}
@@ -114,7 +114,7 @@ function MapCell({ tally: { ruleId, done, answered, shade }, index }: { tally: R
       accessible
       accessibilityLabel={copy.map.cellA11y(ruleId, done, answered)}
       testID={`map-cell-${ruleId}`}
-      className={`h-16 w-full items-center justify-center rounded-lg ${style.box}`}>
+      className={`h-16 w-full items-center justify-center ${style.box}`}>
       <Text className={`font-bold text-lg ${style.text}`}>{ruleId}</Text>
       <Text className={`font-sans text-xs ${style.text}`}>{answered === 0 ? '–' : `${done}/${answered}`}</Text>
     </View>

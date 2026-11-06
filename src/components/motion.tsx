@@ -46,5 +46,5 @@ export function GrowLine({ width = 64, delay = 200, color }: { width?: number; d
     if (!reduce) w.set(withDelay(delay, withTiming(width, { duration: duration.slow })));
   }, [reduce, delay, width, w]);
   const style = useAnimatedStyle(() => ({ width: w.value }));
-  return <Animated.View accessible={false} style={[{ height: 3, borderRadius: 2, backgroundColor: color }, style]} />;
+  return <Animated.View accessible={false} style={[{ height: 3, backgroundColor: color }, style]} />;
 }

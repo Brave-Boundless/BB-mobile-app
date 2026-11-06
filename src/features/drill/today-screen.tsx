@@ -119,7 +119,7 @@ function StartView({ today }: { today: string }) {
         </Rise>
 
         <Rise index={2}>
-          <View className="mt-10 rounded-xl bg-charcoal-900 p-5">
+          <View className="mt-10 bg-charcoal-900 p-5">
             <Text className="font-medium text-base text-bone">{copy.start.notifyLabel}</Text>
             <TimeField value={notifyAt} onChange={setNotifyAt} />
             <Text className="mt-2 font-sans text-sm text-ash">{copy.start.notifyHint}</Text>

@@ -63,7 +63,7 @@ function RuleRow({ rule, status }: { rule: RuleCard; status: RuleStatus }) {
         accessibilityRole="button"
         accessibilityLabel={`${copy.list.ruleLabel(rule.number)}. ${rule.title}. ${label}.`}
         testID={`rule-${rule.number}`}
-        className={`mb-3 min-h-16 rounded-xl border p-4 active:opacity-80 ${
+        className={`mb-3 min-h-16 border p-4 active:opacity-80 ${
           current ? 'border-ember bg-charcoal-800' : 'border-charcoal-700 bg-charcoal-900'
         }`}>
         <Text className="font-medium text-sm text-ash">{copy.list.ruleLabel(rule.number)}</Text>

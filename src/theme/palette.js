@@ -1,27 +1,37 @@
-// Brave & Boundless palette — dark theme first.
-// Ember/charcoal with a single warm accent (ember). Plain CommonJS so both
-// tailwind.config.js and app code can import it.
+// Brave & Boundless palette — from the B&B Design System (tokens.json,
+// 2026-10-13): black #0E0D0C ground, bone #f5f0e8 ink, orange #F17225 accent,
+// crimson #8A1C1C, gold #C8A24A. Plain CommonJS so both tailwind.config.js
+// and app code can import it.
+//
+// Token names (charcoal/bone/ash/ember) are kept from the first build so every
+// screen picks up the brand values; the mapping is:
+//   charcoal.950 = brand `black`   bone = brand `bone`   ash = brand `muted`
+//   ember        = brand `orange`  crimson / gold        = brand colours
+// charcoal.900–700 are bone laid over black at 5/10/20% — flat fields, not tints.
 //
 // Every text/background pair the UI uses is listed in TEXT_PAIRS and checked
 // for WCAG contrast >= 4.5:1 in src/theme/__tests__/contrast.test.ts.
+// Crimson on black is 2.1:1, so crimson only ever sits on bone (stamps).
 
 /** @type {const} */
 const palette = {
   charcoal: {
-    950: '#0F0D0C', // app background
-    900: '#1A1716', // cards, tab bar
-    800: '#26211F', // raised surfaces, pressed states
-    700: '#3A3330', // hairlines, borders
+    950: '#0E0D0C', // brand black: app ground
+    900: '#1A1817', // cards, tab bar
+    800: '#252422', // raised surfaces, pressed states
+    700: '#3C3A38', // hairlines, borders
   },
-  bone: '#F3EEE7', // primary text
-  ash: '#A89F96', // secondary text
+  bone: '#F5F0E8', // brand bone: primary text; passport-page ground
+  ash: '#B8B2A8', // brand muted: secondary text
   ember: {
-    DEFAULT: '#F06A2A', // the one accent: primary actions, active tab
-    soft: '#F58A55', // accent text on dark surfaces
-    // Rule-map shades of the same accent (pre-blended on charcoal-950).
-    mid: '#96451E', // mostly done
-    dim: '#472414', // mostly dodged
+    DEFAULT: '#F17225', // brand orange: the one accent
+    soft: '#F17225', // accent text on dark (brand orange passes 6.6:1)
+    // Rule-map shades of the accent (pre-blended on black).
+    mid: '#964A1B', // mostly done
+    dim: '#472612', // mostly dodged
   },
+  crimson: '#8A1C1C', // stamp ink, on bone only
+  gold: '#C8A24A', // brand gold
 };
 
 /** Foreground/background pairs that must meet 4.5:1. */
@@ -34,9 +44,12 @@ const TEXT_PAIRS = [
   ['ember.soft', 'charcoal.950'],
   ['ember.soft', 'charcoal.900'],
   ['ember.DEFAULT', 'charcoal.950'],
-  ['charcoal.950', 'ember.DEFAULT'], // label on a filled ember button
+  ['charcoal.950', 'ember.DEFAULT'], // label on a filled orange button
   ['bone', 'ember.mid'], // rule-map cell text
   ['bone', 'ember.dim'], // rule-map cell text
+  ['crimson', 'bone'], // stamp ink on the passport page
+  ['charcoal.950', 'bone'], // text on the passport page
+  ['charcoal.950', 'gold'],
 ];
 
 module.exports = { palette, TEXT_PAIRS };
