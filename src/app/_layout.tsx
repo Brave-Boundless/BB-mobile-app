@@ -42,9 +42,10 @@ export default function RootLayout() {
             headerTintColor: palette.ember.soft,
             headerStyle: { backgroundColor: palette.charcoal[950] },
             headerShadowVisible: false,
+            animation: 'slide_from_right',
           }}
         />
-        <Stack.Screen name="milestone/[part]" options={{ presentation: 'fullScreenModal', gestureEnabled: false }} />
+        <Stack.Screen name="milestone/[part]" options={{ presentation: 'fullScreenModal', gestureEnabled: false, animation: 'fade' }} />
       </Stack>
     </QueryClientProvider>
   );

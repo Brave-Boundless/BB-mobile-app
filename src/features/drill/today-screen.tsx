@@ -1,12 +1,15 @@
 import { router } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, Text, View } from 'react-native';
+import Animated from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { todayCopy as copy } from '@copy/today';
 import { Button } from '@/components/button';
+import { Reveal, Rise } from '@/components/motion';
 import { TimeField } from '@/components/time-field';
 import { getRule, type DrillTier } from '@/content';
+import { fadeIn } from '@/theme/motion';
 import { AfterDay45 } from '@/features/practice/after-day-45';
 
 import { EveningPrompt } from './evening-prompt';
@@ -106,21 +109,29 @@ function StartView({ today }: { today: string }) {
   return (
     <View className="flex-1 justify-between">
       <View>
-        <Text accessibilityRole="header" className="font-bold text-3xl text-bone">
-          {copy.start.headline}
-        </Text>
-        <Text className="mt-4 font-sans text-lg text-ash">{copy.start.body}</Text>
+        <Rise index={0}>
+          <Text accessibilityRole="header" className="font-bold text-3xl text-bone">
+            {copy.start.headline}
+          </Text>
+        </Rise>
+        <Rise index={1}>
+          <Text className="mt-4 font-sans text-lg text-ash">{copy.start.body}</Text>
+        </Rise>
 
-        <View className="mt-10 rounded-xl bg-charcoal-900 p-5">
-          <Text className="font-medium text-base text-bone">{copy.start.notifyLabel}</Text>
-          <TimeField value={notifyAt} onChange={setNotifyAt} />
-          <Text className="mt-2 font-sans text-sm text-ash">{copy.start.notifyHint}</Text>
+        <Rise index={2}>
+          <View className="mt-10 rounded-xl bg-charcoal-900 p-5">
+            <Text className="font-medium text-base text-bone">{copy.start.notifyLabel}</Text>
+            <TimeField value={notifyAt} onChange={setNotifyAt} />
+            <Text className="mt-2 font-sans text-sm text-ash">{copy.start.notifyHint}</Text>
+          </View>
+        </Rise>
+      </View>
+
+      <Rise index={3} base={120}>
+        <View className="mt-10">
+          <Button label={copy.start.cta} onPress={() => start(today, notifyAt)} testID="start-day-1" />
         </View>
-      </View>
-
-      <View className="mt-10">
-        <Button label={copy.start.cta} onPress={() => start(today, notifyAt)} testID="start-day-1" />
-      </View>
+      </Rise>
     </View>
   );
 }
@@ -130,9 +141,12 @@ function NotifyAskView({ onDenied }: { onDenied: () => void }) {
 
   return (
     <View className="flex-1 justify-between">
-      <Text accessibilityRole="header" className="font-bold text-2xl text-bone">
-        {copy.notifications.ask}
-      </Text>
+      <Rise>
+        <Text accessibilityRole="header" className="font-bold text-2xl text-bone">
+          {copy.notifications.ask}
+        </Text>
+      </Rise>
+      <Rise index={1} base={120}>
       <View className="mt-10 gap-3">
         <Button
           label={copy.notifications.allow}
@@ -145,6 +159,7 @@ function NotifyAskView({ onDenied }: { onDenied: () => void }) {
         />
         <Button variant="secondary" label={copy.notifications.deny} onPress={markAsked} testID="notify-deny" />
       </View>
+      </Rise>
     </View>
   );
 }
@@ -167,20 +182,29 @@ function DrillView({ row }: { row: DrillDayRow }) {
   return (
     <View className="flex-1 justify-between">
       <View>
-        <Text className="font-medium text-sm uppercase tracking-widest text-ash">
-          {copy.drill.dayOf(row.day, SPINE_LENGTH)}
-        </Text>
-        <Text className="mt-6 font-medium text-base text-ash">{copy.drill.ruleLabel(rule.number)}</Text>
-        <Text accessibilityRole="header" className="mt-1 font-bold text-2xl text-bone">
-          {rule.title}
-        </Text>
+        <Rise index={0}>
+          <Text className="font-medium text-sm uppercase tracking-widest text-ash">
+            {copy.drill.dayOf(row.day, SPINE_LENGTH)}
+          </Text>
+        </Rise>
+        <Rise index={1}>
+          <Text className="mt-6 font-medium text-base text-ash">{copy.drill.ruleLabel(rule.number)}</Text>
+          <Text accessibilityRole="header" className="mt-1 font-bold text-2xl text-bone">
+            {rule.title}
+          </Text>
+        </Rise>
 
-        <Text className="mt-8 font-medium text-sm uppercase tracking-widest text-ember-soft">
-          {copy.drill.tier[tier]}
-        </Text>
-        <Text className="mt-2 font-medium text-2xl leading-9 text-bone" testID="drill-text">
-          {rule.drills[tier]}
-        </Text>
+        <Rise index={2}>
+          {/* Keyed by tier: swapping in the five-minute drill cross-fades. */}
+          <Animated.View key={tier} entering={fadeIn()}>
+            <Text className="mt-8 font-medium text-sm uppercase tracking-widest text-ember-soft">
+              {copy.drill.tier[tier]}
+            </Text>
+            <Text className="mt-2 font-medium text-2xl leading-9 text-bone" testID="drill-text">
+              {rule.drills[tier]}
+            </Text>
+          </Animated.View>
+        </Rise>
 
         {scheduledTier !== 'five_minute' ? (
           <View className="mt-4 items-start">
@@ -193,6 +217,7 @@ function DrillView({ row }: { row: DrillDayRow }) {
         ) : null}
       </View>
 
+      <Rise index={3} base={120}>
       <View className="mt-10 gap-3">
         <Button label={copy.drill.did} accessibilityLabel={copy.drill.a11y.did} onPress={() => respond('done')} testID="did-it" />
         <Button
@@ -203,6 +228,7 @@ function DrillView({ row }: { row: DrillDayRow }) {
           testID="dodged-it"
         />
       </View>
+      </Rise>
     </View>
   );
 }
@@ -219,19 +245,29 @@ function AnsweredView({ row }: { row: DrillDayRow }) {
       <Text className="font-medium text-sm uppercase tracking-widest text-ash">
         {copy.drill.dayOf(row.day, SPINE_LENGTH)}
       </Text>
-      <Text accessibilityRole="header" className="mt-6 font-bold text-3xl text-bone">
-        {done ? copy.answered.done : copy.answered.dodged}
-      </Text>
-      {done ? <Text className="mt-3 font-medium text-2xl text-ember-soft">{rule.mantra}</Text> : null}
+      <Animated.View entering={fadeIn()}>
+        <Text accessibilityRole="header" className="mt-6 font-bold text-3xl text-bone">
+          {done ? copy.answered.done : copy.answered.dodged}
+        </Text>
+      </Animated.View>
+      {done ? (
+        <Reveal delay={180}>
+          <Text className="mt-3 font-medium text-2xl text-ember-soft">{rule.mantra}</Text>
+        </Reveal>
+      ) : null}
 
-      <EveningPrompt row={row} />
+      <Rise base={done ? 520 : 240}>
+        <EveningPrompt row={row} />
+      </Rise>
 
+      <Rise base={done ? 600 : 320}>
       <View className="mt-10">
         <Text className="font-sans text-base text-ash">{copy.answered.nextUnlocks}</Text>
         <View className="mt-2 items-start">
           <Button variant="text" label={copy.answered.undo} onPress={() => undo(row.id)} testID="undo" />
         </View>
       </View>
+      </Rise>
     </View>
   );
 }

@@ -10,6 +10,8 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         headerShown: false,
+        // Cross-fade between tabs.
+        animation: 'fade',
         tabBarActiveTintColor: palette.ember.soft,
         tabBarInactiveTintColor: palette.ash,
         tabBarStyle: {

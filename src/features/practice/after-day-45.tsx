@@ -4,6 +4,9 @@ import { Pressable, Text, View } from 'react-native';
 import { todayCopy } from '@copy/today';
 import { wrapupCopy as copy } from '@copy/wrapup';
 import { Button } from '@/components/button';
+import { Reveal, Rise, Settle } from '@/components/motion';
+import { fadeIn, pop } from '@/theme/motion';
+import Animated from 'react-native-reanimated';
 import { getRule, rules, type RuleId } from '@/content';
 import { EveningPrompt } from '@/features/drill/evening-prompt';
 import type { LocalDate } from '@/features/drill/local-date';
@@ -42,7 +45,11 @@ function Toggle({ label, a11y, on, onPress, testID }: { label: string; a11y: str
         on ? 'border-ember bg-charcoal-800' : 'border-charcoal-700 bg-charcoal-900'
       }`}>
       <View className={`h-5 w-5 items-center justify-center rounded border-2 ${on ? 'border-ember bg-ember' : 'border-ash'}`}>
-        {on ? <View className="h-2 w-2 rounded-sm bg-charcoal-950" /> : null}
+        {on ? (
+          <Animated.View entering={pop()}>
+            <View className="h-2 w-2 rounded-sm bg-charcoal-950" />
+          </Animated.View>
+        ) : null}
       </View>
       <Text className="flex-1 font-medium text-base text-bone">{label}</Text>
     </Pressable>
@@ -86,11 +93,16 @@ function WrapupView({ today, mode, onDone }: { today: LocalDate; mode: 'first' |
     <View className="flex-1">
       {mode === 'first' ? (
         <>
-          <Text accessibilityRole="header" className="font-bold text-3xl text-bone">
-            {copy.wrapup.headline}
-          </Text>
-          <Text className="mt-3 font-sans text-lg text-ash">{copy.wrapup.tally(tally.done, tally.dodged)}</Text>
+          <Rise index={0}>
+            <Text accessibilityRole="header" className="font-bold text-3xl text-bone">
+              {copy.wrapup.headline}
+            </Text>
+          </Rise>
+          <Rise index={1}>
+            <Text className="mt-3 font-sans text-lg text-ash">{copy.wrapup.tally(tally.done, tally.dodged)}</Text>
+          </Rise>
 
+          <Rise index={2} base={150}>
           <View className="mt-10">
             <Heading>{copy.wrapup.dodgeTitle}</Heading>
             {pattern.length === 0 ? (
@@ -99,11 +111,13 @@ function WrapupView({ today, mode, onDone }: { today: LocalDate; mode: 'first' |
               <>
                 <Text className="mt-2 font-sans text-base text-ash">{copy.wrapup.dodgeBody}</Text>
                 <View className="mt-3">
-                  {pattern.map((p) => (
-                    <View key={p.ruleId} className="mb-2 rounded-xl bg-charcoal-900 p-4">
+                  {pattern.map((p, i) => (
+                    <Rise key={p.ruleId} index={i} base={350}>
+                    <View className="mb-2 rounded-xl bg-charcoal-900 p-4">
                       <Text className="font-bold text-base text-bone">{getRule(p.ruleId).title}</Text>
                       <Text className="mt-1 font-medium text-sm text-ember-soft">{copy.wrapup.dodgeRow(p.dodged, p.answered)}</Text>
                     </View>
+                    </Rise>
                   ))}
                 </View>
                 <View className="mt-2">
@@ -122,9 +136,11 @@ function WrapupView({ today, mode, onDone }: { today: LocalDate; mode: 'first' |
               </>
             )}
           </View>
+          </Rise>
         </>
       ) : null}
 
+      <Rise index={mode === 'first' ? 3 : 0} base={mode === 'first' ? 250 : 0}>
       <View className={mode === 'first' ? 'mt-10' : ''}>
         <Heading>{copy.wrapup.keepTitle}</Heading>
         <Text className="mt-2 font-sans text-base text-ash">{copy.wrapup.keepBody}</Text>
@@ -140,11 +156,14 @@ function WrapupView({ today, mode, onDone }: { today: LocalDate; mode: 'first' |
           />
         ))}
       </View>
+      </Rise>
 
       {error ? (
-        <Text accessibilityRole="alert" className="mt-3 font-sans text-sm text-ember-soft">
-          {error}
-        </Text>
+        <Animated.View key={error} entering={fadeIn()}>
+          <Text accessibilityRole="alert" className="mt-3 font-sans text-sm text-ember-soft">
+            {error}
+          </Text>
+        </Animated.View>
       ) : null}
       <View className="mt-6">
         <Button label={copy.wrapup.cta} onPress={lockIn} testID="lock-it-in" />
@@ -174,14 +193,20 @@ function PracticeView({ today, onChange }: { today: LocalDate; onChange: () => v
   return (
     <View className="flex-1">
       <Text className="font-medium text-sm uppercase tracking-widest text-ash">{copy.practice.dayLabel(plan.day)}</Text>
-      {plan.restartDone ? <Text className="mt-4 font-medium text-lg text-ember-soft">{copy.practice.restartDone}</Text> : null}
+      {plan.restartDone ? (
+        <Reveal delay={150}>
+          <Text className="mt-4 font-medium text-lg text-ember-soft">{copy.practice.restartDone}</Text>
+        </Reveal>
+      ) : null}
 
       {restartSlot && plan.restart ? (
         <View className="mt-6">
           <Text className="font-medium text-sm uppercase tracking-widest text-ember-soft">
             {copy.practice.restartLabel(plan.restart.index, plan.restart.total)}
           </Text>
-          <SlotCard slot={restartSlot} />
+          <Rise index={0}>
+            <SlotCard slot={restartSlot} />
+          </Rise>
         </View>
       ) : null}
 
@@ -192,11 +217,19 @@ function PracticeView({ today, onChange }: { today: LocalDate; onChange: () => v
         {dailySlots.length === 0 && !restartSlot ? (
           <Text className="mt-3 font-sans text-lg text-ash">{copy.practice.empty}</Text>
         ) : (
-          dailySlots.map((slot) => <SlotCard key={slot.ruleId} slot={slot} />)
+          dailySlots.map((slot, i) => (
+            <Rise key={slot.ruleId} index={i} base={restartSlot ? 120 : 0} layout>
+              <SlotCard slot={slot} />
+            </Rise>
+          ))
         )}
       </View>
 
-      {allAnswered ? <Text className="mt-6 font-medium text-base text-bone">{copy.practice.allAnswered}</Text> : null}
+      {allAnswered ? (
+        <Reveal delay={250}>
+          <Text className="mt-6 font-medium text-base text-bone">{copy.practice.allAnswered}</Text>
+        </Reveal>
+      ) : null}
 
       <View className="mt-6 items-start">
         <Button variant="text" label={copy.practice.change} onPress={onChange} testID="change-daily-set" />
@@ -215,6 +248,7 @@ function SlotCard({ slot }: { slot: PracticeSlot }) {
   const label = slot.weekly ? copy.practice.weeklyChallenge : todayCopy.drill.tier[slot.tier];
 
   return (
+    <Settle>
     <View className="mt-3 rounded-xl bg-charcoal-900 p-5" testID={`slot-${slot.kind}-${slot.ruleId}`}>
       <Text className="font-bold text-lg text-bone">{rule.title}</Text>
       <Text className="mt-2 font-medium text-sm uppercase tracking-widest text-ember-soft">{label}</Text>
@@ -235,9 +269,14 @@ function SlotCard({ slot }: { slot: PracticeSlot }) {
           />
         </View>
       ) : (
+        <Animated.View entering={fadeIn()}>
         <View className="mt-4">
           <Text className="font-bold text-lg text-bone">{row.status === 'done' ? copy.practice.done : copy.practice.dodged}</Text>
-          {row.status === 'done' ? <Text className="mt-1 font-medium text-base text-ember-soft">{rule.mantra}</Text> : null}
+          {row.status === 'done' ? (
+            <Reveal delay={120}>
+              <Text className="mt-1 font-medium text-base text-ember-soft">{rule.mantra}</Text>
+            </Reveal>
+          ) : null}
           {noting || hasNote ? (
             <EveningPrompt row={row} />
           ) : (
@@ -247,7 +286,9 @@ function SlotCard({ slot }: { slot: PracticeSlot }) {
             </View>
           )}
         </View>
+        </Animated.View>
       )}
     </View>
+    </Settle>
   );
 }

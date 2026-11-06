@@ -5,17 +5,20 @@ import { rulesCopy as copy } from '@copy/rules';
 import { todayCopy } from '@copy/today';
 import { DRILL_TIERS, getPart, getRule, type RuleId } from '@/content';
 import { useDrillStore } from '@/features/drill/store';
+import { Rise } from '@/components/motion';
 
 import { ROMAN, ruleHistory, ruleStartDay, type HistoryEntry } from './history';
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+function Section({ title, children, index = 0 }: { title: string; children: React.ReactNode; index?: number }) {
   return (
+    <Rise index={index} base={120}>
     <View className="mt-8">
       <Text accessibilityRole="header" className="font-medium text-sm uppercase tracking-widest text-ash">
         {title}
       </Text>
       <View className="mt-2">{children}</View>
     </View>
+    </Rise>
   );
 }
 
@@ -42,11 +45,11 @@ export function RuleDetailScreen() {
         </Text>
         <Text className="mt-2 font-sans text-base text-ash">{copy.detail.chapter(rule.chapter)}</Text>
 
-        <Section title={copy.detail.whyItMatters}>
+        <Section title={copy.detail.whyItMatters} index={0}>
           <Text className="font-medium text-xl leading-8 text-bone">{rule.why_it_matters}</Text>
         </Section>
 
-        <Section title={copy.detail.drills}>
+        <Section title={copy.detail.drills} index={1}>
           {DRILL_TIERS.map((tier) => (
             <View key={tier} className="mb-3 rounded-xl bg-charcoal-900 p-4">
               <Text className="font-medium text-sm text-ember-soft">{todayCopy.drill.tier[tier]}</Text>
@@ -55,15 +58,15 @@ export function RuleDetailScreen() {
           ))}
         </Section>
 
-        <Section title={copy.detail.scorecard}>
+        <Section title={copy.detail.scorecard} index={2}>
           <Text className="font-sans text-lg text-bone">{rule.scorecard}</Text>
         </Section>
 
-        <Section title={copy.detail.mantra}>
+        <Section title={copy.detail.mantra} index={3}>
           <Text className="font-bold text-2xl text-ember-soft">{rule.mantra}</Text>
         </Section>
 
-        <Section title={copy.detail.history}>
+        <Section title={copy.detail.history} index={4}>
           {history.length === 0 ? (
             <Text className="font-sans text-base text-ash">{copy.detail.historyEmpty(ruleStartDay(rule.number))}</Text>
           ) : (

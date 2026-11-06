@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { Text, TextInput, View } from 'react-native';
+import Animated from 'react-native-reanimated';
 
 import { todayCopy as copy } from '@copy/today';
 import { Button } from '@/components/button';
 import { palette } from '@/theme';
+import { fadeIn } from '@/theme/motion';
 
 import { checkReport } from './journal-rules';
 import { reportFor, useDrillStore, type DrillDayRow } from './store';
@@ -21,11 +23,13 @@ export function EveningPrompt({ row }: { row: DrillDayRow }) {
 
   if (saved) {
     return (
+      <Animated.View entering={fadeIn()}>
       <View className="mt-10 rounded-xl bg-charcoal-900 p-5">
         <Text className="font-medium text-sm text-ash">{prompt}</Text>
         <Text className="mt-2 font-sans text-lg text-bone">{saved.body}</Text>
         <Text className="mt-3 font-sans text-sm text-ash">{copy.evening.saved}</Text>
       </View>
+      </Animated.View>
     );
   }
   if (skipped) return null;
