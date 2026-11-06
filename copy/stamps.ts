@@ -13,8 +13,6 @@ export const stampsCopy = {
     rule: (n: number, title: string) => `Rule ${n} · ${title}`,
     tally: (done: number) => `${done} of 3 done`,
     cta: 'Keep going',
-    // On days 12/24/36/45 the part stamp lands on the milestone screen too.
-    partStamped: (partName: string) => `${partName} stamped.`,
   },
 
   // ── Passport (on Progress) ───────────────────────────────────────────────
@@ -33,6 +31,5 @@ export const stampsCopy = {
   a11y: {
     earned: (n: number, title: string, done: number) => `Rule ${n}, ${title}. Stamped. ${done} of 3 done.`,
     notYet: (n: number, title: string) => `Rule ${n}, ${title}. Not stamped yet.`,
-    part: (partName: string, earned: boolean) => `${partName}. ${earned ? 'Stamped' : 'Not stamped yet'}.`,
   },
 } as const;
