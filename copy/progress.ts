@@ -1,11 +1,11 @@
-// status: draft — awaiting Mark's approval
+// status: approved — Mark, 2026-11-06
 //
 // Copy for build step 4: the Progress tab. Book text (rule titles, scorecard
 // lines, mantras, part names) comes from content/ verbatim. Did it / Dodged it
 // and tier names reuse the approved copy in copy/today.ts.
 
 export const progressCopy = {
-  status: 'draft',
+  status: 'approved',
 
   title: 'Progress',
 
