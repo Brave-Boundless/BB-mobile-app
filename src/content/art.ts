@@ -5,11 +5,9 @@ import type { PartId, RuleId } from './types';
 // Book illustrations from Box `Brave & Boundless/Book/art` (finals, confirmed by Mark).
 // Each file keeps its natural aspect ratio; `ratio` is width / height.
 //
-// Two rules have no art yet:
-// - Rule 4 (Respect the Stakes): no final found in Box. (The dandelions are FIELD's.)
-// - Rule 8 (No Costume, Just You): left out on purpose. The book's illustration
-//   is topless, which App Store / Play rules treat as nudity.
-// Add an entry here when Mark supplies them.
+// Rule 8 (No Costume, Just You) has no art on purpose: the book's illustration
+// is topless, which App Store / Play rules treat as nudity. Add an entry here
+// if Mark supplies a store-safe version.
 
 export type Art = { source: ImageSourcePropType; ratio: number };
 
@@ -17,6 +15,7 @@ export const chapterArt: Partial<Record<RuleId, Art>> = {
   1: { source: require('../../assets/images/chapters/01.webp'), ratio: 819 / 1024 },
   2: { source: require('../../assets/images/chapters/02.webp'), ratio: 772 / 1024 },
   3: { source: require('../../assets/images/chapters/03.webp'), ratio: 772 / 1024 },
+  4: { source: require('../../assets/images/chapters/04.webp'), ratio: 1 },
   5: { source: require('../../assets/images/chapters/05.webp'), ratio: 679 / 1024 },
   6: { source: require('../../assets/images/chapters/06.webp'), ratio: 772 / 1024 },
   7: { source: require('../../assets/images/chapters/07.webp'), ratio: 904 / 1200 },
