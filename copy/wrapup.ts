@@ -1,4 +1,4 @@
-// status: draft — awaiting Mark's approval
+// status: approved — Mark, 2026-11-06
 //
 // Copy for build step 6: the Day-45 wrap-up, the dodge-pattern restart, and
 // Today after Day 45 (the "daily set"). Rule titles, drills, mantras and part
@@ -6,7 +6,7 @@
 // evening prompts reuse the approved copy in copy/today.ts.
 
 export const wrapupCopy = {
-  status: 'draft',
+  status: 'approved',
 
   // ── Wrap-up (shown on Today the morning after Day 45, until set up) ─────
   wrapup: {

@@ -1,26 +1,21 @@
 import { router } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, Text, TextInput, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { todayCopy as copy } from '@copy/today';
 import { Button } from '@/components/button';
 import { TimeField } from '@/components/time-field';
-import { getPart, getRule, type DrillTier } from '@/content';
-import { palette } from '@/theme';
+import { getRule, type DrillTier } from '@/content';
+import { AfterDay45 } from '@/features/practice/after-day-45';
 
-import { checkReport } from './journal-rules';
+import { EveningPrompt } from './evening-prompt';
 import { requestNotifications, rescheduleMorningPushes } from './notifications';
 import { todayState } from './progress';
 import { SPINE_LENGTH, milestoneFor, spineDay } from './spine';
-import { reportFor, useDrillStore, type DrillDayRow } from './store';
+import { useDrillStore, type DrillDayRow } from './store';
 import { useOffline } from './use-sync';
 import { useToday } from './use-today';
-
-// ── helpers ──────────────────────────────────────────────────────────────
-
-
-
 
 function useHydrated(): boolean {
   const [hydrated, setHydrated] = useState(() => useDrillStore.persist.hasHydrated());
@@ -38,11 +33,14 @@ export function TodayScreen() {
   const today = useToday();
   const offline = useOffline();
   const [pushDenied, setPushDenied] = useState(false);
+  // After Day 45: editing the daily set. Lives here so the scroll view can reset with it.
+  const [editingSet, setEditingSet] = useState(false);
 
   const startedOn = useDrillStore((s) => s.startedOn);
   const notificationsAsked = useDrillStore((s) => s.notificationsAsked);
   const notifyAt = useDrillStore((s) => s.notifyAt);
   const drills = useDrillStore((s) => s.drills);
+  const practice = useDrillStore((s) => s.practice);
   const openToday = useDrillStore((s) => s.openToday);
 
   const records = useMemo(() => Object.values(drills), [drills]);
@@ -54,32 +52,32 @@ export function TodayScreen() {
   }, [hydrated, startedOn, state, today, openToday]);
 
   // Keep the next 7 mornings scheduled with the right rule.
-  const scheduleKey = records.map((r) => `${r.day}:${r.status}:${r.scheduledFor}`).join('|');
+  const scheduleKey = records.map((r) => `${r.day}:${r.ruleId}:${r.status}:${r.scheduledFor}`).join('|');
   useEffect(() => {
-    if (hydrated && startedOn) void rescheduleMorningPushes(records, notifyAt);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hydrated, startedOn, scheduleKey, notifyAt, today]);
+    if (hydrated && startedOn) void rescheduleMorningPushes(useDrillStore.getState(), notifyAt);
+  }, [hydrated, startedOn, scheduleKey, notifyAt, today, practice]);
 
   if (!hydrated) return <Shell />;
 
   let body: React.ReactNode;
   if (!startedOn) body = <StartView today={today} />;
   else if (!notificationsAsked && Platform.OS !== 'web') body = <NotifyAskView onDenied={() => setPushDenied(true)} />;
-  else if (state.kind === 'complete') body = <CompleteView />;
+  else if (state.kind === 'complete') body = <AfterDay45 today={today} editing={editingSet} setEditing={setEditingSet} />;
   else {
     const row = records.find((r) => r.day === state.day && r.day <= SPINE_LENGTH);
     body = !row ? null : row.status === 'pending' ? <DrillView row={row} /> : <AnsweredView row={row} />;
   }
 
   return (
-    <Shell offline={offline}>
+    // A new view (wrap-up → daily set, edit → daily set) opens at the top, not where the last one was scrolled.
+    <Shell offline={offline} scrollKey={state.kind === 'complete' ? `${practice?.startedOn ?? 'wrapup'}:${practice?.dailySet.join(',')}:${editingSet}` : 'spine'}>
       {pushDenied ? <Text className="mb-6 font-sans text-sm text-ash">{copy.notifications.deniedNote}</Text> : null}
       {body}
     </Shell>
   );
 }
 
-function Shell({ children, offline }: { children?: React.ReactNode; offline?: boolean }) {
+function Shell({ children, offline, scrollKey }: { children?: React.ReactNode; offline?: boolean; scrollKey?: string }) {
   return (
     <SafeAreaView edges={['top']} className="flex-1 bg-charcoal-950">
       {offline ? (
@@ -89,6 +87,7 @@ function Shell({ children, offline }: { children?: React.ReactNode; offline?: bo
       ) : null}
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} className="flex-1">
         <ScrollView
+          key={scrollKey}
           contentContainerClassName="grow px-6 pb-8 pt-6"
           keyboardShouldPersistTaps="handled">
           {children}
@@ -233,90 +232,6 @@ function AnsweredView({ row }: { row: DrillDayRow }) {
           <Button variant="text" label={copy.answered.undo} onPress={() => undo(row.id)} testID="undo" />
         </View>
       </View>
-    </View>
-  );
-}
-
-function EveningPrompt({ row }: { row: DrillDayRow }) {
-  const saveReport = useDrillStore((s) => s.saveReport);
-  const skipReport = useDrillStore((s) => s.skipReport);
-  const saved = useDrillStore((s) => reportFor(s, row.id));
-  const skipped = useDrillStore((s) => !!s.reportSkipped[row.id]);
-  const [text, setText] = useState('');
-  const [error, setError] = useState<string | null>(null);
-
-  const prompt = row.status === 'done' ? copy.evening.promptDone : copy.evening.promptDodged;
-
-  if (saved) {
-    return (
-      <View className="mt-10 rounded-xl bg-charcoal-900 p-5">
-        <Text className="font-medium text-sm text-ash">{prompt}</Text>
-        <Text className="mt-2 font-sans text-lg text-bone">{saved.body}</Text>
-        <Text className="mt-3 font-sans text-sm text-ash">{copy.evening.saved}</Text>
-      </View>
-    );
-  }
-  if (skipped) return null;
-
-  const onSave = () => {
-    const check = checkReport(text);
-    if (check.ok) {
-      saveReport(row.id, check.body);
-      setError(null);
-    } else if (check.reason === 'too_long') {
-      setError(copy.evening.tooLong);
-    }
-  };
-
-  return (
-    <View className="mt-10 rounded-xl bg-charcoal-900 p-5">
-      <Text nativeID="evening-prompt" className="font-bold text-xl text-bone">
-        {prompt}
-      </Text>
-      <TextInput
-        accessibilityLabel={prompt}
-        accessibilityLabelledBy="evening-prompt"
-        value={text}
-        onChangeText={(t) => {
-          setText(t);
-          if (error) setError(null);
-        }}
-        placeholder={copy.evening.placeholder}
-        placeholderTextColor={palette.ash}
-        multiline
-        maxLength={1000}
-        className="mt-3 min-h-24 rounded-lg border border-charcoal-700 bg-charcoal-950 p-3 font-sans text-lg text-bone"
-        testID="evening-input"
-      />
-      {error ? (
-        <Text accessibilityRole="alert" className="mt-2 font-sans text-sm text-ember-soft">
-          {error}
-        </Text>
-      ) : null}
-      <View className="mt-4 flex-row gap-3">
-        <View className="flex-1">
-          <Button label={copy.evening.save} onPress={onSave} disabled={!text.trim()} testID="evening-save" />
-        </View>
-        <View className="flex-1">
-          <Button variant="secondary" label={copy.evening.skip} onPress={() => skipReport(row.id)} testID="evening-skip" />
-        </View>
-      </View>
-    </View>
-  );
-}
-
-// ── after day 45 (wrap-up is build step 6) ──────────────────────────────
-
-function CompleteView() {
-  const part = getPart(4);
-  return (
-    <View className="flex-1">
-      <Text accessibilityRole="header" className="font-bold text-3xl text-bone">
-        {copy.milestone.headline(part.name)}
-      </Text>
-      <Text className="mt-4 font-sans text-lg text-ash">
-        {copy.milestone.body(part.rules.length, part.rules.length * 3)}
-      </Text>
     </View>
   );
 }

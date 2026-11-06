@@ -1,7 +1,7 @@
 import NetInfo from '@react-native-community/netinfo';
 import { useEffect, useState } from 'react';
 
-import { pullServer, pushSettings } from '@/features/account/server';
+import { pullServer, pushPractice, pushSettings } from '@/features/account/server';
 import { getSupabase, isSupabaseConfigured } from '@/lib/supabase';
 
 import { useDrillStore } from './store';
@@ -68,6 +68,11 @@ export async function syncNow(): Promise<void> {
     }
     const result = await pushDirty(client, userId, useDrillStore.getState());
     useDrillStore.getState().markSynced(result);
+    const { practice, practiceDirty } = useDrillStore.getState();
+    if (practice && practiceDirty) {
+      await pushPractice(client, userId, practice);
+      useDrillStore.getState().markPracticeSynced(practice);
+    }
   } catch {
     // Offline or transient failure: rows stay dirty and go next time.
   } finally {
@@ -107,7 +112,7 @@ export function useBackgroundSync(): void {
       if (s.isConnected) void syncNow();
     });
     const unsubStore = useDrillStore.subscribe((s, prev) => {
-      if (s.drills !== prev.drills || s.journal !== prev.journal) void syncNow();
+      if (s.drills !== prev.drills || s.journal !== prev.journal || s.practice !== prev.practice) void syncNow();
       else if (s.notifyAt !== prev.notifyAt) void syncSettings();
     });
     let unsubAuth = () => {};

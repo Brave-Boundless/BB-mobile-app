@@ -88,7 +88,7 @@ function PushSection() {
 
   const onChange = (hhmm: string) => {
     setNotifyAt(hhmm);
-    void rescheduleMorningPushes(Object.values(useDrillStore.getState().drills), hhmm);
+    void rescheduleMorningPushes(useDrillStore.getState(), hhmm);
   };
 
   return (

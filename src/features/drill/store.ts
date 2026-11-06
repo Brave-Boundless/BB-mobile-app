@@ -15,9 +15,26 @@ import type { DrillTier, RuleId } from '@/content';
 import type { LocalDate } from './local-date';
 import { todayState, type DrillStatus } from './progress';
 import { spineDay } from './spine';
+import { practiceToday } from '@/features/practice/plan';
+
+/** Which track a drill belongs to. Missing = 'spine' (rows saved before step 6). */
+export type DrillKind = 'spine' | 'restart' | 'daily';
+
+export const kindOf = (d: { kind?: DrillKind }): DrillKind => d.kind ?? 'spine';
+
+/** The user's choices at the Day-45 wrap-up. */
+export interface Practice {
+  /** Rules kept as recurring daily drills. */
+  dailySet: RuleId[];
+  /** Up to 3 dodged rules to rerun, 3 days each, in this order. */
+  restartRules: RuleId[];
+  /** Date the wrap-up was locked in. */
+  startedOn: LocalDate;
+}
 
 export interface DrillDayRow {
   id: string;
+  kind?: DrillKind;
   day: number;
   ruleId: RuleId;
   /** The tier actually shown when answered: five_minute if the user took the fallback. */
@@ -48,6 +65,10 @@ export interface DrillData {
   reportSkipped: Record<string, true>;
   drills: Record<string, DrillDayRow>;
   journal: Record<string, JournalRow>;
+  /** Null until the Day-45 wrap-up is locked in. */
+  practice: Practice | null;
+  /** Practice changed locally and not yet saved on the server. */
+  practiceDirty: boolean;
 }
 
 export interface DrillActions {
@@ -61,6 +82,11 @@ export interface DrillActions {
   saveReport(drillDayId: string, body: string): void;
   skipReport(drillDayId: string): void;
   deleteReport(journalId: string): void;
+  /** Locks in (or edits) the post-Day-45 choices. */
+  setPractice(p: Practice): void;
+  /** Creates today's restart/daily-set rows if missing. Returns their ids. */
+  ensurePracticeToday(today: LocalDate): string[];
+  markPracticeSynced(sent: Practice): void;
   /** Brings server history onto this phone after sign-in. See mergeServerRows. */
   mergeServer(server: ServerSnapshot): void;
   /** Clears `dirty` only on rows unchanged since they were sent (updatedAt matches). */
@@ -77,6 +103,7 @@ export interface SyncedRows {
 export interface ServerSnapshot {
   drills: Omit<DrillDayRow, 'dirty'>[];
   journal: Omit<JournalRow, 'dirty' | 'deleted'>[];
+  practice?: Practice | null;
 }
 
 export type DrillStore = DrillData & DrillActions;
@@ -88,6 +115,8 @@ export const initialDrillData: DrillData = {
   reportSkipped: {},
   drills: {},
   journal: {},
+  practice: null,
+  practiceDirty: false,
 };
 
 export interface StoreDeps {
@@ -166,7 +195,7 @@ export function drillActions(
       set((s) => {
         const row = s.drills[id];
         if (!row) return {};
-        const spineTier = row.day <= 45 ? spineDay(row.day).tier : row.tier;
+        const spineTier = kindOf(row) === 'spine' && row.day <= 45 ? spineDay(row.day).tier : row.tier;
         // The report-back answered "what did it cost / what did you learn" for
         // the old answer, so it goes too.
         const journal = { ...s.journal };
@@ -224,6 +253,48 @@ export function drillActions(
       });
     },
 
+    setPractice(p) {
+      set(() => ({ practice: p, practiceDirty: true }));
+    },
+
+    ensurePracticeToday(today) {
+      const data = get();
+      const plan = practiceToday(data, today);
+      if (!plan) return [];
+      const ids: string[] = [];
+      const add: Record<string, DrillDayRow> = {};
+      for (const slot of plan.slots) {
+        if (slot.row) {
+          // A pending restart drill carried over from an earlier day moves to today.
+          if (slot.row.status === 'pending' && slot.row.scheduledFor !== today) {
+            add[slot.row.id] = { ...slot.row, scheduledFor: today, day: plan.day, updatedAt: stamp(), dirty: true };
+          }
+          ids.push(slot.row.id);
+          continue;
+        }
+        const row: DrillDayRow = {
+          id: deps.newId(),
+          kind: slot.kind,
+          day: plan.day,
+          ruleId: slot.ruleId,
+          tier: slot.tier,
+          scheduledFor: today,
+          status: 'pending',
+          respondedAt: null,
+          updatedAt: stamp(),
+          dirty: true,
+        };
+        add[row.id] = row;
+        ids.push(row.id);
+      }
+      if (Object.keys(add).length) set((s) => ({ drills: { ...s.drills, ...add } }));
+      return ids;
+    },
+
+    markPracticeSynced(sent) {
+      set((s) => (s.practice === sent ? { practiceDirty: false } : {}));
+    },
+
     mergeServer(server) {
       set((s) => mergeServerRows(s, server));
     },
@@ -244,7 +315,9 @@ export const useDrillStore = create<DrillStore>()(
       name: 'bb.drills.v1',
       version: 1,
       storage: createJSONStorage(() => AsyncStorage),
-      partialize: ({ startedOn, notifyAt, notificationsAsked, reportSkipped, drills, journal }) => ({
+      partialize: ({ startedOn, notifyAt, notificationsAsked, reportSkipped, drills, journal, practice, practiceDirty }) => ({
+        practice,
+        practiceDirty,
         startedOn,
         notifyAt,
         notificationsAsked,
@@ -305,12 +378,15 @@ export function mergeServerRows(local: DrillData, server: ServerSnapshot): Parti
 
   const dates = Object.values(drills).map((d) => d.scheduledFor).sort();
   const startedOn = local.startedOn && dates[0] ? (local.startedOn < dates[0] ? local.startedOn : dates[0]) : (local.startedOn ?? dates[0] ?? null);
-  return { drills, journal, startedOn };
+  const practice = local.practiceDirty ? local.practice : (server.practice ?? local.practice);
+  return { drills, journal, startedOn, practice };
 }
 
 /** Rows with changes not yet on the server. */
 export function pendingCount(data: DrillData): number {
   return (
-    Object.values(data.drills).filter((d) => d.dirty).length + Object.values(data.journal).filter((j) => j.dirty).length
+    Object.values(data.drills).filter((d) => d.dirty).length +
+    Object.values(data.journal).filter((j) => j.dirty).length +
+    (data.practiceDirty ? 1 : 0)
   );
 }
