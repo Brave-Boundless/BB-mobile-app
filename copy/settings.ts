@@ -1,10 +1,10 @@
-// status: draft — awaiting Mark's approval
+// status: approved — Mark, 2026-11-06
 //
 // Copy for build step 5b: the Settings tab — morning push time, account
 // (optional sign-in), data export, delete. The tagline is the book's brand line.
 
 export const settingsCopy = {
-  status: 'draft',
+  status: 'approved',
 
   title: 'Settings',
 

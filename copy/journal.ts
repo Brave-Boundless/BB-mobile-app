@@ -1,11 +1,11 @@
-// status: draft — awaiting Mark's approval
+// status: approved — Mark, 2026-11-06
 //
 // Copy for build step 5a: the Journal tab. Entries are the user's own words;
 // rule titles come from content/. The two prompts and Did it / Dodged it
 // reuse the approved copy in copy/today.ts.
 
 export const journalCopy = {
-  status: 'draft',
+  status: 'approved',
 
   title: 'Journal',
 

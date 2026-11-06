@@ -10,7 +10,8 @@
     "ios": {
       "bundleIdentifier": "com.braveandboundless.app",
       "supportsTablet": false,
-      "icon": "./assets/images/icon.png"
+      "icon": "./assets/images/icon.png",
+      "usesAppleSignIn": true
     },
     "android": {
       "adaptiveIcon": {
@@ -44,7 +45,10 @@
         {
           "color": "#F06A2A"
         }
-      ]
+      ],
+      "expo-web-browser",
+      "expo-sharing",
+      "expo-apple-authentication"
     ],
     "experiments": {
       "typedRoutes": true,

@@ -31,6 +31,8 @@ export function getSupabase(): SupabaseClient {
       autoRefreshToken: true,
       persistSession: true,
       detectSessionInUrl: false,
+      // PKCE: OAuth (Google) returns a one-time code to the app's deep link.
+      flowType: 'pkce',
     },
   });
 
