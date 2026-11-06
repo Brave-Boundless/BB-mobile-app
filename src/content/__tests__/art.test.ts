@@ -4,9 +4,9 @@ import { chapterArt, partArt, yourMoveArt } from '../art';
 import { parts, rules } from '..';
 
 describe('book art', () => {
-  it('has an illustration for every rule except 8 (left out on purpose: store nudity rules)', () => {
+  it('has an illustration for every rule', () => {
     const missing = rules.map((r) => r.number).filter((n) => !chapterArt[n]);
-    expect(missing).toEqual([8]);
+    expect(missing).toEqual([]);
   });
 
   it('has a pillar illustration for every part', () => {
