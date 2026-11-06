@@ -7,7 +7,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { settingsCopy as copy } from '@copy/settings';
 import { Button } from '@/components/button';
 import { confirmDestructive } from '@/components/confirm';
+import { Rise } from '@/components/motion';
 import { TimeField } from '@/components/time-field';
+import { fadeIn } from '@/theme/motion';
+import Animated from 'react-native-reanimated';
 import {
   authOptions,
   sendEmailCode,
@@ -30,23 +33,27 @@ const appVersion = Constants.expoConfig?.version ?? '1.0.0';
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
+    <Rise>
     <View className="mt-10">
       <Text accessibilityRole="header" className="font-medium text-sm uppercase tracking-widest text-ash">
         {title}
       </Text>
       <View className="mt-3">{children}</View>
     </View>
+    </Rise>
   );
 }
 
 function Message({ text, tone = 'muted' }: { text: string | null; tone?: 'muted' | 'error' }) {
   if (!text) return null;
   return (
-    <Text
-      accessibilityRole={tone === 'error' ? 'alert' : undefined}
-      className={`mt-2 font-sans text-sm ${tone === 'error' ? 'text-ember-soft' : 'text-ash'}`}>
-      {text}
-    </Text>
+    <Animated.View key={text} entering={fadeIn()}>
+      <Text
+        accessibilityRole={tone === 'error' ? 'alert' : undefined}
+        className={`mt-2 font-sans text-sm ${tone === 'error' ? 'text-ember-soft' : 'text-ash'}`}>
+        {text}
+      </Text>
+    </Animated.View>
   );
 }
 
@@ -191,6 +198,7 @@ function SignIn() {
       </View>
 
       {step.kind === 'email' ? (
+        <Rise>
         <View className="mt-5 rounded-xl bg-charcoal-900 p-5">
           <Text nativeID="email-label" className="font-medium text-base text-bone">
             {copy.account.emailLabel}
@@ -225,9 +233,11 @@ function SignIn() {
             />
           </View>
         </View>
+        </Rise>
       ) : null}
 
       {step.kind === 'code' ? (
+        <Rise>
         <View className="mt-5 rounded-xl bg-charcoal-900 p-5">
           <Text className="font-sans text-base text-bone">{copy.account.codeSent(step.email)}</Text>
           <Text nativeID="code-label" className="mt-4 font-medium text-base text-bone">
@@ -260,6 +270,7 @@ function SignIn() {
             <Button variant="text" label={copy.account.resend} disabled={busy} onPress={() => void send(step.email)} />
           </View>
         </View>
+        </Rise>
       ) : null}
     </View>
   );

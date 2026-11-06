@@ -6,6 +6,7 @@ import { rulesCopy as copy } from '@copy/rules';
 import { getRule, parts, type RuleCard } from '@/content';
 import { useDrillStore } from '@/features/drill/store';
 import { useToday } from '@/features/drill/use-today';
+import { Rise } from '@/components/motion';
 
 import { ROMAN, ruleStatus, type RuleStatus } from './history';
 
@@ -32,8 +33,8 @@ export function RulesScreen() {
         <Text accessibilityRole="header" className="pt-6 font-bold text-3xl uppercase tracking-wide text-bone">
           {copy.list.title}
         </Text>
-        {sections.map(({ part, data: partRules }) => (
-          <View key={part.id}>
+        {sections.map(({ part, data: partRules }, p) => (
+          <Rise key={part.id} index={p}>
             <View accessibilityRole="header" className="mb-3 mt-10">
               <Text className="font-medium text-sm uppercase tracking-widest text-ash">
                 {copy.list.partLabel(ROMAN[part.id])}
@@ -41,10 +42,12 @@ export function RulesScreen() {
               <Text className="mt-1 font-bold text-2xl tracking-wide text-ember-soft">{part.name}</Text>
               <Text className="font-sans text-base text-ash">{part.subtitle}</Text>
             </View>
-            {partRules.map((rule) => (
-              <RuleRow key={rule.number} rule={rule} status={ruleStatus(data, rule.number, today)} />
+            {partRules.map((rule, i) => (
+              <Rise key={rule.number} index={i} base={p * 60 + 80}>
+                <RuleRow rule={rule} status={ruleStatus(data, rule.number, today)} />
+              </Rise>
             ))}
-          </View>
+          </Rise>
         ))}
       </ScrollView>
     </SafeAreaView>

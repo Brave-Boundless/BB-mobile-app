@@ -1,4 +1,5 @@
 import { ScrollView, Text, View } from 'react-native';
+import Animated from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { progressCopy as copy } from '@copy/progress';
@@ -6,6 +7,8 @@ import { getRule } from '@/content';
 import { SPINE_LENGTH } from '@/features/drill/spine';
 import { useDrillStore } from '@/features/drill/store';
 import { useToday } from '@/features/drill/use-today';
+import { Reveal, Rise } from '@/components/motion';
+import { pop } from '@/theme/motion';
 
 import { position, ruleTallies, streak, streakMantra, type Position, type RuleTally, type Shade } from './stats';
 
@@ -45,6 +48,7 @@ export function ProgressScreen() {
           {copy.title}
         </Text>
 
+        <Rise index={0}>
         <View className="mt-8 flex-row gap-3">
           <View className="flex-1 rounded-xl bg-charcoal-900 p-4">
             <Heading>{copy.day.label}</Heading>
@@ -59,13 +63,19 @@ export function ProgressScreen() {
             </Text>
           </View>
         </View>
-        {run > 0 && mantra ? <Text className="mt-3 font-medium text-lg text-ember-soft">{mantra}</Text> : null}
+        </Rise>
+        {run > 0 && mantra ? (
+          <Reveal delay={300}>
+            <Text className="mt-3 font-medium text-lg text-ember-soft">{mantra}</Text>
+          </Reveal>
+        ) : null}
 
+        <Rise index={1}>
         <View className="mt-10">
           <Heading>{copy.map.title}</Heading>
           <View className="mt-3 flex-row flex-wrap gap-2">
-            {tallies.map((t) => (
-              <MapCell key={t.ruleId} tally={t} />
+            {tallies.map((t, i) => (
+              <MapCell key={t.ruleId} tally={t} index={i} />
             ))}
           </View>
           <View className="mt-4 flex-row flex-wrap gap-x-4 gap-y-2" accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
@@ -77,30 +87,38 @@ export function ProgressScreen() {
             ))}
           </View>
         </View>
+        </Rise>
 
+        <Rise index={2}>
         <View className="mt-10">
           <Heading>{copy.scorecards.title}</Heading>
           <Text className="mt-2 font-sans text-base text-ash">{copy.scorecards.hint}</Text>
-          {tallies.map((t) => (
-            <ScorecardRow key={t.ruleId} tally={t} />
+          {tallies.map((t, i) => (
+            <Rise key={t.ruleId} index={i} base={250}>
+              <ScorecardRow tally={t} />
+            </Rise>
           ))}
         </View>
+        </Rise>
       </ScrollView>
     </SafeAreaView>
   );
 }
 
-function MapCell({ tally: { ruleId, done, answered, shade } }: { tally: RuleTally }) {
+function MapCell({ tally: { ruleId, done, answered, shade }, index }: { tally: RuleTally; index: number }) {
   const style = CELL[shade];
+  // The 15 cells pop in left to right, top to bottom.
   return (
+    <Animated.View entering={pop(index)} style={{ width: '18%' }}>
     <View
       accessible
       accessibilityLabel={copy.map.cellA11y(ruleId, done, answered)}
       testID={`map-cell-${ruleId}`}
-      className={`h-16 w-[18%] items-center justify-center rounded-lg ${style.box}`}>
+      className={`h-16 w-full items-center justify-center rounded-lg ${style.box}`}>
       <Text className={`font-bold text-lg ${style.text}`}>{ruleId}</Text>
       <Text className={`font-sans text-xs ${style.text}`}>{answered === 0 ? '–' : `${done}/${answered}`}</Text>
     </View>
+    </Animated.View>
   );
 }
 

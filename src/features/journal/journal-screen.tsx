@@ -6,6 +6,9 @@ import { journalCopy as copy } from '@copy/journal';
 import { todayCopy } from '@copy/today';
 import { Button } from '@/components/button';
 import { confirmDestructive } from '@/components/confirm';
+import { Rise } from '@/components/motion';
+import { fadeIn, fadeOut } from '@/theme/motion';
+import Animated from 'react-native-reanimated';
 import { rules, type RuleId } from '@/content';
 import { checkReport } from '@/features/drill/journal-rules';
 import { useDrillStore } from '@/features/drill/store';
@@ -42,9 +45,16 @@ export function JournalScreen() {
 
         <View className="px-6 pt-6">
           {items.length === 0 ? (
-            <Text className="font-sans text-lg text-ash">{anyAtAll ? copy.emptyFiltered : copy.empty}</Text>
+            <Animated.View entering={fadeIn()}>
+              <Text className="font-sans text-lg text-ash">{anyAtAll ? copy.emptyFiltered : copy.empty}</Text>
+            </Animated.View>
           ) : (
-            items.map((item) => <Entry key={item.entry.id} item={item} />)
+            // Keyed by filter so switching rules re-runs the stagger; deletes fade out and the rest close up.
+            items.map((item, i) => (
+              <Rise key={`${filter ?? 'all'}:${item.entry.id}`} index={i} exiting={fadeOut} layout>
+                <Entry item={item} />
+              </Rise>
+            ))
           )}
         </View>
       </ScrollView>

@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 import { jest } from '@jest/globals';
 
+// Reanimated 4 needs a native worklets runtime; see test/reanimated-mock.js.
+jest.mock('react-native-reanimated', () => require('./test/reanimated-mock'));
+
 jest.mock('@react-native-async-storage/async-storage', () =>
   require('@react-native-async-storage/async-storage/jest/async-storage-mock'),
 );
