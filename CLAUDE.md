@@ -123,3 +123,9 @@ Seed `rules` from `content/bb-rule-cards.json` via a migration script; the JSON 
 - 2026-11-06 — Evening report-back is **in-app only** (shown on Today after answering). One push per day: the morning mantra (title = rule title, body = mantra), scheduled locally 7 days ahead and re-planned on every answer and app open.
 - 2026-11-06 — Accounts are **optional at start** (Mark): Day 1 needs no sign-in. Drills and journal are stored on the device first and sync to Supabase after sign-in. This is also the offline path the brief requires for Today + Journal.
 - 2026-11-06 — One PR per step: step 2 is on `claude/step-2-today`, stacked on step 1's branch, as its own draft PR.
+- 2026-11-06 — `copy/today.ts` **approved** by Mark.
+- 2026-11-06 — Today is local-first: Zustand store persisted to AsyncStorage (`bb.drills.v1`). Rows get client UUIDs and a `dirty` flag; `use-sync.ts` pushes dirty rows to Supabase on launch, reconnect and every write, only when signed in. A row is marked clean only if unchanged since it was sent. Sync is push-only for now; pulling history onto a new device comes with sign-in (step 5).
+- 2026-11-06 — `drill_days.tier` records the tier actually done: `five_minute` when the user took the "Only have five minutes" fallback. Undo restores the scheduled tier and deletes that day's report-back (it answered the old outcome).
+- 2026-11-06 — Report-back limit enforced in-app: max 3 sentences and 1000 chars (DB check matches). Skipping the prompt is remembered per drill.
+- 2026-11-06 — Milestones are a full-screen modal route (`/milestone/[part]`) pushed after answering days 12/24/36/45. Day 45+ shows the FIELD milestone copy on Today until the step-6 wrap-up exists.
+- 2026-11-06 — Maestro smoke flow lives in `.maestro/smoke.yaml`. It needs a dev build (EAS) to run; not run in CI yet.

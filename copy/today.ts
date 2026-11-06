@@ -1,4 +1,4 @@
-// status: draft — awaiting Mark's approval
+// status: approved — Mark, 2026-11-06
 //
 // Copy for build step 2: first run, the Today screen, the evening report-back,
 // milestones, and the morning push. Book text (rule titles, drills, mantras,
@@ -7,7 +7,7 @@
 // imperative, no exclamation points, never shame a dodge.
 
 export const todayCopy = {
-  status: 'draft',
+  status: 'approved',
 
   // ── First run ────────────────────────────────────────────────────────────
   start: {
