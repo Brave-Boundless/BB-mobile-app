@@ -52,11 +52,22 @@ describe('Rules screens', () => {
     expect(screen.getByText(copy.detail.fallbackNote)).toBeTruthy(); // day 2 only
     expect(screen.getByText('Day 3 · Daily drill · Did it')).toBeTruthy();
     expect(screen.getByText('It cost me my excuse.')).toBeTruthy();
+    expect(screen.getByTestId('rule-stamp')).toBeTruthy(); // all three days answered
   });
 
   it('shows the empty record for a rule not reached', async () => {
     jest.mocked(useLocalSearchParams).mockReturnValue({ id: '4' });
     await wrap(<RuleDetailScreen />);
     expect(screen.getByText(copy.detail.historyEmpty(10))).toBeTruthy();
+  });
+
+  it('heads a rule with its chapter illustration, except rule 8', async () => {
+    jest.mocked(useLocalSearchParams).mockReturnValue({ id: '1' });
+    await wrap(<RuleDetailScreen />);
+    expect(screen.getByTestId('chapter-art')).toBeTruthy();
+    screen.unmount();
+    jest.mocked(useLocalSearchParams).mockReturnValue({ id: '8' });
+    await wrap(<RuleDetailScreen />);
+    expect(screen.queryByTestId('chapter-art')).toBeNull();
   });
 });

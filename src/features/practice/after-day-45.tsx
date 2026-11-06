@@ -4,6 +4,8 @@ import { Pressable, Text, View } from 'react-native';
 import { todayCopy } from '@copy/today';
 import { wrapupCopy as copy } from '@copy/wrapup';
 import { Button } from '@/components/button';
+import { ChapterArt } from '@/components/art';
+import { yourMoveArt } from '@/content/art';
 import { Reveal, Rise, Settle } from '@/components/motion';
 import { fadeIn, pop } from '@/theme/motion';
 import Animated from 'react-native-reanimated';
@@ -41,13 +43,13 @@ function Toggle({ label, a11y, on, onPress, testID }: { label: string; a11y: str
       accessibilityLabel={a11y}
       onPress={onPress}
       testID={testID}
-      className={`mb-2 min-h-14 flex-row items-center gap-3 rounded-xl border px-4 py-3 active:opacity-80 ${
+      className={`mb-2 min-h-14 flex-row items-center gap-3 border px-4 py-3 active:opacity-80 ${
         on ? 'border-ember bg-charcoal-800' : 'border-charcoal-700 bg-charcoal-900'
       }`}>
-      <View className={`h-5 w-5 items-center justify-center rounded border-2 ${on ? 'border-ember bg-ember' : 'border-ash'}`}>
+      <View className={`h-5 w-5 items-center justify-center border-2 ${on ? 'border-ember bg-ember' : 'border-ash'}`}>
         {on ? (
           <Animated.View entering={pop()}>
-            <View className="h-2 w-2 rounded-sm bg-charcoal-950" />
+            <View className="h-2 w-2 bg-charcoal-950" />
           </Animated.View>
         ) : null}
       </View>
@@ -93,6 +95,11 @@ function WrapupView({ today, mode, onDone }: { today: LocalDate; mode: 'first' |
     <View className="flex-1">
       {mode === 'first' ? (
         <>
+          <Reveal>
+            <View className="mb-8">
+              <ChapterArt art={yourMoveArt} testID="your-move-art" />
+            </View>
+          </Reveal>
           <Rise index={0}>
             <Text accessibilityRole="header" className="font-bold text-3xl text-bone">
               {copy.wrapup.headline}
@@ -113,7 +120,7 @@ function WrapupView({ today, mode, onDone }: { today: LocalDate; mode: 'first' |
                 <View className="mt-3">
                   {pattern.map((p, i) => (
                     <Rise key={p.ruleId} index={i} base={350}>
-                    <View className="mb-2 rounded-xl bg-charcoal-900 p-4">
+                    <View className="mb-2 bg-charcoal-900 p-4">
                       <Text className="font-bold text-base text-bone">{getRule(p.ruleId).title}</Text>
                       <Text className="mt-1 font-medium text-sm text-ember-soft">{copy.wrapup.dodgeRow(p.dodged, p.answered)}</Text>
                     </View>
@@ -249,7 +256,7 @@ function SlotCard({ slot }: { slot: PracticeSlot }) {
 
   return (
     <Settle>
-    <View className="mt-3 rounded-xl bg-charcoal-900 p-5" testID={`slot-${slot.kind}-${slot.ruleId}`}>
+    <View className="mt-3 bg-charcoal-900 p-5" testID={`slot-${slot.kind}-${slot.ruleId}`}>
       <Text className="font-bold text-lg text-bone">{rule.title}</Text>
       <Text className="mt-2 font-medium text-sm uppercase tracking-widest text-ember-soft">{label}</Text>
       <Text className="mt-1 font-medium text-xl leading-8 text-bone">{rule.drills[slot.tier]}</Text>

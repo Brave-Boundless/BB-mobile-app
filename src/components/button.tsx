@@ -14,8 +14,8 @@ interface ButtonProps {
 }
 
 const base = {
-  primary: 'min-h-14 items-center justify-center rounded-xl bg-ember px-6',
-  secondary: 'min-h-14 items-center justify-center rounded-xl border border-charcoal-700 bg-charcoal-900 px-6',
+  primary: 'min-h-14 items-center justify-center bg-ember px-6',
+  secondary: 'min-h-14 items-center justify-center border border-charcoal-700 bg-charcoal-900 px-6',
   text: 'min-h-12 items-center justify-center px-2',
 } as const;
 

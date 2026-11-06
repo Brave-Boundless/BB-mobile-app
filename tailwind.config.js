@@ -5,6 +5,8 @@ module.exports = {
   content: ['./src/**/*.{js,jsx,ts,tsx}'],
   presets: [require('nativewind/preset')],
   theme: {
+    // The brand is square: radius-0 is its only radius (B&B Design System).
+    borderRadius: { none: '0px', DEFAULT: '0px', sm: '0px', md: '0px', lg: '0px', xl: '0px', '2xl': '0px', full: '0px' },
     extend: {
       colors: palette,
       fontFamily: {

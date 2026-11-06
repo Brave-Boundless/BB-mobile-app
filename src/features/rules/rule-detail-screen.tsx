@@ -6,6 +6,11 @@ import { todayCopy } from '@copy/today';
 import { DRILL_TIERS, getPart, getRule, type RuleId } from '@/content';
 import { useDrillStore } from '@/features/drill/store';
 import { Rise } from '@/components/motion';
+import { ChapterArt } from '@/components/art';
+import { chapterArt } from '@/content/art';
+import { stampsCopy } from '@copy/stamps';
+import { StampImage } from '@/features/stamps/passport';
+import { stampFor } from '@/features/stamps/stamps';
 
 import { ROMAN, ruleHistory, ruleStartDay, type HistoryEntry } from './history';
 
@@ -31,11 +36,19 @@ export function RuleDetailScreen() {
   const rule = getRule(id as RuleId);
   const part = getPart(rule.part);
   const history = ruleHistory(data, rule.number);
+  const stamp = stampFor(data, rule.number);
 
   return (
     <>
       <Stack.Screen options={{ title: '' }} />
       <ScrollView className="flex-1 bg-charcoal-950" contentContainerClassName="px-6 pb-12 pt-2">
+        {chapterArt[rule.number] ? (
+          <Rise>
+            <View className="mb-6">
+              <ChapterArt art={chapterArt[rule.number]!} testID="chapter-art" />
+            </View>
+          </Rise>
+        ) : null}
         <Text className="font-medium text-sm uppercase tracking-widest text-ember-soft">
           {`${copy.list.partLabel(ROMAN[part.id])} · ${part.name}`}
         </Text>
@@ -51,7 +64,7 @@ export function RuleDetailScreen() {
 
         <Section title={copy.detail.drills} index={1}>
           {DRILL_TIERS.map((tier) => (
-            <View key={tier} className="mb-3 rounded-xl bg-charcoal-900 p-4">
+            <View key={tier} className="mb-3 bg-charcoal-900 p-4">
               <Text className="font-medium text-sm text-ember-soft">{todayCopy.drill.tier[tier]}</Text>
               <Text className="mt-1 font-sans text-lg text-bone">{rule.drills[tier]}</Text>
             </View>
@@ -67,6 +80,18 @@ export function RuleDetailScreen() {
         </Section>
 
         <Section title={copy.detail.history} index={4}>
+          {stamp ? (
+            <View
+              accessible
+              accessibilityLabel={stampsCopy.a11y.earned(rule.number, rule.title, stamp.done)}
+              className="mb-4 flex-row items-center gap-4"
+              testID="rule-stamp">
+              <StampImage ruleId={rule.number} width={120} />
+              <Text className="flex-1 font-medium text-base text-bone">{stampsCopy.rule.stamped(stamp.done)}</Text>
+            </View>
+          ) : history.length > 0 ? (
+            <Text className="mb-3 font-sans text-base text-ash">{stampsCopy.rule.notYet}</Text>
+          ) : null}
           {history.length === 0 ? (
             <Text className="font-sans text-base text-ash">{copy.detail.historyEmpty(ruleStartDay(rule.number))}</Text>
           ) : (

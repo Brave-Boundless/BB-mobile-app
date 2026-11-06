@@ -24,7 +24,7 @@ export function EveningPrompt({ row }: { row: DrillDayRow }) {
   if (saved) {
     return (
       <Animated.View entering={fadeIn()}>
-      <View className="mt-10 rounded-xl bg-charcoal-900 p-5">
+      <View className="mt-10 bg-charcoal-900 p-5">
         <Text className="font-medium text-sm text-ash">{prompt}</Text>
         <Text className="mt-2 font-sans text-lg text-bone">{saved.body}</Text>
         <Text className="mt-3 font-sans text-sm text-ash">{copy.evening.saved}</Text>
@@ -45,7 +45,7 @@ export function EveningPrompt({ row }: { row: DrillDayRow }) {
   };
 
   return (
-    <View className="mt-10 rounded-xl bg-charcoal-900 p-5">
+    <View className="mt-10 bg-charcoal-900 p-5">
       <Text nativeID="evening-prompt" className="font-bold text-xl text-bone">
         {prompt}
       </Text>
@@ -61,7 +61,7 @@ export function EveningPrompt({ row }: { row: DrillDayRow }) {
         placeholderTextColor={palette.ash}
         multiline
         maxLength={1000}
-        className="mt-3 min-h-24 rounded-lg border border-charcoal-700 bg-charcoal-950 p-3 font-sans text-lg text-bone"
+        className="mt-3 min-h-24 border border-charcoal-700 bg-charcoal-950 p-3 font-sans text-lg text-bone"
         testID="evening-input"
       />
       {error ? (
