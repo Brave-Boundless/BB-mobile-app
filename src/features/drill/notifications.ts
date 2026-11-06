@@ -6,7 +6,7 @@ import { Platform } from 'react-native';
 
 import { toLocalDate } from './local-date';
 import { planMorningNotifications } from './notification-plan';
-import type { DrillRecord } from './progress';
+import type { DrillData } from './store';
 
 const CHANNEL_ID = 'morning-drill';
 
@@ -36,10 +36,10 @@ export async function requestNotifications(): Promise<boolean> {
 }
 
 /** Replaces every scheduled push with the current 7-day plan. */
-export async function rescheduleMorningPushes(records: readonly DrillRecord[], notifyAt: string): Promise<void> {
+export async function rescheduleMorningPushes(data: DrillData, notifyAt: string = data.notifyAt): Promise<void> {
   if (Platform.OS === 'web' || !(await notificationsAllowed())) return;
   const now = new Date();
-  const plan = planMorningNotifications(records, now, toLocalDate(now), notifyAt);
+  const plan = planMorningNotifications(Object.values(data.drills), now, toLocalDate(now), notifyAt, data);
   await Notifications.cancelAllScheduledNotificationsAsync();
   for (const n of plan) {
     await Notifications.scheduleNotificationAsync({

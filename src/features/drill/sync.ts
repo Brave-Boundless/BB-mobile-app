@@ -19,6 +19,7 @@ export async function pushDirty(client: SupabaseClient, userId: string, data: Dr
       drills.map((d) => ({
         id: d.id,
         user_id: userId,
+        kind: d.kind ?? 'spine',
         day_number: d.day,
         rule_id: d.ruleId,
         tier: d.tier,

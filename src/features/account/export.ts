@@ -20,8 +20,10 @@ export function buildExport(data: DrillData, opts: { now: Date; appVersion: stri
     appVersion: opts.appVersion,
     account: opts.email ? { email: opts.email } : null,
     settings: { startedOn: data.startedOn, morningPushAt: data.notifyAt },
+    afterDay45: data.practice,
     drills: drills.map((d) => ({
       id: d.id,
+      track: d.kind ?? 'spine',
       day: d.day,
       rule: d.ruleId,
       ruleTitle: getRule(d.ruleId).title,
