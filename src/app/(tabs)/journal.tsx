@@ -1,6 +1,3 @@
-import { navigationCopy } from '@copy/navigation';
-import { NotBuilt } from '@/components/screen';
+import { JournalScreen } from '@/features/journal/journal-screen';
 
-export default function JournalScreen() {
-  return <NotBuilt title={navigationCopy.tabs.journal} note={navigationCopy.building(5)} />;
-}
+export default JournalScreen;

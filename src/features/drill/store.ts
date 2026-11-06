@@ -60,6 +60,9 @@ export interface DrillActions {
   undo(id: string): void;
   saveReport(drillDayId: string, body: string): void;
   skipReport(drillDayId: string): void;
+  deleteReport(journalId: string): void;
+  /** Brings server history onto this phone after sign-in. See mergeServerRows. */
+  mergeServer(server: ServerSnapshot): void;
   /** Clears `dirty` only on rows unchanged since they were sent (updatedAt matches). */
   markSynced(sent: SyncedRows): void;
   reset(): void;
@@ -68,6 +71,12 @@ export interface DrillActions {
 export interface SyncedRows {
   drills: { id: string; updatedAt: string }[];
   journal: { id: string; updatedAt: string }[];
+}
+
+/** Rows as stored on the server, already mapped to local shape (clean). */
+export interface ServerSnapshot {
+  drills: Omit<DrillDayRow, 'dirty'>[];
+  journal: Omit<JournalRow, 'dirty' | 'deleted'>[];
 }
 
 export type DrillStore = DrillData & DrillActions;
@@ -207,6 +216,18 @@ export function drillActions(
       });
     },
 
+    deleteReport(journalId) {
+      set((s) => {
+        const j = s.journal[journalId];
+        if (!j) return {};
+        return { journal: { ...s.journal, [journalId]: { ...j, deleted: true, dirty: true, updatedAt: stamp() } } };
+      });
+    },
+
+    mergeServer(server) {
+      set((s) => mergeServerRows(s, server));
+    },
+
     reset() {
       set(() => ({ ...initialDrillData }));
     },
@@ -238,4 +259,58 @@ export const useDrillStore = create<DrillStore>()(
 /** Report-back for a drill, if any. */
 export function reportFor(data: DrillData, drillDayId: string): JournalRow | undefined {
   return Object.values(data.journal).find((j) => j.drillDayId === drillDayId && !j.deleted);
+}
+
+/**
+ * Merge rule for signing in (decisions log, step 5):
+ * - The server's history wins for every day it has. A local row for the same
+ *   spine day under a different id is dropped, with its report-back.
+ * - A row with the same id: local wins only if it has unsent changes.
+ * - Local days the server doesn't have are kept, and sync pushes them.
+ * - Local tombstones are kept so their server delete still goes out.
+ */
+export function mergeServerRows(local: DrillData, server: ServerSnapshot): Partial<DrillData> {
+  const drills: Record<string, DrillDayRow> = {};
+  const serverDays = new Set(server.drills.map((d) => `${d.day}:${d.ruleId}`));
+  const dropped = new Set<string>();
+
+  for (const d of Object.values(local.drills)) {
+    const sameId = server.drills.find((x) => x.id === d.id);
+    if (!sameId && serverDays.has(`${d.day}:${d.ruleId}`)) {
+      dropped.add(d.id);
+      continue;
+    }
+    drills[d.id] = d;
+  }
+  for (const d of server.drills) {
+    const mine = drills[d.id];
+    if (mine?.dirty) continue;
+    drills[d.id] = { ...d, dirty: false };
+  }
+
+  const journal: Record<string, JournalRow> = {};
+  for (const j of Object.values(local.journal)) {
+    if (dropped.has(j.drillDayId)) continue;
+    journal[j.id] = j;
+  }
+  for (const j of server.journal) {
+    const mine = journal[j.id];
+    if (mine?.dirty) continue;
+    // One live report per drill: a clean local entry on the same drill under another id gives way.
+    for (const other of Object.values(journal)) {
+      if (other.drillDayId === j.drillDayId && other.id !== j.id && !other.deleted && !other.dirty) delete journal[other.id];
+    }
+    journal[j.id] = { ...j, dirty: false, deleted: false };
+  }
+
+  const dates = Object.values(drills).map((d) => d.scheduledFor).sort();
+  const startedOn = local.startedOn && dates[0] ? (local.startedOn < dates[0] ? local.startedOn : dates[0]) : (local.startedOn ?? dates[0] ?? null);
+  return { drills, journal, startedOn };
+}
+
+/** Rows with changes not yet on the server. */
+export function pendingCount(data: DrillData): number {
+  return (
+    Object.values(data.drills).filter((d) => d.dirty).length + Object.values(data.journal).filter((j) => j.dirty).length
+  );
 }

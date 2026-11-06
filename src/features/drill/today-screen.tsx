@@ -1,4 +1,3 @@
-import DateTimePicker from '@react-native-community/datetimepicker';
 import { router } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, Text, TextInput, View } from 'react-native';
@@ -6,6 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { todayCopy as copy } from '@copy/today';
 import { Button } from '@/components/button';
+import { TimeField } from '@/components/time-field';
 import { getPart, getRule, type DrillTier } from '@/content';
 import { palette } from '@/theme';
 
@@ -19,20 +19,8 @@ import { useToday } from './use-today';
 
 // ── helpers ──────────────────────────────────────────────────────────────
 
-function hhmmToDate(hhmm: string): Date {
-  const [h, m] = hhmm.split(':').map(Number);
-  const d = new Date();
-  d.setHours(h, m, 0, 0);
-  return d;
-}
 
-function dateToHhmm(d: Date): string {
-  return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
-}
 
-function formatTime(hhmm: string): string {
-  return hhmmToDate(hhmm).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
-}
 
 function useHydrated(): boolean {
   const [hydrated, setHydrated] = useState(() => useDrillStore.persist.hasHydrated());
@@ -134,43 +122,6 @@ function StartView({ today }: { today: string }) {
       <View className="mt-10">
         <Button label={copy.start.cta} onPress={() => start(today, notifyAt)} testID="start-day-1" />
       </View>
-    </View>
-  );
-}
-
-function TimeField({ value, onChange }: { value: string; onChange: (hhmm: string) => void }) {
-  const [open, setOpen] = useState(false);
-
-  if (Platform.OS === 'web') {
-    return <Text className="mt-2 font-bold text-2xl text-ember-soft">{formatTime(value)}</Text>;
-  }
-  if (Platform.OS === 'ios') {
-    return (
-      <DateTimePicker
-        value={hhmmToDate(value)}
-        mode="time"
-        display="spinner"
-        themeVariant="dark"
-        textColor={palette.bone}
-        minuteInterval={5}
-        onChange={(_, d) => d && onChange(dateToHhmm(d))}
-      />
-    );
-  }
-  // Android: tap the time to open the system dialog.
-  return (
-    <View className="mt-1 items-start">
-      <Button variant="text" label={formatTime(value)} onPress={() => setOpen(true)} />
-      {open ? (
-        <DateTimePicker
-          value={hhmmToDate(value)}
-          mode="time"
-          onChange={(e, d) => {
-            setOpen(false);
-            if (e.type === 'set' && d) onChange(dateToHhmm(d));
-          }}
-        />
-      ) : null}
     </View>
   );
 }

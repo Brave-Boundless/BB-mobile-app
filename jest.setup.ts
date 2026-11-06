@@ -26,10 +26,28 @@ jest.mock('expo-crypto', () => ({
 jest.mock('expo-router', () => {
   const Stack = Object.assign(() => null, { Screen: () => null });
   return {
-    router: { push: jest.fn(), back: jest.fn() },
+    router: { push: jest.fn(), back: jest.fn(), replace: jest.fn() },
     useLocalSearchParams: jest.fn(() => ({})),
     // asChild Link: render the child; tests assert on hrefs via the child's props.
     Link: ({ children }: { children: unknown }) => children,
     Stack,
   };
 });
+
+jest.mock('expo-file-system', () => {
+  class File {
+    uri: string;
+    exists = false;
+    constructor(...parts: { uri?: string }[] | string[]) {
+      this.uri = parts.map((p) => (typeof p === 'string' ? p : (p.uri ?? ''))).join('/');
+    }
+    create() {}
+    delete() {}
+    async write() {}
+  }
+  return { File, Paths: { cache: { uri: 'file:///cache' } } };
+});
+
+jest.mock('expo-sharing', () => ({ shareAsync: jest.fn(async () => undefined) }));
+jest.mock('expo-apple-authentication', () => ({ signInAsync: jest.fn(), AppleAuthenticationScope: { EMAIL: 1 } }));
+jest.mock('expo-web-browser', () => ({ openAuthSessionAsync: jest.fn() }));
