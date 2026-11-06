@@ -27,7 +27,7 @@ scripts/              generate-rules-migration.ts
 
 ```bash
 npm install
-cp .env.example .env   # fill in Supabase URL + publishable key
+cp .env.example .env   # already points at the hosted project
 npm start
 ```
 
@@ -36,6 +36,8 @@ Native modules beyond Expo Go's set will need a dev build: `npx eas-cli@latest b
 ## Database
 
 Migrations live in `supabase/migrations/`. Every table has RLS on.
+
+Hosted project: **Brave & Boundless app** (org Boondock Walker, ref `wxhonnvhecqsbydmeelc`, `us-east-1`). Link the CLI once with `npx supabase link --project-ref wxhonnvhecqsbydmeelc`.
 
 ```bash
 npm run db:start    # local Supabase (needs Docker)
