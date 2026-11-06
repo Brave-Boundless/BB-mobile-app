@@ -1,0 +1,221 @@
+{
+  "source": "Brave & Boundless, master manuscript 2026-10-19, Boundless Rule Cards pp. 273-277",
+  "parts": [
+    { "id": 1, "name": "FIRE", "subtitle": "Origin & First Breaks", "rules": [1, 2, 3, 4] },
+    { "id": 2, "name": "FORGE", "subtitle": "Skills & Systems", "rules": [5, 6, 7, 8] },
+    { "id": 3, "name": "FOUNDATION", "subtitle": "Core Pillars", "rules": [9, 10, 11, 12] },
+    { "id": 4, "name": "FIELD", "subtitle": "Impact & Legacy", "rules": [13, 14, 15] }
+  ],
+  "rules": [
+    {
+      "number": 1,
+      "title": "Move Before You’re Ready",
+      "chapter": "Burn the Map",
+      "part": 1,
+      "why_it_matters": "Ready is a stall word. Motion creates proof.",
+      "drills": {
+        "five_minute": "Write the smallest visible step you can take in 5 minutes. Do it now.",
+        "uncomfortable": "Send one message that commits you publicly to a start date.",
+        "daily": "“MVP the day” — ship one imperfect deliverable before noon."
+      },
+      "scorecard": "Days you shipped ≥1 thing / 7.",
+      "mantra": "Action beats anxiety."
+    },
+    {
+      "number": 2,
+      "title": "Tell the Brutal Truth Fast",
+      "chapter": "Own the Wreckage",
+      "part": 1,
+      "why_it_matters": "Delay compounds damage.",
+      "drills": {
+        "five_minute": "Draft the honest sentence you’re dodging. Read it out loud.",
+        "uncomfortable": "Deliver it to the person, same day, with ownership + ask.",
+        "daily": "Clear one micro-truth (status, budget, boundary) before lunch."
+      },
+      "scorecard": "# of hard truths delivered within 24 hours.",
+      "mantra": "Clarity now saves carnage later."
+    },
+    {
+      "number": 3,
+      "title": "Hard Reps Build Unfair Advantages",
+      "chapter": "Run Toward Hard",
+      "part": 1,
+      "why_it_matters": "Capacity > comfort.",
+      "drills": {
+        "five_minute": "Choose one rep that burns (cold outreach, sprint, cold shower). Do 1.",
+        "uncomfortable": "Schedule a weekly “hard session” with a measurable failure point.",
+        "daily": "Add +1 rep or +1% intensity to a core skill."
+      },
+      "scorecard": "Consecutive days with hard rep ≥1.",
+      "mantra": "Seek the steep."
+    },
+    {
+      "number": 4,
+      "title": "Life Has No Practice Rounds",
+      "chapter": "Respect the Stakes",
+      "part": 1,
+      "why_it_matters": "Everything counts. Behave like it.",
+      "drills": {
+        "five_minute": "Identify today’s one “game play” (conversation, pitch, set). Prep 3 bullets.",
+        "uncomfortable": "Volunteer to go first in a real-stakes moment this week.",
+        "daily": "Post-game yourself: 3 wins, 1 fix, 1 next rep."
+      },
+      "scorecard": "# of first-to-act moments / week.",
+      "mantra": "Live ammo, steady aim."
+    },
+    {
+      "number": 5,
+      "title": "Optimize the Machine",
+      "chapter": "Own Your Presence",
+      "part": 2,
+      "why_it_matters": "Body is throughput. Throughput is life.",
+      "drills": {
+        "five_minute": "Water + walk: 16 oz, 5-min brisk loop.",
+        "uncomfortable": "Remove one indulgence for 7 days (alcohol, late scroll, sugar).",
+        "daily": "Sleep window alarm — consistent lights-out and wake."
+      },
+      "scorecard": "Days you hit movement + protein target + sleep window.",
+      "mantra": "Energy is earned."
+    },
+    {
+      "number": 6,
+      "title": "Freedom Requires Ownership",
+      "chapter": "Build Your Own",
+      "part": 2,
+      "why_it_matters": "Value compels; pleading repels.",
+      "drills": {
+        "five_minute": "Ship one proof-of-value artifact (before/after, demo, micro-case).",
+        "uncomfortable": "Pitch with a “here’s what I already did for you” sample.",
+        "daily": "Create one reusable asset (template, checklist, Loom)."
+      },
+      "scorecard": "New assets created / week; inbound yes’s from proof.",
+      "mantra": "Build the table. Don’t beg for a seat."
+    },
+    {
+      "number": 7,
+      "title": "Pain Is Tuition; Don’t Drop Out",
+      "chapter": "Strengthen Your Anti-Fragile Heart",
+      "part": 2,
+      "why_it_matters": "Paid pain becomes paid skill.",
+      "drills": {
+        "five_minute": "Name the lesson inside today’s irritation; write one sentence.",
+        "uncomfortable": "Re-attempt something you failed at last month with one change.",
+        "daily": "Log one “tuition > tactic” conversion."
+      },
+      "scorecard": "Tuition logs this week; re-attempts executed.",
+      "mantra": "Hurt → learn → earn."
+    },
+    {
+      "number": 8,
+      "title": "Alignment Over Approval",
+      "chapter": "No Costume, Just You",
+      "part": 2,
+      "why_it_matters": "Masks choke momentum.",
+      "drills": {
+        "five_minute": "Write your non-negotiables (3). Check today’s biggest decision against them.",
+        "uncomfortable": "Decline one misaligned invite/opportunity — politely, clearly.",
+        "daily": "One choice that favors values over vibes."
+      },
+      "scorecard": "Misaligned “no’s” made; aligned “yes’s” honored.",
+      "mantra": "Be judged for your truth, not loved for your costume."
+    },
+    {
+      "number": 9,
+      "title": "Faith Moves Mountains, Doubt Moves Nothing",
+      "chapter": "Anchor Your Soul",
+      "part": 3,
+      "why_it_matters": "Belief fuels endurance and standards.",
+      "drills": {
+        "five_minute": "Quiet sit: breathe 30x; speak a 10-word prayer/affirmation of purpose.",
+        "uncomfortable": "Share one faith/values boundary in a real setting this week.",
+        "daily": "Gratitude proof — record one instance of provision/answered effort."
+      },
+      "scorecard": "Days with sit + entry; boundaries upheld.",
+      "mantra": "Anchor, then advance."
+    },
+    {
+      "number": 10,
+      "title": "Passion Compounds Into Prosperity",
+      "chapter": "Make Obsession Your Occupation",
+      "part": 3,
+      "why_it_matters": "When you love the work, you outlast everyone who’s just chasing paychecks.",
+      "drills": {
+        "five_minute": "Draw three circles: “Good At,” “Care About,” “People Pay For.” Find the overlap.",
+        "uncomfortable": "Start one side project this week in work you’d do for free. Create something. Ship it.",
+        "daily": "Feed the obsession: read, create, or connect with someone in that space."
+      },
+      "scorecard": "Hours on passionate work vs. work you tolerate; Monday morning energy (1-10).",
+      "mantra": "Love the work long enough. Wealth follows."
+    },
+    {
+      "number": 11,
+      "title": "Build With Aligned Partners",
+      "chapter": "Build Together",
+      "part": 3,
+      "why_it_matters": "Alignment beats résumé.",
+      "drills": {
+        "five_minute": "Write your teammate filter: mission, standards, speed, communication.",
+        "uncomfortable": "Fire one obligation relationship; replace with an aligned ask.",
+        "daily": "Give one piece of no-nonsense, kind feedback to a teammate."
+      },
+      "scorecard": "# adds via filter; # misaligned ties cut.",
+      "mantra": "Pick chemistry over credentials."
+    },
+    {
+      "number": 12,
+      "title": "Humble and Kind — The Ultimate Rebellion",
+      "chapter": "Be a Bridge",
+      "part": 3,
+      "why_it_matters": "Strength without humility cracks; with it, compounds.",
+      "drills": {
+        "five_minute": "Send a 3-line thank-you with a specific receipt (what, when, effect).",
+        "uncomfortable": "Apologize once this week without qualification.",
+        "daily": "“Hold the door” practice — spot and solve one micro-friction for someone."
+      },
+      "scorecard": "Thank-yous sent; clean apologies; frictions removed.",
+      "mantra": "Steel spine, soft front."
+    },
+    {
+      "number": 13,
+      "title": "Love Big. Set Standards High.",
+      "chapter": "Parent with Purpose",
+      "part": 4,
+      "why_it_matters": "Love without standards is neglect; standards without love is tyranny.",
+      "drills": {
+        "five_minute": "Write the current family/relationship standard in one sentence.",
+        "uncomfortable": "Enforce one boundary calmly, immediately, and consistently.",
+        "daily": "One “high-standard + warmth” moment (teach, model, praise)."
+      },
+      "scorecard": "Boundaries upheld / attempted; positive reps logged.",
+      "mantra": "Warmth + weight."
+    },
+    {
+      "number": 14,
+      "title": "Raise the Standard, Earn Your Confidence",
+      "chapter": "Raise the Standard",
+      "part": 4,
+      "why_it_matters": "Standards die without systems.",
+      "drills": {
+        "five_minute": "Choose one standard; attach a 3-step micro-system (trigger > action > track).",
+        "uncomfortable": "Audit your top process; cut one lazy shortcut permanently.",
+        "daily": "Run the checklist before the work, not after."
+      },
+      "scorecard": "System runs completed / misses; defect rate trend.",
+      "mantra": "Care more than anyone else."
+    },
+    {
+      "number": 15,
+      "title": "Make Your Life a Public Service Announcement",
+      "chapter": "Live Your Legacy",
+      "part": 4,
+      "why_it_matters": "Visible standards scale culture.",
+      "drills": {
+        "five_minute": "Name your “Carsons” (3 young people watching you).",
+        "uncomfortable": "Initiate one real conversation this week: future, standards, choices.",
+        "daily": "Do one thing hard because someone is watching."
+      },
+      "scorecard": "Mentor touches; public standards moments; hard example set.",
+      "mantra": "Be the proof."
+    }
+  ]
+}

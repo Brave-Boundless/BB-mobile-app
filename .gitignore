@@ -147,3 +147,29 @@ vite.config.ts.timestamp-*
 
 # Turbo Repo
 .turbo
+
+# Expo
+.expo/
+dist/
+web-build/
+expo-env.d.ts
+.metro-health-check*
+
+# Native (Continuous Native Generation — never commit)
+/ios
+/android
+.kotlin/
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.pem
+
+# Supabase local
+supabase/.branches
+supabase/.temp
+
+# macOS
+.DS_Store
