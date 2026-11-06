@@ -49,6 +49,7 @@ const TEXT_PAIRS = [
   ['bone', 'ember.dim'], // rule-map cell text
   ['crimson', 'bone'], // stamp ink on the passport page
   ['charcoal.950', 'bone'], // text on the passport page
+  ['charcoal.700', 'bone'], // muted text and slot numbers on the passport page
   ['charcoal.950', 'gold'],
 ];
 

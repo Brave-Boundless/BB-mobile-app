@@ -8,6 +8,9 @@ import { useDrillStore } from '@/features/drill/store';
 import { Rise } from '@/components/motion';
 import { ChapterArt } from '@/components/art';
 import { chapterArt } from '@/content/art';
+import { stampsCopy } from '@copy/stamps';
+import { StampImage } from '@/features/stamps/passport';
+import { stampFor } from '@/features/stamps/stamps';
 
 import { ROMAN, ruleHistory, ruleStartDay, type HistoryEntry } from './history';
 
@@ -33,6 +36,7 @@ export function RuleDetailScreen() {
   const rule = getRule(id as RuleId);
   const part = getPart(rule.part);
   const history = ruleHistory(data, rule.number);
+  const stamp = stampFor(data, rule.number);
 
   return (
     <>
@@ -76,6 +80,18 @@ export function RuleDetailScreen() {
         </Section>
 
         <Section title={copy.detail.history} index={4}>
+          {stamp ? (
+            <View
+              accessible
+              accessibilityLabel={stampsCopy.a11y.earned(rule.number, rule.title, stamp.done)}
+              className="mb-4 flex-row items-center gap-4 bg-bone p-4"
+              testID="rule-stamp">
+              <StampImage ruleId={rule.number} width={120} />
+              <Text className="flex-1 font-medium text-base text-charcoal-950">{stampsCopy.rule.stamped(stamp.done)}</Text>
+            </View>
+          ) : history.length > 0 ? (
+            <Text className="mb-3 font-sans text-base text-ash">{stampsCopy.rule.notYet}</Text>
+          ) : null}
           {history.length === 0 ? (
             <Text className="font-sans text-base text-ash">{copy.detail.historyEmpty(ruleStartDay(rule.number))}</Text>
           ) : (

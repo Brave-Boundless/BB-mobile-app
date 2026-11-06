@@ -1,4 +1,4 @@
-import { ScrollView, Text, View } from 'react-native';
+import { ScrollView, Text, View, useWindowDimensions } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -9,6 +9,7 @@ import { useDrillStore } from '@/features/drill/store';
 import { useToday } from '@/features/drill/use-today';
 import { Reveal, Rise } from '@/components/motion';
 import { pop } from '@/theme/motion';
+import { Passport } from '@/features/stamps/passport';
 
 import { position, ruleTallies, streak, streakMantra, type Position, type RuleTally, type Shade } from './stats';
 
@@ -40,6 +41,9 @@ export function ProgressScreen() {
   const run = streak(data);
   const mantra = streakMantra(data);
   const tallies = ruleTallies(data);
+  // Passport: 3 slots a row inside the 24pt gutters and the page's 16pt padding.
+  const { width: screen } = useWindowDimensions();
+  const slot = Math.floor((Math.min(screen, 560) - 48 - 32 - 24) / 3);
 
   return (
     <SafeAreaView edges={['top']} className="flex-1 bg-charcoal-950">
@@ -90,6 +94,12 @@ export function ProgressScreen() {
         </Rise>
 
         <Rise index={2}>
+          <View className="mt-10">
+            <Passport data={data} slot={slot} />
+          </View>
+        </Rise>
+
+        <Rise index={3}>
         <View className="mt-10">
           <Heading>{copy.scorecards.title}</Heading>
           <Text className="mt-2 font-sans text-base text-ash">{copy.scorecards.hint}</Text>

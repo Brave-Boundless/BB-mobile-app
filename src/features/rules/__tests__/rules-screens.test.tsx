@@ -52,6 +52,7 @@ describe('Rules screens', () => {
     expect(screen.getByText(copy.detail.fallbackNote)).toBeTruthy(); // day 2 only
     expect(screen.getByText('Day 3 · Daily drill · Did it')).toBeTruthy();
     expect(screen.getByText('It cost me my excuse.')).toBeTruthy();
+    expect(screen.getByTestId('rule-stamp')).toBeTruthy(); // all three days answered
   });
 
   it('shows the empty record for a rule not reached', async () => {

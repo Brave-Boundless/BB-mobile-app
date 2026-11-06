@@ -3,6 +3,7 @@ import { render, screen } from '@testing-library/react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { progressCopy as copy } from '@copy/progress';
+import { stampsCopy } from '@copy/stamps';
 import { rules } from '@/content';
 import { useDrillStore } from '@/features/drill/store';
 
@@ -31,6 +32,8 @@ describe('Progress screen', () => {
     expect(screen.getByText(copy.streak.zero)).toBeTruthy();
     expect(screen.getByLabelText(copy.map.cellA11y(1, 0, 0))).toBeTruthy();
     expect(screen.getAllByText(copy.scorecards.notReached)).toHaveLength(15);
+    expect(screen.getByText(stampsCopy.passport.count(0))).toBeTruthy();
+    expect(screen.queryByTestId('stamp-1')).toBeNull();
   });
 
   it('after four days: day, streak with mantra, map and scorecards', async () => {
@@ -48,5 +51,10 @@ describe('Progress screen', () => {
     expect(screen.getByLabelText(copy.map.cellA11y(2, 1, 1))).toBeTruthy();
     for (const r of rules) expect(screen.getByText(r.scorecard)).toBeTruthy();
     expect(screen.getByText(copy.scorecards.tally(2, 3))).toBeTruthy();
+    // Rule 1's three days are answered: its stamp is in the passport; rule 2's is not.
+    expect(screen.getByText(stampsCopy.passport.count(1))).toBeTruthy();
+    expect(screen.getByTestId('stamp-1')).toBeTruthy();
+    expect(screen.getByLabelText(stampsCopy.a11y.earned(1, 'Move Before You’re Ready', 2))).toBeTruthy();
+    expect(screen.getByLabelText(stampsCopy.a11y.notYet(2, 'Tell the Brutal Truth Fast'))).toBeTruthy();
   });
 });
