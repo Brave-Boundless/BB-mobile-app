@@ -173,3 +173,6 @@ supabase/.temp
 
 # macOS
 .DS_Store
+
+# App Store Connect API key, written from the EXPO_ASC_API_KEY_BASE64 secret at build time
+.secrets/
