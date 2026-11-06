@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Brave & Boundless",
-    "slug": "bb-mobile-app",
+    "slug": "brave-boundless-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -54,6 +54,11 @@
       "typedRoutes": true,
       "reactCompiler": true
     },
-    "backgroundColor": "#0E0D0C"
+    "backgroundColor": "#0E0D0C",
+    "extra": {
+      "eas": {
+        "projectId": "228a7450-d1b4-4087-ad0d-0e4d24df6aa1"
+      }
+    }
   }
 }
