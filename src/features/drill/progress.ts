@@ -1,6 +1,6 @@
 // What the Today screen shows, derived from the user's drill records.
 //
-// Progression model (PROPOSED — awaiting Mark's call, see copy/today.ts):
+// Progression model (Mark, 2026-11-06):
 // one spine day per calendar day, and the next day unlocks only after the
 // current one is answered (Did it / Dodged it). Missing calendar days never
 // skips a drill and never counts against the user: they pick up where they
