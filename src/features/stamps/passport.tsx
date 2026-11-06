@@ -28,19 +28,19 @@ export function StampImage({ ruleId, width, testID }: { ruleId: RuleId; width: n
 }
 
 /**
- * The Passport: a bone page with a slot per rule. Stamp inks only work on
- * bone (crimson is 2.1:1 on black), so the page is the brand's paper.
+ * The Passport: a slot per rule, straight on the dark ground (Mark: no paper
+ * behind the stamps). The stamps are re-inked lighter for black — see stampArt.
  */
 export function Passport({ data, slot }: { data: DrillData; slot: number }) {
   const stamps = rules.map((r) => stampFor(data, r.number));
   const count = stamps.filter(Boolean).length;
   return (
-    <View className="bg-bone p-4" testID="passport">
-      <Text accessibilityRole="header" className="font-bold text-xl uppercase tracking-wide text-charcoal-950">
+    <View testID="passport">
+      <Text accessibilityRole="header" className="font-medium text-sm uppercase tracking-widest text-ash">
         {copy.passport.title}
       </Text>
-      <Text className="mt-1 font-sans text-sm text-charcoal-700">{copy.passport.hint}</Text>
-      <Text className="mt-1 font-medium text-sm text-charcoal-950" testID="passport-count">
+      <Text className="mt-2 font-sans text-base text-ash">{copy.passport.hint}</Text>
+      <Text className="mt-1 font-medium text-base text-bone" testID="passport-count">
         {copy.passport.count(count)}
       </Text>
       <View className="mt-4 flex-row flex-wrap justify-between gap-y-3">
@@ -66,7 +66,7 @@ function Slot({ ruleId, stamp, size, index }: { ruleId: RuleId; stamp?: Stamp; s
           <StampImage ruleId={ruleId} width={size} testID={`stamp-${ruleId}`} />
         </Animated.View>
       ) : (
-        <Text className="font-medium text-base text-charcoal-700">{ruleId}</Text>
+        <Text className="font-medium text-base text-ash">{ruleId}</Text>
       )}
     </View>
   );

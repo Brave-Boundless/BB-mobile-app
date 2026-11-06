@@ -41,9 +41,9 @@ export function ProgressScreen() {
   const run = streak(data);
   const mantra = streakMantra(data);
   const tallies = ruleTallies(data);
-  // Passport: 3 slots a row inside the 24pt gutters and the page's 16pt padding.
+  // Passport: 3 slots a row inside the 24pt gutters.
   const { width: screen } = useWindowDimensions();
-  const slot = Math.floor((Math.min(screen, 560) - 48 - 32 - 24) / 3);
+  const slot = Math.floor((Math.min(screen, 560) - 48 - 24) / 3);
 
   return (
     <SafeAreaView edges={['top']} className="flex-1 bg-charcoal-950">

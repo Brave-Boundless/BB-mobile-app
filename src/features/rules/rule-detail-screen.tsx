@@ -84,10 +84,10 @@ export function RuleDetailScreen() {
             <View
               accessible
               accessibilityLabel={stampsCopy.a11y.earned(rule.number, rule.title, stamp.done)}
-              className="mb-4 flex-row items-center gap-4 bg-bone p-4"
+              className="mb-4 flex-row items-center gap-4"
               testID="rule-stamp">
               <StampImage ruleId={rule.number} width={120} />
-              <Text className="flex-1 font-medium text-base text-charcoal-950">{stampsCopy.rule.stamped(stamp.done)}</Text>
+              <Text className="flex-1 font-medium text-base text-bone">{stampsCopy.rule.stamped(stamp.done)}</Text>
             </View>
           ) : history.length > 0 ? (
             <Text className="mb-3 font-sans text-base text-ash">{stampsCopy.rule.notYet}</Text>

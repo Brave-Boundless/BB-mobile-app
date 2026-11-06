@@ -11,7 +11,8 @@
 //
 // Every text/background pair the UI uses is listed in TEXT_PAIRS and checked
 // for WCAG contrast >= 4.5:1 in src/theme/__tests__/contrast.test.ts.
-// Crimson on black is 2.1:1, so crimson only ever sits on bone (stamps).
+// Crimson on black is 2.1:1, so crimson never sits on the dark ground. The
+// stamps use lightened inks instead (src/features/stamps/stamps.ts).
 
 /** @type {const} */
 const palette = {
@@ -49,7 +50,6 @@ const TEXT_PAIRS = [
   ['bone', 'ember.dim'], // rule-map cell text
   ['crimson', 'bone'], // stamp ink on the passport page
   ['charcoal.950', 'bone'], // text on the passport page
-  ['charcoal.700', 'bone'], // muted text and slot numbers on the passport page
   ['charcoal.950', 'gold'],
 ];
 
