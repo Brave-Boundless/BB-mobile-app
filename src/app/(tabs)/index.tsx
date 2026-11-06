@@ -1,6 +1,3 @@
-import { navigationCopy } from '@copy/navigation';
-import { NotBuilt } from '@/components/screen';
+import { TodayScreen } from '@/features/drill/today-screen';
 
-export default function TodayScreen() {
-  return <NotBuilt title={navigationCopy.tabs.today} note={navigationCopy.building(2)} />;
-}
+export default TodayScreen;

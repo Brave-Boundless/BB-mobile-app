@@ -1,0 +1,24 @@
+# Smoke flow from CLAUDE.md §4: onboard → complete Day 1 → see Progress.
+# Run against a dev build:  maestro test .maestro/smoke.yaml
+appId: com.braveandboundless.app
+---
+- clearState
+- launchApp
+- assertVisible: "45 days. 15 rules. One drill a day."
+- tapOn:
+    id: "start-day-1"
+- tapOn:
+    id: "notify-deny"
+- assertVisible: "Day 1 of 45"
+- assertVisible: "Move Before You’re Ready"
+- tapOn: "Did it. Log today’s drill as done."
+- assertVisible: "Done."
+- assertVisible: "Action beats anxiety."
+- tapOn:
+    id: "evening-input"
+- inputText: "It cost me my excuse."
+- tapOn:
+    id: "evening-save"
+- assertVisible: "In the journal."
+- tapOn: "Progress"
+- assertVisible: "Progress"
