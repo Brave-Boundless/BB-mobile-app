@@ -11,7 +11,10 @@
       "bundleIdentifier": "com.braveandboundless.app",
       "supportsTablet": false,
       "icon": "./assets/images/icon.png",
-      "usesAppleSignIn": true
+      "usesAppleSignIn": true,
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
