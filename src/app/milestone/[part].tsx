@@ -4,9 +4,11 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { todayCopy as copy } from '@copy/today';
 import { Button } from '@/components/button';
-import { GrowLine, Rise } from '@/components/motion';
+import { GrowLine, Reveal, Rise } from '@/components/motion';
 import { palette } from '@/theme';
 import { getPart, type PartId } from '@/content';
+import { partArt } from '@/content/art';
+import { PillarArt } from '@/components/art';
 
 // End of a part: days 12, 24, 36, 45. Part name + subtitle are the book's;
 // no badges, no confetti (CLAUDE.md §3).
@@ -21,6 +23,11 @@ export default function MilestoneScreen() {
     <SafeAreaView className="flex-1 bg-charcoal-950">
       <View className="flex-1 justify-between px-6 pb-8 pt-16">
         <View>
+          <Reveal>
+            <View className="mb-8">
+              <PillarArt art={partArt[id as PartId]} size={160} testID="milestone-art" />
+            </View>
+          </Reveal>
           <Rise index={0} base={150}>
             <Text className="font-medium text-sm uppercase tracking-widest text-ember-soft">{part.subtitle}</Text>
           </Rise>

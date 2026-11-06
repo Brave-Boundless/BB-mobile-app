@@ -4,6 +4,8 @@ import { Pressable, Text, View } from 'react-native';
 import { todayCopy } from '@copy/today';
 import { wrapupCopy as copy } from '@copy/wrapup';
 import { Button } from '@/components/button';
+import { ChapterArt } from '@/components/art';
+import { yourMoveArt } from '@/content/art';
 import { Reveal, Rise, Settle } from '@/components/motion';
 import { fadeIn, pop } from '@/theme/motion';
 import Animated from 'react-native-reanimated';
@@ -93,6 +95,11 @@ function WrapupView({ today, mode, onDone }: { today: LocalDate; mode: 'first' |
     <View className="flex-1">
       {mode === 'first' ? (
         <>
+          <Reveal>
+            <View className="mb-8">
+              <ChapterArt art={yourMoveArt} testID="your-move-art" />
+            </View>
+          </Reveal>
           <Rise index={0}>
             <Text accessibilityRole="header" className="font-bold text-3xl text-bone">
               {copy.wrapup.headline}

@@ -6,6 +6,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { todayCopy as copy } from '@copy/today';
 import { Button } from '@/components/button';
+import { ArtThumb } from '@/components/art';
+import { chapterArt } from '@/content/art';
 import { Reveal, Rise } from '@/components/motion';
 import { TimeField } from '@/components/time-field';
 import { getRule, type DrillTier } from '@/content';
@@ -188,10 +190,15 @@ function DrillView({ row }: { row: DrillDayRow }) {
           </Text>
         </Rise>
         <Rise index={1}>
-          <Text className="mt-6 font-medium text-base text-ash">{copy.drill.ruleLabel(rule.number)}</Text>
-          <Text accessibilityRole="header" className="mt-1 font-bold text-2xl text-bone">
-            {rule.title}
-          </Text>
+          <View className="mt-6 flex-row items-end gap-4">
+            <View className="flex-1">
+              <Text className="font-medium text-base text-ash">{copy.drill.ruleLabel(rule.number)}</Text>
+              <Text accessibilityRole="header" className="mt-1 font-bold text-2xl text-bone">
+                {rule.title}
+              </Text>
+            </View>
+            {chapterArt[rule.number] ? <ArtThumb art={chapterArt[rule.number]!} width={72} testID="today-art" /> : null}
+          </View>
         </Rise>
 
         <Rise index={2}>

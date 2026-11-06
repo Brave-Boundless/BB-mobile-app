@@ -4,6 +4,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { rulesCopy as copy } from '@copy/rules';
 import { getRule, parts, type RuleCard } from '@/content';
+import { chapterArt, partArt } from '@/content/art';
+import { ArtThumb, PillarArt } from '@/components/art';
 import { useDrillStore } from '@/features/drill/store';
 import { useToday } from '@/features/drill/use-today';
 import { Rise } from '@/components/motion';
@@ -35,12 +37,15 @@ export function RulesScreen() {
         </Text>
         {sections.map(({ part, data: partRules }, p) => (
           <Rise key={part.id} index={p}>
-            <View accessibilityRole="header" className="mb-3 mt-10">
-              <Text className="font-medium text-sm uppercase tracking-widest text-ash">
-                {copy.list.partLabel(ROMAN[part.id])}
-              </Text>
-              <Text className="mt-1 font-bold text-2xl tracking-wide text-ember-soft">{part.name}</Text>
-              <Text className="font-sans text-base text-ash">{part.subtitle}</Text>
+            <View accessibilityRole="header" className="mb-3 mt-10 flex-row items-center gap-4">
+              <PillarArt art={partArt[part.id]} size={64} testID={`part-art-${part.id}`} />
+              <View className="flex-1">
+                <Text className="font-medium text-sm uppercase tracking-widest text-ash">
+                  {copy.list.partLabel(ROMAN[part.id])}
+                </Text>
+                <Text className="mt-1 font-bold text-2xl tracking-wide text-ember-soft">{part.name}</Text>
+                <Text className="font-sans text-base text-ash">{part.subtitle}</Text>
+              </View>
             </View>
             {partRules.map((rule, i) => (
               <Rise key={rule.number} index={i} base={p * 60 + 80}>
@@ -57,18 +62,22 @@ export function RulesScreen() {
 function RuleRow({ rule, status }: { rule: RuleCard; status: RuleStatus }) {
   const current = status.kind === 'current';
   const label = statusText(status);
+  const art = chapterArt[rule.number];
   return (
     <Link href={`/rule/${rule.number}`} asChild>
       <Pressable
         accessibilityRole="button"
         accessibilityLabel={`${copy.list.ruleLabel(rule.number)}. ${rule.title}. ${label}.`}
         testID={`rule-${rule.number}`}
-        className={`mb-3 min-h-16 border p-4 active:opacity-80 ${
+        className={`mb-3 min-h-16 flex-row items-center gap-4 border p-4 active:opacity-80 ${
           current ? 'border-ember bg-charcoal-800' : 'border-charcoal-700 bg-charcoal-900'
         }`}>
-        <Text className="font-medium text-sm text-ash">{copy.list.ruleLabel(rule.number)}</Text>
-        <Text className="mt-1 font-bold text-lg text-bone">{rule.title}</Text>
-        <Text className={`mt-1 font-medium text-sm ${current ? 'text-ember-soft' : 'text-ash'}`}>{label}</Text>
+        <View className="flex-1">
+          <Text className="font-medium text-sm text-ash">{copy.list.ruleLabel(rule.number)}</Text>
+          <Text className="mt-1 font-bold text-lg text-bone">{rule.title}</Text>
+          <Text className={`mt-1 font-medium text-sm ${current ? 'text-ember-soft' : 'text-ash'}`}>{label}</Text>
+        </View>
+        {art ? <ArtThumb art={art} width={48} /> : null}
       </Pressable>
     </Link>
   );

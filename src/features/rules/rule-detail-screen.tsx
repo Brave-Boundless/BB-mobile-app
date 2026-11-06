@@ -6,6 +6,8 @@ import { todayCopy } from '@copy/today';
 import { DRILL_TIERS, getPart, getRule, type RuleId } from '@/content';
 import { useDrillStore } from '@/features/drill/store';
 import { Rise } from '@/components/motion';
+import { ChapterArt } from '@/components/art';
+import { chapterArt } from '@/content/art';
 
 import { ROMAN, ruleHistory, ruleStartDay, type HistoryEntry } from './history';
 
@@ -36,6 +38,13 @@ export function RuleDetailScreen() {
     <>
       <Stack.Screen options={{ title: '' }} />
       <ScrollView className="flex-1 bg-charcoal-950" contentContainerClassName="px-6 pb-12 pt-2">
+        {chapterArt[rule.number] ? (
+          <Rise>
+            <View className="mb-6">
+              <ChapterArt art={chapterArt[rule.number]!} testID="chapter-art" />
+            </View>
+          </Rise>
+        ) : null}
         <Text className="font-medium text-sm uppercase tracking-widest text-ember-soft">
           {`${copy.list.partLabel(ROMAN[part.id])} · ${part.name}`}
         </Text>
