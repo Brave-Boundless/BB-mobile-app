@@ -23,7 +23,13 @@ jest.mock('expo-crypto', () => ({
   randomUUID: () => `00000000-0000-4000-8000-${String(++mockUuid).padStart(12, '0')}`,
 }));
 
-jest.mock('expo-router', () => ({
-  router: { push: jest.fn(), back: jest.fn() },
-  useLocalSearchParams: jest.fn(() => ({})),
-}));
+jest.mock('expo-router', () => {
+  const Stack = Object.assign(() => null, { Screen: () => null });
+  return {
+    router: { push: jest.fn(), back: jest.fn() },
+    useLocalSearchParams: jest.fn(() => ({})),
+    // asChild Link: render the child; tests assert on hrefs via the child's props.
+    Link: ({ children }: { children: unknown }) => children,
+    Stack,
+  };
+});

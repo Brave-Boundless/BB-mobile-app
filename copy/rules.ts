@@ -1,4 +1,4 @@
-// status: draft — awaiting Mark's approval
+// status: approved — Mark, 2026-11-06
 //
 // Copy for build step 3: the Rules tab (15 cards in four parts) and a single
 // rule's detail screen. Book text is NOT here: part names and subtitles, rule
@@ -7,7 +7,7 @@
 // the approved copy in copy/today.ts.
 
 export const rulesCopy = {
-  status: 'draft',
+  status: 'approved',
 
   // ── List ───────────────────────────────────────────────────────────────
   list: {
