@@ -33,6 +33,17 @@ export default function RootLayout() {
           contentStyle: { backgroundColor: palette.charcoal[950] },
         }}>
         <Stack.Screen name="(tabs)" />
+        <Stack.Screen
+          name="rule/[id]"
+          options={{
+            headerShown: true,
+            headerTitle: '',
+            headerBackButtonDisplayMode: 'minimal',
+            headerTintColor: palette.ember.soft,
+            headerStyle: { backgroundColor: palette.charcoal[950] },
+            headerShadowVisible: false,
+          }}
+        />
         <Stack.Screen name="milestone/[part]" options={{ presentation: 'fullScreenModal', gestureEnabled: false }} />
       </Stack>
     </QueryClientProvider>

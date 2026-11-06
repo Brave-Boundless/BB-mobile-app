@@ -129,3 +129,5 @@ Seed `rules` from `content/bb-rule-cards.json` via a migration script; the JSON 
 - 2026-11-06 — Report-back limit enforced in-app: max 3 sentences and 1000 chars (DB check matches). Skipping the prompt is remembered per drill.
 - 2026-11-06 — Milestones are a full-screen modal route (`/milestone/[part]`) pushed after answering days 12/24/36/45. Day 45+ shows the FIELD milestone copy on Today until the step-6 wrap-up exists.
 - 2026-11-06 — Maestro smoke flow lives in `.maestro/smoke.yaml`. It needs a dev build (EAS) to run; not run in CI yet.
+- 2026-11-06 — `copy/rules.ts` **approved** by Mark. Rules is read-only reference: any card can be read any time, but the 45-day spine stays linear (brief §6 default). Jumping to a rule is deferred to the step-6 restart.
+- 2026-11-06 — Rules list status: "Today" for the rule the user is on, "N done · N dodged" for rules worked, "Starts Day N" otherwise. Rule detail (`/rule/[id]`, pushed on the root stack) shows all six card fields, then the user's record with the fallback note and report-backs. Both read the local store, so they work offline and before sign-in.
