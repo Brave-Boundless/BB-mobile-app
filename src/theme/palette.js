@@ -18,6 +18,9 @@ const palette = {
   ember: {
     DEFAULT: '#F06A2A', // the one accent: primary actions, active tab
     soft: '#F58A55', // accent text on dark surfaces
+    // Rule-map shades of the same accent (pre-blended on charcoal-950).
+    mid: '#96451E', // mostly done
+    dim: '#472414', // mostly dodged
   },
 };
 
@@ -32,6 +35,8 @@ const TEXT_PAIRS = [
   ['ember.soft', 'charcoal.900'],
   ['ember.DEFAULT', 'charcoal.950'],
   ['charcoal.950', 'ember.DEFAULT'], // label on a filled ember button
+  ['bone', 'ember.mid'], // rule-map cell text
+  ['bone', 'ember.dim'], // rule-map cell text
 ];
 
 module.exports = { palette, TEXT_PAIRS };

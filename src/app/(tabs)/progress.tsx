@@ -1,6 +1,3 @@
-import { navigationCopy } from '@copy/navigation';
-import { NotBuilt } from '@/components/screen';
+import { ProgressScreen } from '@/features/progress/progress-screen';
 
-export default function ProgressScreen() {
-  return <NotBuilt title={navigationCopy.tabs.progress} note={navigationCopy.building(4)} />;
-}
+export default ProgressScreen;
