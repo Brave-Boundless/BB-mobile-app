@@ -22,3 +22,16 @@ export function NotBuilt({ title, note }: { title: string; note: string }) {
     </Screen>
   );
 }
+
+/**
+ * Outer frame for a tab screen. Standalone it handles the top safe area;
+ * embedded under a segment bar (which already did) it is a plain view.
+ */
+export function TabFrame({ embedded, children }: { embedded?: boolean; children: ReactNode }) {
+  if (embedded) return <View className="flex-1 bg-charcoal-950">{children}</View>;
+  return (
+    <SafeAreaView edges={['top']} className="flex-1 bg-charcoal-950">
+      {children}
+    </SafeAreaView>
+  );
+}

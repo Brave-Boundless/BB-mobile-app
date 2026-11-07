@@ -7,7 +7,7 @@ import { Button } from '@/components/button';
 import { GrowLine, Reveal, Rise } from '@/components/motion';
 import { palette } from '@/theme';
 import { getPart, type PartId } from '@/content';
-import { partArt } from '@/content/art';
+import { partArt, partColor, partTextColor } from '@/content/art';
 import { PillarArt } from '@/components/art';
 
 // End of a part: days 12, 24, 36, 45. Part name + subtitle are the book's;
@@ -25,14 +25,17 @@ export default function MilestoneScreen() {
         <View>
           <Reveal>
             <View className="mb-8">
-              <PillarArt art={partArt[id as PartId]} size={160} testID="milestone-art" />
+              <PillarArt art={partArt[id as PartId]} color={partColor[id as PartId]} size={160} testID="milestone-art" />
             </View>
           </Reveal>
           <Rise index={0} base={150}>
             <Text className="font-medium text-sm uppercase tracking-widest text-ember-soft">{part.subtitle}</Text>
           </Rise>
           <Rise index={1} base={250}>
-            <Text accessibilityRole="header" className="mt-3 font-bold text-4xl uppercase tracking-wide text-bone">
+            <Text
+              accessibilityRole="header"
+              className="mt-3 font-bold text-4xl uppercase tracking-wide"
+              style={{ color: partTextColor[id as PartId] }}>
               {copy.milestone.headline(part.name)}
             </Text>
           </Rise>

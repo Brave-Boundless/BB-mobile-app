@@ -32,6 +32,19 @@ export interface Practice {
   startedOn: LocalDate;
 }
 
+/** "How hard was it?" after Did it: 1 Easy … 5 Brutal. */
+export type Effort = 1 | 2 | 3 | 4 | 5;
+
+/** "What got in the way?" after Dodged it. */
+export const DODGE_REASONS = ['fear', 'time', 'forgot', 'point', 'other'] as const;
+export type DodgeReason = (typeof DODGE_REASONS)[number];
+
+/** Tomorrow's planned time (a local reminder at that time). */
+export interface DrillPlan {
+  forDate: LocalDate;
+  at: string; // 'HH:MM' local
+}
+
 export interface DrillDayRow {
   id: string;
   kind?: DrillKind;
@@ -42,6 +55,10 @@ export interface DrillDayRow {
   scheduledFor: LocalDate;
   status: DrillStatus;
   respondedAt: string | null;
+  /** Done drills only. Missing on rows saved before step 7. */
+  effort?: Effort | null;
+  /** Dodged drills only. Missing on rows saved before step 7. */
+  dodgeReason?: DodgeReason | null;
   updatedAt: string;
   dirty: boolean;
 }
@@ -63,12 +80,18 @@ export interface DrillData {
   notificationsAsked: boolean;
   /** Drill ids whose evening prompt the user skipped. */
   reportSkipped: Record<string, true>;
+  /** Drill ids whose "How hard was it?" / "What got in the way?" the user skipped. */
+  askSkipped: Record<string, true>;
   drills: Record<string, DrillDayRow>;
   journal: Record<string, JournalRow>;
   /** Null until the Day-45 wrap-up is locked in. */
   practice: Practice | null;
   /** Practice changed locally and not yet saved on the server. */
   practiceDirty: boolean;
+  /** Tomorrow's planned time, if the reader set one. Local to this phone. */
+  plan: DrillPlan | null;
+  /** Date the last "On Day N you wrote" was shown, and which entry. */
+  lookBack: { on: LocalDate; journalId: string } | null;
 }
 
 export interface DrillActions {
@@ -79,6 +102,13 @@ export interface DrillActions {
   openToday(today: LocalDate): string | undefined;
   answer(id: string, status: Exclude<DrillStatus, 'pending'>, tier: DrillTier): void;
   undo(id: string): void;
+  /** Done drills: how hard it was. Null clears it. */
+  rate(id: string, effort: Effort | null): void;
+  /** Dodged drills: what got in the way. Null clears it. */
+  setDodgeReason(id: string, reason: DodgeReason | null): void;
+  setPlan(plan: DrillPlan | null): void;
+  setLookBack(v: { on: LocalDate; journalId: string }): void;
+  skipAsk(id: string): void;
   saveReport(drillDayId: string, body: string): void;
   skipReport(drillDayId: string): void;
   deleteReport(journalId: string): void;
@@ -113,10 +143,13 @@ export const initialDrillData: DrillData = {
   notifyAt: '07:00',
   notificationsAsked: false,
   reportSkipped: {},
+  askSkipped: {},
   drills: {},
   journal: {},
   practice: null,
   practiceDirty: false,
+  plan: null,
+  lookBack: null,
 };
 
 export interface StoreDeps {
@@ -185,7 +218,16 @@ export function drillActions(
         return {
           drills: {
             ...s.drills,
-            [id]: { ...row, status, tier, respondedAt: stamp(), updatedAt: stamp(), dirty: true },
+            [id]: {
+              ...row,
+              status,
+              tier,
+              effort: null,
+              dodgeReason: null,
+              respondedAt: stamp(),
+              updatedAt: stamp(),
+              dirty: true,
+            },
           },
         };
       });
@@ -205,11 +247,48 @@ export function drillActions(
         return {
           drills: {
             ...s.drills,
-            [id]: { ...row, status: 'pending', tier: spineTier, respondedAt: null, updatedAt: stamp(), dirty: true },
+            [id]: {
+              ...row,
+              status: 'pending',
+              tier: spineTier,
+              effort: null,
+              dodgeReason: null,
+              respondedAt: null,
+              updatedAt: stamp(),
+              dirty: true,
+            },
           },
           journal,
         };
       });
+    },
+
+    rate(id, effort) {
+      set((s) => {
+        const row = s.drills[id];
+        if (!row || row.status !== 'done') return {};
+        return { drills: { ...s.drills, [id]: { ...row, effort, updatedAt: stamp(), dirty: true } } };
+      });
+    },
+
+    setDodgeReason(id, reason) {
+      set((s) => {
+        const row = s.drills[id];
+        if (!row || row.status !== 'dodged') return {};
+        return { drills: { ...s.drills, [id]: { ...row, dodgeReason: reason, updatedAt: stamp(), dirty: true } } };
+      });
+    },
+
+    setPlan(plan) {
+      set(() => ({ plan }));
+    },
+
+    setLookBack(v) {
+      set(() => ({ lookBack: v }));
+    },
+
+    skipAsk(id) {
+      set((s) => ({ askSkipped: { ...s.askSkipped, [id]: true } }));
     },
 
     saveReport(drillDayId, body) {
@@ -315,7 +394,22 @@ export const useDrillStore = create<DrillStore>()(
       name: 'bb.drills.v1',
       version: 1,
       storage: createJSONStorage(() => AsyncStorage),
-      partialize: ({ startedOn, notifyAt, notificationsAsked, reportSkipped, drills, journal, practice, practiceDirty }) => ({
+      partialize: ({
+        startedOn,
+        notifyAt,
+        notificationsAsked,
+        reportSkipped,
+        drills,
+        journal,
+        practice,
+        practiceDirty,
+        plan,
+        lookBack,
+        askSkipped,
+      }) => ({
+        askSkipped,
+        plan,
+        lookBack,
         practice,
         practiceDirty,
         startedOn,

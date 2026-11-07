@@ -3,6 +3,8 @@ export declare const palette: {
   readonly bone: string;
   readonly ash: string;
   readonly ember: { readonly DEFAULT: string; readonly soft: string; readonly mid: string; readonly dim: string };
+  readonly part: { readonly fire: string; readonly forge: string; readonly foundation: string; readonly field: string };
+  readonly partText: { readonly fire: string; readonly forge: string; readonly foundation: string; readonly field: string };
   readonly crimson: string;
   readonly gold: string;
 };

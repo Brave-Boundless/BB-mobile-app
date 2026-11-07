@@ -19,7 +19,7 @@ export function buildExport(data: DrillData, opts: { now: Date; appVersion: stri
     exportedAt: opts.now.toISOString(),
     appVersion: opts.appVersion,
     account: opts.email ? { email: opts.email } : null,
-    settings: { startedOn: data.startedOn, morningPushAt: data.notifyAt },
+    settings: { startedOn: data.startedOn, morningPushAt: data.notifyAt, plannedReminder: data.plan },
     afterDay45: data.practice,
     drills: drills.map((d) => ({
       id: d.id,
@@ -31,6 +31,8 @@ export function buildExport(data: DrillData, opts: { now: Date; appVersion: stri
       date: d.scheduledFor,
       status: d.status,
       respondedAt: d.respondedAt,
+      howHard: d.effort ?? null,
+      whatGotInTheWay: d.dodgeReason ?? null,
     })),
     journal: Object.values(data.journal)
       .filter((j) => !j.deleted)

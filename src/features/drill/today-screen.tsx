@@ -4,6 +4,8 @@ import { KeyboardAvoidingView, Platform, ScrollView, Text, View } from 'react-na
 import Animated from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { deeperCopy } from '@copy/deeper';
+import { structureCopy as structure } from '@copy/structure';
 import { todayCopy as copy } from '@copy/today';
 import { Button } from '@/components/button';
 import { ArtThumb } from '@/components/art';
@@ -14,10 +16,13 @@ import { getRule, type DrillTier } from '@/content';
 import { fadeIn } from '@/theme/motion';
 import { AfterDay45 } from '@/features/practice/after-day-45';
 
+import { HowHard, LookBack, PlanTomorrow, RuleRecapCard, WhatGotInTheWay } from './after-answer-view';
 import { EveningPrompt } from './evening-prompt';
+import { Grid45, Pips } from './pips';
 import { requestNotifications, rescheduleMorningPushes } from './notifications';
 import { todayState } from './progress';
 import { SPINE_LENGTH, milestoneFor, spineDay } from './spine';
+import { rulePips } from './structure';
 import { useDrillStore, type DrillDayRow } from './store';
 import { useOffline } from './use-sync';
 import { useToday } from './use-today';
@@ -70,7 +75,7 @@ export function TodayScreen() {
   else if (state.kind === 'complete') body = <AfterDay45 today={today} editing={editingSet} setEditing={setEditingSet} />;
   else {
     const row = records.find((r) => r.day === state.day && r.day <= SPINE_LENGTH);
-    body = !row ? null : row.status === 'pending' ? <DrillView row={row} /> : <AnsweredView row={row} />;
+    body = !row ? null : row.status === 'pending' ? <DrillView row={row} /> : <AnsweredView row={row} today={today} />;
   }
 
   return (
@@ -104,6 +109,8 @@ function Shell({ children, offline, scrollKey }: { children?: React.ReactNode; o
 
 // ── first run ────────────────────────────────────────────────────────────
 
+const EMPTY_GRID = Array.from({ length: 15 }, () => ['ahead', 'ahead', 'ahead'] as const);
+
 function StartView({ today }: { today: string }) {
   const start = useDrillStore((s) => s.start);
   const [notifyAt, setNotifyAt] = useState(useDrillStore.getState().notifyAt);
@@ -113,14 +120,28 @@ function StartView({ today }: { today: string }) {
       <View>
         <Rise index={0}>
           <Text accessibilityRole="header" className="font-bold text-3xl text-bone">
-            {copy.start.headline}
+            {structure.intro.headline}
           </Text>
         </Rise>
         <Rise index={1}>
-          <Text className="mt-4 font-sans text-lg text-ash">{copy.start.body}</Text>
+          <Text className="mt-4 font-sans text-lg text-ash">{structure.intro.body}</Text>
+          <View className="mt-6">
+            <Grid45 rows={EMPTY_GRID} label={structure.intro.headline} testID="intro-grid" />
+          </View>
+        </Rise>
+        <Rise index={2}>
+          <View className="mt-6 gap-3">
+            {(['five_minute', 'uncomfortable', 'daily'] as const).map((t, i) => (
+              <View key={t} className="flex-row items-start gap-3">
+                <Pips pips={(['ahead', 'ahead', 'ahead'] as const).map((p, j) => (j === i ? 'done' : p))} label="" />
+                <Text className="flex-1 font-medium text-base leading-6 text-bone">{structure.intro.tiers[t]}</Text>
+              </View>
+            ))}
+          </View>
+          <Text className="mt-4 font-sans text-base text-ash">{structure.intro.pace}</Text>
         </Rise>
 
-        <Rise index={2}>
+        <Rise index={3}>
           <View className="mt-10 bg-charcoal-900 p-5">
             <Text className="font-medium text-base text-bone">{copy.start.notifyLabel}</Text>
             <TimeField value={notifyAt} onChange={setNotifyAt} />
@@ -129,7 +150,7 @@ function StartView({ today }: { today: string }) {
         </Rise>
       </View>
 
-      <Rise index={3} base={120}>
+      <Rise index={4} base={120}>
         <View className="mt-10">
           <Button label={copy.start.cta} onPress={() => start(today, notifyAt)} testID="start-day-1" />
         </View>
@@ -170,9 +191,11 @@ function NotifyAskView({ onDenied }: { onDenied: () => void }) {
 
 function DrillView({ row }: { row: DrillDayRow }) {
   const answer = useDrillStore((s) => s.answer);
+  const drills = useDrillStore((s) => s.drills);
   const [fiveMinute, setFiveMinute] = useState(false);
   const rule = getRule(row.ruleId);
-  const scheduledTier = spineDay(row.day).tier;
+  const { tier: scheduledTier, dayOfRule } = spineDay(row.day);
+  const pips = rulePips({ drills }, rule.number);
   const tier: DrillTier = fiveMinute ? 'five_minute' : scheduledTier;
 
   const respond = (status: 'done' | 'dodged') => {
@@ -185,8 +208,8 @@ function DrillView({ row }: { row: DrillDayRow }) {
     <View className="flex-1 justify-between">
       <View>
         <Rise index={0}>
-          <Text className="font-medium text-sm uppercase tracking-widest text-ash">
-            {copy.drill.dayOf(row.day, SPINE_LENGTH)}
+          <Text className="font-medium text-sm uppercase tracking-widest text-ash" testID="drill-position">
+            {structure.position(row.day, SPINE_LENGTH, rule.number, dayOfRule)}
           </Text>
         </Rise>
         <Rise index={1}>
@@ -196,6 +219,9 @@ function DrillView({ row }: { row: DrillDayRow }) {
               <Text accessibilityRole="header" className="mt-1 font-bold text-2xl text-bone">
                 {rule.title}
               </Text>
+              <View className="mt-3">
+                <Pips pips={pips} size={12} label={structure.pipsA11y(dayOfRule - 1)} testID="rule-pips" />
+              </View>
             </View>
             {chapterArt[rule.number] ? <ArtThumb art={chapterArt[rule.number]!} width={72} testID="today-art" /> : null}
           </View>
@@ -213,15 +239,22 @@ function DrillView({ row }: { row: DrillDayRow }) {
           </Animated.View>
         </Rise>
 
-        {scheduledTier !== 'five_minute' ? (
-          <View className="mt-4 items-start">
+        <View className="mt-4 flex-row flex-wrap items-start gap-x-4">
+          <Button
+            variant="text"
+            label={deeperCopy.open}
+            accessibilityLabel={deeperCopy.openA11y}
+            onPress={() => router.push(`/drill/${rule.number}/${tier}`)}
+            testID="go-deeper"
+          />
+          {scheduledTier !== 'five_minute' ? (
             <Button
               variant="text"
               label={fiveMinute ? copy.drill.backToFull : copy.drill.fiveMinuteFallback}
               onPress={() => setFiveMinute((v) => !v)}
             />
-          </View>
-        ) : null}
+          ) : null}
+        </View>
       </View>
 
       <Rise index={3} base={120}>
@@ -242,7 +275,7 @@ function DrillView({ row }: { row: DrillDayRow }) {
 
 // ── after answering ──────────────────────────────────────────────────────
 
-function AnsweredView({ row }: { row: DrillDayRow }) {
+function AnsweredView({ row, today }: { row: DrillDayRow; today: string }) {
   const undo = useDrillStore((s) => s.undo);
   const rule = getRule(row.ruleId);
   const done = row.status === 'done';
@@ -250,7 +283,7 @@ function AnsweredView({ row }: { row: DrillDayRow }) {
   return (
     <View className="flex-1">
       <Text className="font-medium text-sm uppercase tracking-widest text-ash">
-        {copy.drill.dayOf(row.day, SPINE_LENGTH)}
+        {structure.position(row.day, SPINE_LENGTH, rule.number, spineDay(row.day).dayOfRule)}
       </Text>
       <Animated.View entering={fadeIn()}>
         <Text accessibilityRole="header" className="mt-6 font-bold text-3xl text-bone">
@@ -263,8 +296,18 @@ function AnsweredView({ row }: { row: DrillDayRow }) {
         </Reveal>
       ) : null}
 
+      <Rise base={done ? 420 : 200}>
+        {done ? <HowHard row={row} /> : <WhatGotInTheWay row={row} />}
+      </Rise>
+
       <Rise base={done ? 520 : 240}>
         <EveningPrompt row={row} />
+      </Rise>
+
+      <RuleRecapCard row={row} />
+
+      <Rise base={done ? 560 : 280}>
+        <PlanTomorrow row={row} today={today} />
       </Rise>
 
       <Rise base={done ? 600 : 320}>
@@ -274,6 +317,10 @@ function AnsweredView({ row }: { row: DrillDayRow }) {
           <Button variant="text" label={copy.answered.undo} onPress={() => undo(row.id)} testID="undo" />
         </View>
       </View>
+      </Rise>
+
+      <Rise base={done ? 640 : 360}>
+        <LookBack today={today} ruleId={row.ruleId} />
       </Rise>
     </View>
   );

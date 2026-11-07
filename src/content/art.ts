@@ -1,5 +1,7 @@
 import type { ImageSourcePropType } from 'react-native';
 
+import { palette } from '@/theme';
+
 import type { PartId, RuleId } from './types';
 
 // Book illustrations from Box `Brave & Boundless/Book/art` (finals, confirmed by Mark).
@@ -33,11 +35,27 @@ export const chapterArt: Partial<Record<RuleId, Art>> = {
 };
 
 /** The four pillar illustrations. Transparent, made to sit on the dark ground. */
+/** Each part's colour (palette.part), behind its pillar icon. */
+export const partColor: Record<PartId, string> = {
+  1: palette.part.fire,
+  2: palette.part.forge,
+  3: palette.part.foundation,
+  4: palette.part.field,
+};
+
+/** Each part's colour for its name in text, lightened to read on black (palette.partText). */
+export const partTextColor: Record<PartId, string> = {
+  1: palette.partText.fire,
+  2: palette.partText.forge,
+  3: palette.partText.foundation,
+  4: palette.partText.field,
+};
+
 export const partArt: Record<PartId, Art> = {
-  1: { source: require('../../assets/images/parts/fire.webp'), ratio: 1 },
-  2: { source: require('../../assets/images/parts/forge.webp'), ratio: 772 / 1024 },
-  3: { source: require('../../assets/images/parts/foundation.webp'), ratio: 772 / 1024 },
-  4: { source: require('../../assets/images/parts/field.webp'), ratio: 772 / 1024 },
+  1: { source: require('../../assets/images/parts/fire.webp'), ratio: 525 / 988 },
+  2: { source: require('../../assets/images/parts/forge.webp'), ratio: 697 / 464 },
+  3: { source: require('../../assets/images/parts/foundation.webp'), ratio: 597 / 792 },
+  4: { source: require('../../assets/images/parts/field.webp'), ratio: 509 / 860 },
 };
 
 /** "Your Move": the book's closing image. Shown on the Day 45 wrap-up. */

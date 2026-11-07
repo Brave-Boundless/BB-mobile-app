@@ -1,9 +1,13 @@
-import { Stack, useLocalSearchParams } from 'expo-router';
+import { Stack, router, useLocalSearchParams } from 'expo-router';
 import { ScrollView, Text, View } from 'react-native';
 
+import { deeperCopy } from '@copy/deeper';
+import { practiceCopy } from '@copy/practice';
 import { rulesCopy as copy } from '@copy/rules';
+import { Button } from '@/components/button';
 import { todayCopy } from '@copy/today';
 import { DRILL_TIERS, getPart, getRule, type RuleId } from '@/content';
+import { effortTrend } from '@/features/drill/after-answer';
 import { useDrillStore } from '@/features/drill/store';
 import { Rise } from '@/components/motion';
 import { ChapterArt } from '@/components/art';
@@ -37,6 +41,7 @@ export function RuleDetailScreen() {
   const part = getPart(rule.part);
   const history = ruleHistory(data, rule.number);
   const stamp = stampFor(data, rule.number);
+  const trend = effortTrend(data, rule.number);
 
   return (
     <>
@@ -67,6 +72,15 @@ export function RuleDetailScreen() {
             <View key={tier} className="mb-3 bg-charcoal-900 p-4">
               <Text className="font-medium text-sm text-ember-soft">{todayCopy.drill.tier[tier]}</Text>
               <Text className="mt-1 font-sans text-lg text-bone">{rule.drills[tier]}</Text>
+              <View className="mt-1 items-start">
+                <Button
+                  variant="text"
+                  label={deeperCopy.open}
+                  accessibilityLabel={deeperCopy.openA11y}
+                  onPress={() => router.push(`/drill/${rule.number}/${tier}`)}
+                  testID={`go-deeper-${tier}`}
+                />
+              </View>
             </View>
           ))}
         </Section>
@@ -91,6 +105,11 @@ export function RuleDetailScreen() {
             </View>
           ) : history.length > 0 ? (
             <Text className="mb-3 font-sans text-base text-ash">{stampsCopy.rule.notYet}</Text>
+          ) : null}
+          {trend ? (
+            <Text className="mb-3 font-medium text-base text-ember-soft" testID="rule-trend">
+              {practiceCopy.trend.line(trend.ruleId, practiceCopy.rating.scale[trend.first - 1], trend.firstDay, practiceCopy.rating.scale[trend.last - 1])}
+            </Text>
           ) : null}
           {history.length === 0 ? (
             <Text className="font-sans text-base text-ash">{copy.detail.historyEmpty(ruleStartDay(rule.number))}</Text>

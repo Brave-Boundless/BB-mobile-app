@@ -1,4 +1,4 @@
-import { Image, View, useWindowDimensions, type DimensionValue } from 'react-native';
+import { Image, View, useWindowDimensions } from 'react-native';
 
 import type { Art } from '@/content/art';
 
@@ -39,18 +39,25 @@ export function ArtThumb({ art, width = 56, testID }: { art: Art; width?: number
 }
 
 /**
- * A pillar illustration. They are transparent cut-outs with a lot of black in
- * them (anvil, block), so they sit on a bone tile — the brand's paper — not on
- * the black ground, where the black would disappear.
+ * A pillar illustration on its part's colour (FIRE red, FORGE orange,
+ * FOUNDATION slate, FIELD olive), as on the book and the website. The icons
+ * are transparent cut-outs with a lot of black, so they never sit directly on
+ * the black ground. The files are trimmed to the drawing, so 78% of the circle
+ * fills it while every corner of the drawing stays inside the edge.
  */
-export function PillarArt({ art, size, testID }: { art: Art; size: DimensionValue; testID?: string }) {
+export function PillarArt({ art, size, color, testID }: { art: Art; size: number; color: string; testID?: string }) {
+  // A circle, not a square (Mark, 2026-11-07): the one round shape in an
+  // otherwise square brand, to break up the blocks of the rule list.
   return (
-    <View testID={testID} className="items-center justify-center bg-bone" style={{ width: size, aspectRatio: 1 }}>
+    <View
+      testID={testID}
+      className="items-center justify-center overflow-hidden"
+      style={{ width: size, height: size, borderRadius: size / 2, backgroundColor: color }}>
       <Image
         {...decorative}
         source={art.source}
         resizeMode="contain"
-        style={{ width: '82%', height: '82%' }}
+        style={{ width: '78%', height: '78%' }}
       />
     </View>
   );

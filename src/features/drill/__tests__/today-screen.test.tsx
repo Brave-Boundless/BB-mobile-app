@@ -29,14 +29,14 @@ describe('Today screen', () => {
     await renderToday();
 
     // First run
-    expect(await screen.findByText(copy.start.headline)).toBeTruthy();
+    expect(await screen.findByText('15 rules. 3 drills each. 45 days.')).toBeTruthy();
     await fireEvent.press(screen.getByText(copy.start.cta));
 
     // Push ask: decline
     await fireEvent.press(await screen.findByText(copy.notifications.deny));
 
     // Day 1: rule 1, five-minute drill, verbatim from the card
-    expect(await screen.findByText('Day 1 of 45')).toBeTruthy();
+    expect(await screen.findByText('Drill 1 of 45 · Rule 1 · Drill 1 of 3')).toBeTruthy();
     expect(screen.getByText('Move Before You’re Ready')).toBeTruthy();
     expect(screen.getByText('Write the smallest visible step you can take in 5 minutes. Do it now.')).toBeTruthy();
     // No fallback on a five-minute day
@@ -72,7 +72,7 @@ describe('Today screen', () => {
     expect(screen.getByText(copy.evening.promptDodged)).toBeTruthy();
 
     await fireEvent.press(screen.getByText(copy.answered.undo));
-    expect(await screen.findByText('Day 1 of 45')).toBeTruthy();
+    expect(await screen.findByText('Drill 1 of 45 · Rule 1 · Drill 1 of 3')).toBeTruthy();
     expect(screen.getByLabelText(copy.drill.a11y.did)).toBeTruthy();
   });
 
@@ -86,7 +86,7 @@ describe('Today screen', () => {
       useDrillStore.getState().answer(id, 'done', 'five_minute');
     }
     await renderToday();
-    expect(await screen.findByText('Day 12 of 45')).toBeTruthy();
+    expect(await screen.findByText('Drill 12 of 45 · Rule 4 · Drill 3 of 3')).toBeTruthy();
     expect(screen.getByText('Post-game yourself: 3 wins, 1 fix, 1 next rep.')).toBeTruthy();
 
     await fireEvent.press(screen.getByText(copy.drill.fiveMinuteFallback));

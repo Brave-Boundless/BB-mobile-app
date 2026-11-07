@@ -44,7 +44,7 @@ describe('Progress screen', () => {
       s.answer(useDrillStore.getState().openToday(`2026-10-0${i + 1}`)!, o, 'five_minute');
     });
     await show();
-    expect(screen.getByTestId('progress-day').props.children).toBe(copy.day.value(5, 45)); // day 4 answered yesterday → day 5 today
+    expect(screen.getByTestId('progress-day').props.children).toBe('4 of 45 drills answered');
     expect(screen.getByTestId('progress-streak').props.children).toBe(copy.streak.value(2));
     expect(screen.getByText('Clarity now saves carnage later.')).toBeTruthy();
     expect(screen.getByLabelText(copy.map.cellA11y(1, 2, 3))).toBeTruthy();

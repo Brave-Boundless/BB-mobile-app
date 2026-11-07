@@ -1,17 +1,21 @@
 import { ScrollView, Text, View, useWindowDimensions } from 'react-native';
+import { TabFrame } from '@/components/screen';
 import Animated from 'react-native-reanimated';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { practiceCopy } from '@copy/practice';
 import { progressCopy as copy } from '@copy/progress';
-import { getRule } from '@/content';
-import { SPINE_LENGTH } from '@/features/drill/spine';
+import { structureCopy as structure } from '@copy/structure';
+import { getRule, rules } from '@/content';
+import { effortTrend } from '@/features/drill/after-answer';
+import { Grid45 } from '@/features/drill/pips';
+import { allPips, answeredCount } from '@/features/drill/structure';
 import { useDrillStore } from '@/features/drill/store';
 import { useToday } from '@/features/drill/use-today';
 import { Reveal, Rise } from '@/components/motion';
 import { pop } from '@/theme/motion';
 import { Passport } from '@/features/stamps/passport';
 
-import { position, ruleTallies, streak, streakMantra, type Position, type RuleTally, type Shade } from './stats';
+import { position, ruleTallies, streak, streakMantra, type RuleTally, type Shade } from './stats';
 
 const CELL: Record<Shade, { box: string; text: string }> = {
   all: { box: 'bg-ember', text: 'text-charcoal-950' },
@@ -19,12 +23,6 @@ const CELL: Record<Shade, { box: string; text: string }> = {
   some: { box: 'bg-ember-dim', text: 'text-bone' },
   none: { box: 'border border-charcoal-700 bg-charcoal-950', text: 'text-ash' },
 };
-
-function positionText(p: Position): string {
-  if (p.kind === 'notStarted') return copy.day.notStarted;
-  if (p.kind === 'complete') return copy.day.complete(SPINE_LENGTH);
-  return copy.day.value(p.day, SPINE_LENGTH);
-}
 
 function Heading({ children }: { children: string }) {
   return (
@@ -34,32 +32,37 @@ function Heading({ children }: { children: string }) {
   );
 }
 
-export function ProgressScreen() {
+export function ProgressScreen({ embedded }: { embedded?: boolean } = {}) {
   const today = useToday();
   const data = useDrillStore();
   const pos = position(data, today);
   const run = streak(data);
   const mantra = streakMantra(data);
   const tallies = ruleTallies(data);
+  const trends = rules.flatMap((r) => effortTrend(data, r.number) ?? []);
   // Passport: 3 slots a row inside the 24pt gutters.
   const { width: screen } = useWindowDimensions();
   const slot = Math.floor((Math.min(screen, 560) - 48 - 24) / 3);
 
   return (
-    <SafeAreaView edges={['top']} className="flex-1 bg-charcoal-950">
+    <TabFrame embedded={embedded}>
       <ScrollView contentContainerClassName="px-6 pb-12 pt-6">
+        {embedded ? null : (
         <Text accessibilityRole="header" className="font-bold text-3xl uppercase tracking-wide text-bone">
           {copy.title}
         </Text>
+        )}
 
         <Rise index={0}>
-        <View className="mt-8 flex-row gap-3">
-          <View className="flex-1 bg-charcoal-900 p-4">
-            <Heading>{copy.day.label}</Heading>
-            <Text className="mt-2 font-bold text-2xl text-bone" testID="progress-day">
-              {positionText(pos)}
-            </Text>
+        <View className="mt-8 bg-charcoal-900 p-4">
+          <Text className="font-bold text-2xl text-bone" testID="progress-day">
+            {pos.kind === 'notStarted' ? copy.day.notStarted : structure.progress(answeredCount(data))}
+          </Text>
+          <View className="mt-4">
+            <Grid45 rows={allPips(data)} label={structure.progress(answeredCount(data))} testID="progress-grid" />
           </View>
+        </View>
+        <View className="mt-3 flex-row gap-3">
           <View className="flex-1 bg-charcoal-900 p-4">
             <Heading>{copy.streak.label}</Heading>
             <Text className="mt-2 font-bold text-2xl text-bone" testID="progress-streak">
@@ -99,6 +102,20 @@ export function ProgressScreen() {
           </View>
         </Rise>
 
+        <Rise index={2}>
+          <View className="mt-10" testID="effort-trend">
+            <Heading>{practiceCopy.trend.title}</Heading>
+            {trends.length > 0 ? (
+              trends.map((t) => (
+                <Text key={t.ruleId} className="mt-2 font-sans text-base text-bone">
+                  {practiceCopy.trend.line(t.ruleId, practiceCopy.rating.scale[t.first - 1], t.firstDay, practiceCopy.rating.scale[t.last - 1])}
+                </Text>
+              ))
+            ) : (
+              <Text className="mt-2 font-sans text-base text-ash">{practiceCopy.trend.empty}</Text>
+            )}
+          </View>
+        </Rise>
         <Rise index={3}>
         <View className="mt-10">
           <Heading>{copy.scorecards.title}</Heading>
@@ -111,7 +128,7 @@ export function ProgressScreen() {
         </View>
         </Rise>
       </ScrollView>
-    </SafeAreaView>
+    </TabFrame>
   );
 }
 

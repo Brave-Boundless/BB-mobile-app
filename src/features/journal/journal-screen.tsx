@@ -1,6 +1,6 @@
 import { useState } from 'react';
+import { TabFrame } from '@/components/screen';
 import { Pressable, ScrollView, Text, TextInput, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { journalCopy as copy } from '@copy/journal';
 import { todayCopy } from '@copy/today';
@@ -16,18 +16,20 @@ import { palette } from '@/theme';
 
 import { formatEntryDate, journalItems, type JournalItem } from './entries';
 
-export function JournalScreen() {
+export function JournalScreen({ embedded }: { embedded?: boolean } = {}) {
   const data = useDrillStore();
   const [filter, setFilter] = useState<RuleId | undefined>(undefined);
   const items = journalItems(data, filter);
   const anyAtAll = journalItems(data).length > 0;
 
   return (
-    <SafeAreaView edges={['top']} className="flex-1 bg-charcoal-950">
+    <TabFrame embedded={embedded}>
       <ScrollView contentContainerClassName="pb-12 pt-6" keyboardShouldPersistTaps="handled">
+        {embedded ? null : (
         <Text accessibilityRole="header" className="px-6 font-bold text-3xl uppercase tracking-wide text-bone">
           {copy.title}
         </Text>
+        )}
 
         {anyAtAll ? (
           <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerClassName="gap-2 px-6 pt-6">
@@ -58,7 +60,7 @@ export function JournalScreen() {
           )}
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </TabFrame>
   );
 }
 

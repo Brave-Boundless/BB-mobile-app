@@ -1,6 +1,6 @@
 {
-  "status": "draft",
-  "note": "“What it builds” for each of the 45 drills, shown on the Go deeper page. New writing drafted from the rule cards for Mark to edit; NOT book text and not quoted as such. Keys match drills.five_minute / drills.uncomfortable / drills.daily in bb-rule-cards.json.",
+  "status": "approved",
+  "note": "“What it builds” for each of the 45 drills, shown on the Go deeper page. New writing drafted from the rule cards, approved by Mark 2026-11-07; NOT book text and not quoted as such. Keys match drills.five_minute / drills.uncomfortable / drills.daily in bb-rule-cards.json.",
   "rules": [
     {
       "number": 1,

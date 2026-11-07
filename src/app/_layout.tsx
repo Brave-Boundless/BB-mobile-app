@@ -48,6 +48,18 @@ export default function RootLayout() {
             animation: 'slide_from_right',
           }}
         />
+        <Stack.Screen
+          name="drill/[rule]/[tier]"
+          options={{
+            headerShown: true,
+            headerTitle: '',
+            headerBackButtonDisplayMode: 'minimal',
+            headerTintColor: palette.ember.soft,
+            headerStyle: { backgroundColor: palette.charcoal[950] },
+            headerShadowVisible: false,
+            animation: 'slide_from_right',
+          }}
+        />
         <Stack.Screen name="milestone/[part]" options={{ presentation: 'fullScreenModal', gestureEnabled: false, animation: 'fade' }} />
       </Stack>
       {/* Film grain over the whole app, above content, never catching touches. */}

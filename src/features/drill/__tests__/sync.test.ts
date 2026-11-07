@@ -35,7 +35,7 @@ describe('pushDirty', () => {
 
     expect(calls.map((c) => `${c.op}:${c.table}`)).toEqual(['upsert:drill_days', 'upsert:journal_entries', 'delete:journal_entries']);
     expect(calls[0].payload).toEqual([
-      { id: 'a', user_id: 'user-1', kind: 'spine', day_number: 1, rule_id: 1, tier: 'five_minute', scheduled_for: '2026-11-10', status: 'done', responded_at: 't' },
+      { id: 'a', user_id: 'user-1', kind: 'spine', day_number: 1, rule_id: 1, tier: 'five_minute', scheduled_for: '2026-11-10', status: 'done', responded_at: 't', effort: null, dodge_reason: null },
     ]);
     expect(calls[2].payload).toEqual(['j2']);
     expect(sent).toEqual({ drills: [{ id: 'a', updatedAt: 'u1' }], journal: [{ id: 'j1', updatedAt: 'u3' }, { id: 'j2', updatedAt: 'u4' }] });

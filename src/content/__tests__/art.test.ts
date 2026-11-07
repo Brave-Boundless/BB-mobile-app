@@ -1,6 +1,6 @@
 import { describe, expect, it } from '@jest/globals';
 
-import { chapterArt, partArt, yourMoveArt } from '../art';
+import { chapterArt, partArt, partColor, partTextColor, yourMoveArt } from '../art';
 import { parts, rules } from '..';
 
 describe('book art', () => {
@@ -13,6 +13,14 @@ describe('book art', () => {
     for (const art of Object.values(chapterArt)) expect(art!.ratio).toBe(3 / 4);
   });
 
+  it('puts each pillar on its part’s colour from the book and website', () => {
+    expect(partColor).toEqual({ 1: '#800717', 2: '#C9512A', 3: '#4E5C5F', 4: '#47553C' });
+  });
+
+  it('has a readable text colour for every part name', () => {
+    expect(Object.keys(partTextColor)).toEqual(['1', '2', '3', '4']);
+  });
+
   it('has a pillar illustration for every part', () => {
     for (const p of parts) expect(partArt[p.id]).toBeDefined();
   });
@@ -21,7 +29,7 @@ describe('book art', () => {
     for (const art of [...Object.values(chapterArt), ...Object.values(partArt), yourMoveArt]) {
       expect(art!.source).toBeTruthy();
       expect(art!.ratio).toBeGreaterThan(0.5);
-      expect(art!.ratio).toBeLessThan(1.5);
+      expect(art!.ratio).toBeLessThan(2); // the trimmed anvil is about 3:2
     }
   });
 });

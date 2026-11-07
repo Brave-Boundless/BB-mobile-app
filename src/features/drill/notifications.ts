@@ -4,6 +4,9 @@ import * as Notifications from 'expo-notifications';
 import { AndroidImportance } from 'expo-notifications';
 import { Platform } from 'react-native';
 
+import { practiceCopy } from '@copy/practice';
+
+import { planReminder } from './after-answer';
 import { toLocalDate } from './local-date';
 import { planMorningNotifications } from './notification-plan';
 import type { DrillData } from './store';
@@ -35,7 +38,7 @@ export async function requestNotifications(): Promise<boolean> {
   return granted;
 }
 
-/** Replaces every scheduled push with the current 7-day plan. */
+/** Replaces every scheduled push with the current 7-day plan, plus tomorrow's planned-time reminder. */
 export async function rescheduleMorningPushes(data: DrillData, notifyAt: string = data.notifyAt): Promise<void> {
   if (Platform.OS === 'web' || !(await notificationsAllowed())) return;
   const now = new Date();
@@ -45,6 +48,13 @@ export async function rescheduleMorningPushes(data: DrillData, notifyAt: string 
     await Notifications.scheduleNotificationAsync({
       content: { title: n.title, body: n.body, data: { url: '/' } },
       trigger: { type: Notifications.SchedulableTriggerInputTypes.DATE, date: n.fireAt, channelId: CHANNEL_ID },
+    });
+  }
+  const reminder = planReminder(data, now, toLocalDate(now), practiceCopy.plan.pushBody);
+  if (reminder) {
+    await Notifications.scheduleNotificationAsync({
+      content: { title: reminder.title, body: reminder.body, data: { url: '/' } },
+      trigger: { type: Notifications.SchedulableTriggerInputTypes.DATE, date: reminder.fireAt, channelId: CHANNEL_ID },
     });
   }
 }

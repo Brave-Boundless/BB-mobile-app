@@ -1,4 +1,4 @@
-// status: draft — 2026-11-07
+// status: approved — Mark, 2026-11-07
 //
 // Book passages from content/passages.json, shown verbatim. Morning passage on
 // Today (matched to the current rule), evening passage after the report-back,
@@ -6,7 +6,7 @@
 // out of push notifications but can show in the app.
 
 export const inspirationCopy = {
-  status: 'draft',
+  status: 'approved',
   morning: 'This morning',
   evening: 'Before you close the day',
   // Under every passage, e.g. "Rule 1 · Burn the Map"

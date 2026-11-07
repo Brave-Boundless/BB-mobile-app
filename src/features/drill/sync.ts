@@ -26,6 +26,8 @@ export async function pushDirty(client: SupabaseClient, userId: string, data: Dr
         scheduled_for: d.scheduledFor,
         status: d.status,
         responded_at: d.respondedAt,
+        effort: d.effort ?? null,
+        dodge_reason: d.dodgeReason ?? null,
       })),
     );
     if (error) throw error;
