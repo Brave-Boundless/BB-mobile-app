@@ -1,15 +1,37 @@
-// status: approved — Mark, 2026-11-06
+// status: draft — 2026-11-07, replaces the approved 2026-11-06 version
 //
-// Tab labels are the screen names from the build brief (CLAUDE.md §3).
+// Five tabs (Mark, 2026-11-07): Today · Ask Mark · Rules · Community · You.
+// Progress moves inside Rules; Journal and Settings move inside You.
+// Previously approved labels kept as-is: Today, Rules, Progress, Journal, Settings.
 // `building` is a developer placeholder shown on screens that are not built
 // yet; it never ships to readers.
 
 export const navigationCopy = {
-  status: 'approved',
+  status: 'draft',
+  // Current tabs (approved 2026-11-06), used until the new layout ships.
   tabs: {
     today: 'Today',
     rules: 'Rules',
     progress: 'Progress',
+    journal: 'Journal',
+    settings: 'Settings',
+  },
+  // New five-tab layout (draft).
+  nextTabs: {
+    today: 'Today',
+    askMark: 'Ask Mark',
+    rules: 'Rules',
+    community: 'Community',
+    you: 'You',
+  },
+  // Segments at the top of the Rules tab
+  rulesTabs: {
+    rules: 'Rules',
+    progress: 'Progress',
+    passages: 'Passages',
+  },
+  // Segments at the top of the You tab
+  youTabs: {
     journal: 'Journal',
     settings: 'Settings',
   },

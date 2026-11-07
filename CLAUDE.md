@@ -6,8 +6,14 @@ This file is the project brief for Claude Code. Read it fully before touching co
 
 A mobile app (iOS + Android) that helps a reader of *Brave & Boundless* by Mark A. Nead turn the book's 15 rules into daily practice. The app is a companion to the book, not a replacement for it. Its voice is the author's: direct, no fluff, a little profane, earned through real failure.
 
-**Phase 1 (this build):** solo use. Daily drill, progress tracking, inspiration from the book.
-**Phase 2 (later, design for it now):** connect users who share the same struggle into small support groups.
+**Scope (Mark, 2026-11-07):** the app is the home for **everything Brave & Boundless**, not only rule tracking:
+- **The 45 drills** (built, steps 1–6), made deeper and more interactive (step 7).
+- **Daily inspiration** from the book's passages (step 8).
+- **Ask Mark**, the AI chat already live on the website (step 9).
+- **Share Your Story**, the story submission already on the website (step 10).
+- **Community**: connect people for support and inspiration (step 11, designed separately).
+
+**Phase 1:** solo use (steps 1–10). **Phase 2:** community. Design for it now.
 
 Tagline / brand line: **ONLY THE BRAVE BECOME BOUNDLESS**. Motifs: fire, mountain, transformation.
 
@@ -42,12 +48,12 @@ Each rule card has these fields and the app must use all six:
 - Milestones at Day 12 (end of FIRE), 24 (end of FORGE), 36 (end of FOUNDATION), 45 (end of FIELD). Milestone screens use the part name and a short message; no badges, no confetti.
 - After Day 45: the user picks which rules to keep running as recurring `daily` drills. The app also surfaces the rules they dodged most ("dodge pattern") and offers to restart on those.
 
-### Screens (phase 1)
-1. **Today** — the drill, the two-tap response, evening prompt. This is the home screen.
-2. **Rules** — the 15 cards in four part groupings. Tapping a card shows all six fields and the user's history on that rule.
-3. **Progress** — streak, current day of 45, a 15-cell "rule map" colored by completion rate, and each rule's `scorecard` as a simple count/ratio.
-4. **Journal** — reverse-chronological report-backs, filterable by rule.
-5. **Settings** — notification time, account, data export, delete account.
+### Screens — five tabs (Mark, 2026-11-07)
+1. **Today** — the drill, the two-tap response, evening prompt, the day's passage. This is the home screen.
+2. **Ask Mark** — the AI chat in Mark's voice (step 9).
+3. **Rules** — segments **Rules** (the 15 cards in four parts; tapping one shows all six fields and the user's history), **Progress** (streak, drills answered of 45, the 15-cell rule map, each rule's `scorecard`) and **Passages** (the book's passages by situation).
+4. **Community** — Share Your Story (step 10); groups later (step 11).
+5. **You** — segments **Journal** (reverse-chronological report-backs, filterable by rule) and **Settings** (notification time, account, data export, delete account).
 
 ### Tone rules for all UI copy
 - Short. Imperative. No exclamation points. No "You've got this!"
@@ -91,6 +97,11 @@ Seed `rules` from `content/bb-rule-cards.json` via a migration script; the JSON 
    4. Progress screen.
    5. Journal + Settings (incl. export/delete).
    6. Day-45 wrap-up and dodge-pattern restart.
+   7. Engagement: five-tab layout; clearer 45-drill structure; Go deeper page per drill; rate done drills; dodge reasons; plan tomorrow; rule recap; old notes resurfacing.
+   8. Daily inspiration: morning/evening passages on Today; Passages library.
+   9. Ask Mark in the app.
+   10. Share Your Story in the app.
+   11. Community (design first: moderation, reporting, blocking — App Store guideline 1.2).
 3. Before writing a screen, write the copy for it in a `copy/` file and get it approved. Copy is product here.
 4. When something in this brief conflicts with reality (an API changed, a library is dead), say so plainly and propose the fix. Do not work around it silently.
 5. Keep a running **Decisions log** below. Date each entry.
@@ -157,3 +168,14 @@ Seed `rules` from `content/bb-rule-cards.json` via a migration script; the JSON 
 - 2026-11-06 — Rule 8 (No Costume) art = `no costume-2` (masked runner, Mark supplied), replacing the book's topless version for the app. All 15 rules now have art.
 - 2026-11-06 — App linked to Mark's Expo project **brave-boundless-app** (id `228a7450-d1b4-4087-ad0d-0e4d24df6aa1`) by hand, the same edit `eas init --id` makes: `expo.extra.eas.projectId` + `slug` renamed `bb-mobile-app` → `brave-boundless-app` to match (internal only; app name, bundle id and scheme unchanged). `owner` left unset until the Expo account/org name is known; EAS builds also need `EXPO_TOKEN` as an environment secret.
 - 2026-11-06 — **EAS builds.** Expo access comes from a **network secret** (Bearer token injected for `api.expo.dev`), so the token never sits in the container; run eas-cli with `EXPO_TOKEN=placeholder`. Owner = Expo org **`boondock-walker`**. `eas.json` profiles carry the public `EXPO_PUBLIC_*` values (the `.env` is git-ignored and not uploaded); `preview` and `development` build Android **APKs** for internal install. Android keystore generated and held by EAS. Channels are set but `expo-updates` isn't installed yet — OTA updates come later.
+- 2026-11-06 — **iOS builds.** `ios.infoPlist.ITSAppUsesNonExemptEncryption = false` (the app only uses standard HTTPS, which is exempt), so TestFlight doesn't ask about export compliance on every build. EAS has **no Apple credentials** yet, so `eas build -p ios` can't run non-interactively from the cloud container. It needs either one interactive run by Mark (`eas build -p ios`, Apple ID sign-in; EAS then stores the cert + profile) or an App Store Connect API key. Ad-hoc (`preview`) builds also need each iPhone registered with `eas device:create`.
+- 2026-11-06 — **First iOS build** (Mark, interactive on his Mac): Apple team **Boondock Walker, LLC** (`ZQY76525CR`); EAS registered `com.braveandboundless.app` and now holds the distribution certificate and App Store provisioning profile, so later iOS builds can run non-interactively from the container. Production build 1.0.0 (3) from `main` @ `dced482` finished. A store-distribution `.ipa` installs only through TestFlight/App Store, so the next step is `eas submit -p ios`.
+- 2026-11-07 — **Scope widened** (Mark): the app covers everything Brave & Boundless — drills, daily inspiration, Ask Mark, Share Your Story, and later community. Build steps 7–11 added to §5. **Five tabs** (Mark): Today · Ask Mark · Rules (with Progress and Passages) · Community · You (Journal + Settings).
+- 2026-11-07 — **Step 7, engagement** (Mark: the app "feels rather static"; approved all of): a **Go deeper** page per drill (why it matters, **what it builds**, passages, the chapter exercise, Ask Mark about this drill); **rate done drills** 1–5; **dodge reasons** (fear, no time, forgot, didn't see the point, something else); **plan tomorrow** with a reminder at the chosen time (a second, optional push per day — supersedes "one push per day"); a **recap** after each rule's third drill; **old notes** resurfacing on Today. No streak pressure, badges or confetti added.
+- 2026-11-07 — **45-drill structure made explicit** (Mark): a first-run screen with a 15 × 3 grid; Today shows "Drill 14 of 45 · Rule 5 · Drill 2 of 3" with three pips; the Rules list shows three pips per rule; Progress counts drills answered of 45.
+- 2026-11-07 — **What it builds**: new writing, one line per drill, in `content/drill-outcomes.json` (**draft, drafted by Claude from the rule cards for Mark to edit**). Kept apart from the book's text and never presented as a quote; tested for 45 entries and no exclamation points.
+- 2026-11-07 — Step 7/8 copy drafted for approval: `copy/navigation.ts` (now draft: new tabs alongside the approved current ones), `copy/structure.ts`, `copy/deeper.ts`, `copy/practice.ts`, `copy/inspiration.ts`. No screens built on them until approved.
+- 2026-11-07 — Existing services to reuse: **Ask Mark** = Express server on Railway (`askmark-production.up.railway.app`, repo `Brave-Boundless/askMark`), `POST /api/chat` with the full message history, no caller key, 10 requests/min per IP; native apps send no `Origin`, which its CORS allows. **Share Your Story** = Kit form `9584762` (name, email, "which describes you", story), with the website's privacy promise and 988 crisis line.
+- 2026-11-07 — **Rule art is all 3:4 portrait** (Mark). Rules 1, 4, 9 and 14 cropped at the sides (Rule 4 keeps the lighthouse and the swimmer); Rule 5 was narrower and is widened with its own paper background instead of losing head or feet. The other ten files are 772 × 1024 (within 4px); the app shows every chapter illustration at exactly 3:4 with `cover`, and a test holds it there.
+- 2026-11-07 — **Share a passage** (Mark): an image card (1080 × 1920, passage + "Mark A. Nead · Brave & Boundless" + site) through the phone's share sheet, which already includes Instagram Stories, feed and DMs, Messages and WhatsApp. A dedicated "Share to Instagram Stories" button needs a Meta app ID registered for Instagram's sharing API; add later if wanted. Copy in `copy/inspiration.ts` (draft).
+

@@ -3,29 +3,33 @@ import type { ImageSourcePropType } from 'react-native';
 import type { PartId, RuleId } from './types';
 
 // Book illustrations from Box `Brave & Boundless/Book/art` (finals, confirmed by Mark).
-// Each file keeps its natural aspect ratio; `ratio` is width / height.
+// `ratio` is width / height. Every chapter illustration is shown 3:4 portrait
+// (Mark, 2026-11-07); the files are 3:4 (or within 4px of it), and the app
+// crops to exactly 3:4 with `cover`.
 //
 // Rule 8 (No Costume, Just You) uses `no costume-2` (masked runner), not the
 // book's topless version, which App Store / Play rules treat as nudity.
 
 export type Art = { source: ImageSourcePropType; ratio: number };
 
+const PORTRAIT = 3 / 4;
+
 export const chapterArt: Partial<Record<RuleId, Art>> = {
-  1: { source: require('../../assets/images/chapters/01.webp'), ratio: 819 / 1024 },
-  2: { source: require('../../assets/images/chapters/02.webp'), ratio: 772 / 1024 },
-  3: { source: require('../../assets/images/chapters/03.webp'), ratio: 772 / 1024 },
-  4: { source: require('../../assets/images/chapters/04.webp'), ratio: 1 },
-  5: { source: require('../../assets/images/chapters/05.webp'), ratio: 679 / 1024 },
-  6: { source: require('../../assets/images/chapters/06.webp'), ratio: 772 / 1024 },
-  7: { source: require('../../assets/images/chapters/07.webp'), ratio: 904 / 1200 },
-  8: { source: require('../../assets/images/chapters/08.webp'), ratio: 904 / 1200 },
-  9: { source: require('../../assets/images/chapters/09.webp'), ratio: 1117 / 1200 },
-  10: { source: require('../../assets/images/chapters/10.webp'), ratio: 772 / 1024 },
-  11: { source: require('../../assets/images/chapters/11.webp'), ratio: 904 / 1200 },
-  12: { source: require('../../assets/images/chapters/12.webp'), ratio: 904 / 1200 },
-  13: { source: require('../../assets/images/chapters/13.webp'), ratio: 772 / 1024 },
-  14: { source: require('../../assets/images/chapters/14.webp'), ratio: 839 / 1024 },
-  15: { source: require('../../assets/images/chapters/15.webp'), ratio: 772 / 1024 },
+  1: { source: require('../../assets/images/chapters/01.webp'), ratio: PORTRAIT },
+  2: { source: require('../../assets/images/chapters/02.webp'), ratio: PORTRAIT },
+  3: { source: require('../../assets/images/chapters/03.webp'), ratio: PORTRAIT },
+  4: { source: require('../../assets/images/chapters/04.webp'), ratio: PORTRAIT },
+  5: { source: require('../../assets/images/chapters/05.webp'), ratio: PORTRAIT },
+  6: { source: require('../../assets/images/chapters/06.webp'), ratio: PORTRAIT },
+  7: { source: require('../../assets/images/chapters/07.webp'), ratio: PORTRAIT },
+  8: { source: require('../../assets/images/chapters/08.webp'), ratio: PORTRAIT },
+  9: { source: require('../../assets/images/chapters/09.webp'), ratio: PORTRAIT },
+  10: { source: require('../../assets/images/chapters/10.webp'), ratio: PORTRAIT },
+  11: { source: require('../../assets/images/chapters/11.webp'), ratio: PORTRAIT },
+  12: { source: require('../../assets/images/chapters/12.webp'), ratio: PORTRAIT },
+  13: { source: require('../../assets/images/chapters/13.webp'), ratio: PORTRAIT },
+  14: { source: require('../../assets/images/chapters/14.webp'), ratio: PORTRAIT },
+  15: { source: require('../../assets/images/chapters/15.webp'), ratio: PORTRAIT },
 };
 
 /** The four pillar illustrations. Transparent, made to sit on the dark ground. */

@@ -9,6 +9,10 @@ describe('book art', () => {
     expect(missing).toEqual([]);
   });
 
+  it('shows every rule’s illustration at the same 3:4 portrait shape', () => {
+    for (const art of Object.values(chapterArt)) expect(art!.ratio).toBe(3 / 4);
+  });
+
   it('has a pillar illustration for every part', () => {
     for (const p of parts) expect(partArt[p.id]).toBeDefined();
   });
