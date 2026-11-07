@@ -69,7 +69,7 @@ Members read only their own groups' visible posts, minus anyone they've blocked.
 
 ## 5. Suggested rollout
 
-1. **11a — Pilot**: invite-only. Mark (or a moderator he names) creates one or two groups by hand from readers he picks; full posting, reporting, blocking, filter and admin view. No automatic matching yet. Learn what people actually do.
+1. **11a — Pilot** (chosen): invite-only. Mark creates a group for a rule and gets an **invite code** (e.g. `FIRE-7K2Q`) to send to the readers he picks; they enter it in the app. Full posting, reporting, blocking, filter and moderator tools. No automatic matching yet. Learn what people actually do.
 2. **11b — Matching**: the waitlist and automatic groups of 5–8 by rule.
 3. **11c — Extras** if the pilot calls for them: photos, a group recap at the end, alumni groups.
 
@@ -84,7 +84,7 @@ Members read only their own groups' visible posts, minus anyone they've blocked.
 
 ## 7. Mark's answers (2026-11-07)
 
-1. **Rollout**: invite-only **pilot first** (Mark is moderating it himself, which implies the pilot; to confirm).
+1. **Rollout**: invite-only **pilot first** (confirmed). Mark creates each group and shares its invite code with the readers he picks.
 2. **Moderator**: **Mark, for the pilot**. Decide the longer-term model once the workload is clear.
 3. **Group length**: **fixed 3 weeks**.
 4. **Who can join**: **anyone with an account** (no Day-12 gate).
