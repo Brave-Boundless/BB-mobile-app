@@ -1,6 +1,6 @@
 # Community groups — design (build step 11)
 
-Status: **draft for Mark's decisions**. Nothing here is built yet. The brief (`CLAUDE.md` §1, §6) sets the shape: small groups of 5–8, matched by a shared rule struggle, moderated, and designed so phase 1 doesn't get in the way. This document turns that into concrete choices. The "Decisions" section at the end lists what Mark needs to decide; everything else follows from those answers.
+Status: **decided by Mark, 2026-11-07** (see the end). Nothing here is built yet. The brief (`CLAUDE.md` §1, §6) sets the shape: small groups of 5–8, matched by a shared rule struggle, moderated, and designed so phase 1 doesn't get in the way. This document turns that into concrete choices. The "Decisions" section at the end lists what Mark needs to decide; everything else follows from those answers.
 
 ## 1. What a group is for
 
@@ -81,3 +81,12 @@ Members read only their own groups' visible posts, minus anyone they've blocked.
 4. **Who can join**: only readers past a point in the 45 drills (e.g. finished FIRE, Day 12), or anyone with an account?
 5. **Private messages**: none at first (proposed), or allowed between group members?
 6. **Age**: 18+ only (proposed — simplest given the subject matter), or 17+ to match Apple's likely rating?
+
+## 7. Mark's answers (2026-11-07)
+
+1. **Rollout**: invite-only **pilot first** (Mark is moderating it himself, which implies the pilot; to confirm).
+2. **Moderator**: **Mark, for the pilot**. Decide the longer-term model once the workload is clear.
+3. **Group length**: **fixed 3 weeks**.
+4. **Who can join**: **anyone with an account** (no Day-12 gate).
+5. **Private messages**: **none at first**.
+6. **Age**: **18+ only** — a one-time "I'm 18 or older" confirmation when joining, and the App Store age rating set to match.
