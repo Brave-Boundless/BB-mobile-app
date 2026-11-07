@@ -1,14 +1,14 @@
-// status: draft — for Mark's review, 2026-11-07
+// status: approved — Mark, 2026-11-07 (Settings title changed to "Follow Brave & Boundless")
 //
 // Links to the website and Brave & Boundless on social (Mark, 2026-11-07). Same accounts as
-// braveandboundless.com's footer. Shown in Settings ("Follow Mark", above the
+// braveandboundless.com's footer. Shown in Settings ("Follow Brave & Boundless", above the
 // version line), at the end of Community → Share Your Story ("Follow along"),
 // and as the handle on the passage share card.
 
 export const socialCopy = {
-  status: 'draft',
+  status: 'approved',
 
-  settingsTitle: 'Follow Mark',
+  settingsTitle: 'Follow Brave & Boundless',
   communityTitle: 'Follow along',
   communityBody: 'Stories, drills and the work behind the book.',
 
