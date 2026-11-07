@@ -26,7 +26,7 @@ export default function TabLayout() {
       <Tabs.Screen name="rules" options={{ title: tabs.rules }} />
       <Tabs.Screen name="ask" options={{ title: tabs.askMark }} />
       <Tabs.Screen name="community" options={{ title: tabs.community }} />
-      <Tabs.Screen name="you" options={{ title: tabs.you }} />
+      <Tabs.Screen name="journal" options={{ title: tabs.journal }} />
     </Tabs>
   );
 }

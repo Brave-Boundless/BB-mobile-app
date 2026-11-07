@@ -4,6 +4,8 @@ import { KeyboardAvoidingView, Modal, Platform, Pressable, ScrollView, Text, Tex
 import Animated from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { AccountIcon } from '@/features/account/account-icon';
+
 import { askMarkCopy as copy } from '@copy/askmark';
 import { Button } from '@/components/button';
 import { confirmDestructive } from '@/components/confirm';
@@ -110,6 +112,7 @@ export function AskMarkScreen() {
             </Text>
             <Text className="font-sans text-sm text-ash">{copy.subtitle}</Text>
           </View>
+          <AccountIcon />
         </View>
 
         <ScrollView

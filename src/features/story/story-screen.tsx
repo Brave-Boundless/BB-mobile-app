@@ -3,6 +3,8 @@ import { KeyboardAvoidingView, Linking, Platform, Pressable, ScrollView, Switch,
 import Animated from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { TopBar } from '@/components/top-actions';
+
 import { storyCopy as copy } from '@copy/story';
 import { Button } from '@/components/button';
 import { Chips } from '@/components/chips';
@@ -65,8 +67,9 @@ export function StoryScreen() {
 
   return (
     <SafeAreaView edges={['top']} className="flex-1 bg-charcoal-950">
+      <TopBar />
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} className="flex-1">
-        <ScrollView contentContainerClassName="px-6 pb-16 pt-6" keyboardShouldPersistTaps="handled">
+        <ScrollView contentContainerClassName="px-6 pb-16 pt-2" keyboardShouldPersistTaps="handled">
           <Rise index={0}>
             <Text className="font-medium text-sm uppercase tracking-widest text-ember-soft">{copy.intro.eyebrow}</Text>
             <Text className="mt-3 font-sans text-lg leading-7 text-bone">{copy.intro.body}</Text>

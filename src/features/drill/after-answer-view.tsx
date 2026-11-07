@@ -178,7 +178,7 @@ export function LookBack({ today, ruleId }: { today: LocalDate; ruleId: RuleId }
       <Text className="mt-2 font-sans text-lg leading-7 text-bone">{pick.entry.body}</Text>
       <Text className="mt-1 font-sans text-sm text-ash">{`${todayCopy.drill.ruleLabel(rule.number)} · ${rule.title}`}</Text>
       <View className="mt-1 items-start">
-        <Button variant="text" label={copy.lookBack.open} onPress={() => router.push('/you')} />
+        <Button variant="text" label={copy.lookBack.open} onPress={() => router.push('/journal')} />
       </View>
     </View>
   );

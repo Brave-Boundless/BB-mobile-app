@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { TabFrame } from '@/components/screen';
+import { AccountIcon } from '@/features/account/account-icon';
 import { Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 
 import { journalCopy as copy } from '@copy/journal';
@@ -24,11 +25,14 @@ export function JournalScreen({ embedded }: { embedded?: boolean } = {}) {
 
   return (
     <TabFrame embedded={embedded}>
-      <ScrollView contentContainerClassName="pb-12 pt-6" keyboardShouldPersistTaps="handled">
+      <ScrollView contentContainerClassName="pb-12 pt-4" keyboardShouldPersistTaps="handled">
         {embedded ? null : (
-        <Text accessibilityRole="header" className="px-6 font-bold text-3xl uppercase tracking-wide text-bone">
-          {copy.title}
-        </Text>
+          <View className="flex-row items-center justify-between pl-6 pr-3">
+            <Text accessibilityRole="header" className="font-bold text-3xl uppercase tracking-wide text-bone">
+              {copy.title}
+            </Text>
+            <AccountIcon />
+          </View>
         )}
 
         {anyAtAll ? (
