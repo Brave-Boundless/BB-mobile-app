@@ -2,7 +2,7 @@ import Constants from 'expo-constants';
 import { TabFrame } from '@/components/screen';
 import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { Linking, Platform, ScrollView, Text, TextInput, View } from 'react-native';
+import { Linking, Platform, ScrollView, Switch, Text, TextInput, View } from 'react-native';
 
 import { settingsCopy as copy } from '@copy/settings';
 import { Button } from '@/components/button';
@@ -26,6 +26,8 @@ import { EMAIL_RE, deleteAccountOnServer } from '@/features/account/server';
 import { notificationsAllowed, rescheduleMorningPushes } from '@/features/drill/notifications';
 import { pendingCount, useDrillStore } from '@/features/drill/store';
 import { useSyncState } from '@/features/drill/use-sync';
+import { askMarkSettingsCopy } from '@copy/askmark';
+import { useAskMarkStore } from '@/features/askmark/store';
 import { getSupabase } from '@/lib/supabase';
 import { palette } from '@/theme';
 
@@ -41,6 +43,35 @@ function Section({ title, children }: { title: string; children: React.ReactNode
       <View className="mt-3">{children}</View>
     </View>
     </Rise>
+  );
+}
+
+/** Ask Mark: whether the app tells it where the reader is in the 45 drills. */
+function AskMarkSection() {
+  const share = useAskMarkStore((s) => s.shareProgress);
+  const setShare = useAskMarkStore((s) => s.setShareProgress);
+  return (
+    <Section title={askMarkSettingsCopy.title}>
+      <View className="flex-row items-center gap-4 bg-charcoal-900 p-5">
+        <View className="flex-1">
+          <Text nativeID="askmark-share-label" className="font-medium text-base text-bone">
+            {askMarkSettingsCopy.share}
+          </Text>
+          <Text className="mt-1 font-sans text-sm text-ash">{askMarkSettingsCopy.shareHint}</Text>
+        </View>
+        <Switch
+          accessibilityLabel={askMarkSettingsCopy.share}
+          accessibilityLabelledBy="askmark-share-label"
+          value={share}
+          onValueChange={setShare}
+          trackColor={{ true: palette.ember.DEFAULT, false: palette.charcoal[700] }}
+          thumbColor={palette.bone}
+          // react-native-web ignores thumbColor when on and uses its own teal.
+          {...({ activeThumbColor: palette.bone } as object)}
+          testID="askmark-share"
+        />
+      </View>
+    </Section>
   );
 }
 
@@ -70,6 +101,7 @@ export function SettingsScreen({ embedded }: { embedded?: boolean } = {}) {
         </Text>
         )}
         <PushSection />
+        <AskMarkSection />
         <AccountSection email={email} signedIn={!!session} />
         <DataSection email={email} />
         <DeleteSection signedIn={!!session} />
@@ -286,7 +318,10 @@ function DataSection({ email }: { email?: string }) {
     setError(null);
     try {
       const now = new Date();
-      await shareExport(buildExport(useDrillStore.getState(), { now, appVersion, email }), exportFileName(now));
+      await shareExport(
+        buildExport(useDrillStore.getState(), { now, appVersion, email, askMark: useAskMarkStore.getState().messages }),
+        exportFileName(now),
+      );
     } catch {
       setError(copy.data.exportFailed);
     }

@@ -1,4 +1,4 @@
-// status: draft — 2026-11-07
+// status: approved — Mark, 2026-11-07
 //
 // Copy for build step 9: Ask Mark in the app. Lines marked (website) are the
 // live braveandboundless.com/ask wording, reused as-is; everything else is new
@@ -6,7 +6,7 @@
 // (Brave-Boundless/askMark) and are never written here.
 
 export const askMarkCopy = {
-  status: 'draft',
+  status: 'approved',
 
   // ── Header ─────────────────────────────────────────────────────────────
   title: 'Ask Mark', // (website)
@@ -99,7 +99,7 @@ export const askMarkCopy = {
 
 // Settings → a new "Ask Mark" section. (new)
 export const askMarkSettingsCopy = {
-  status: 'draft',
+  status: 'approved',
   title: 'Ask Mark',
   share: 'Share my drill progress',
   shareHint: 'Your day, rule, today’s drill, whether you did it or dodged it, and what got in the way. Never your journal.',
