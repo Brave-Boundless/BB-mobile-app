@@ -10,6 +10,7 @@ import { View } from 'react-native';
 
 import { Grain } from '@/components/grain';
 import { useBackgroundSync } from '@/features/drill/use-sync';
+import { useNewsletterOnSignIn } from '@/features/account/use-account-effects';
 import { queryClient } from '@/lib/query-client';
 import { appFonts, palette } from '@/theme';
 
@@ -19,6 +20,7 @@ export default function RootLayout() {
   const [fontsLoaded, fontError] = useFonts(appFonts);
   const ready = fontsLoaded || fontError !== null;
   useBackgroundSync();
+  useNewsletterOnSignIn();
 
   useEffect(() => {
     if (ready) SplashScreen.hideAsync();

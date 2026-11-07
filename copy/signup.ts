@@ -1,4 +1,4 @@
-// status: draft — for Mark's review, 2026-11-07
+// status: approved — Mark, 2026-11-07
 //
 // Required sign-up (Mark, 2026-11-07: readers should create an account, "so I
 // can market to them"). The account is required for backup, sync and groups;
@@ -18,7 +18,7 @@
 // Tone: short, imperative, no exclamation points.
 
 export const signupCopy = {
-  status: 'draft',
+  status: 'approved',
 
   // ── The sign-up screen ────────────────────────────────────────────────────
   screen: {

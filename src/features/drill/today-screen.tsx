@@ -10,6 +10,8 @@ import { structureCopy as structure } from '@copy/structure';
 import { todayCopy as copy } from '@copy/today';
 import { Button } from '@/components/button';
 import { TopBar } from '@/components/top-actions';
+import { SignUpScreen } from '@/features/account/signup-screen';
+import { accountsRequired, useAuthState } from '@/features/account/session';
 import { ArtThumb } from '@/components/art';
 import { chapterArt } from '@/content/art';
 import { Reveal, Rise } from '@/components/motion';
@@ -28,7 +30,7 @@ import { todayState } from './progress';
 import { SPINE_LENGTH, milestoneFor, spineDay } from './spine';
 import { rulePips } from './structure';
 import { useDrillStore, type DrillDayRow } from './store';
-import { useOffline } from './use-sync';
+import { syncNow, useOffline } from './use-sync';
 import { useToday } from './use-today';
 
 function useHydrated(): boolean {
@@ -57,6 +59,22 @@ export function TodayScreen() {
   const practice = useDrillStore((s) => s.practice);
   const openToday = useDrillStore((s) => s.openToday);
 
+  const start = useDrillStore((s) => s.start);
+  const { session } = useAuthState();
+  // First-time reader who tapped Start Day 1 without an account: the push time they picked.
+  const [signingUp, setSigningUp] = useState<string | null>(null);
+
+  // Signed in from the sign-up screen: pull any history this account already
+  // has (a returning reader on a new phone), then start Day 1 if there was none.
+  useEffect(() => {
+    if (signingUp === null || !session) return;
+    const pickedTime = signingUp;
+    void syncNow().then(() => {
+      if (!useDrillStore.getState().startedOn) start(today, pickedTime);
+      setSigningUp(null);
+    });
+  }, [signingUp, session, start, today]);
+
   const records = useMemo(() => Object.values(drills), [drills]);
   const state = useMemo(() => todayState(records, today), [records, today]);
 
@@ -72,9 +90,17 @@ export function TodayScreen() {
   }, [hydrated, startedOn, scheduleKey, notifyAt, today, practice]);
 
   if (!hydrated) return <Shell />;
+  if (signingUp !== null && !session) {
+    return (
+      <SafeAreaView edges={['top']} className="flex-1 bg-charcoal-950">
+        <SignUpScreen variant="new" offline={offline} />
+      </SafeAreaView>
+    );
+  }
 
   let body: React.ReactNode;
-  if (!startedOn) body = <StartView today={today} />;
+  if (!startedOn)
+    body = <StartView onStart={(time) => (accountsRequired && !session ? setSigningUp(time) : start(today, time))} />;
   else if (!notificationsAsked && Platform.OS !== 'web') body = <NotifyAskView onDenied={() => setPushDenied(true)} />;
   else if (state.kind === 'complete') body = <AfterDay45 today={today} editing={editingSet} setEditing={setEditingSet} />;
   else {
@@ -116,8 +142,7 @@ function Shell({ children, offline, scrollKey }: { children?: React.ReactNode; o
 
 const EMPTY_GRID = Array.from({ length: 15 }, () => ['ahead', 'ahead', 'ahead'] as const);
 
-function StartView({ today }: { today: string }) {
-  const start = useDrillStore((s) => s.start);
+function StartView({ onStart }: { onStart: (notifyAt: string) => void }) {
   const [notifyAt, setNotifyAt] = useState(useDrillStore.getState().notifyAt);
 
   return (
@@ -157,7 +182,7 @@ function StartView({ today }: { today: string }) {
 
       <Rise index={4} base={120}>
         <View className="mt-10">
-          <Button label={copy.start.cta} onPress={() => start(today, notifyAt)} testID="start-day-1" />
+          <Button label={copy.start.cta} onPress={() => onStart(notifyAt)} testID="start-day-1" />
           <View className="mt-4 items-center">
             <Button variant="text" label={howItWorksCopy.link} onPress={() => router.push('/how-it-works')} testID="how-it-works-start" />
           </View>
