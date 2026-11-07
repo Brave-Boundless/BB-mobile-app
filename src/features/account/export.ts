@@ -2,33 +2,44 @@
 // (Mark, 2026-11-06). Built from the local store, which holds the full record
 // (merged with the server after sign-in).
 
-import { File, Paths } from 'expo-file-system';
-import * as Sharing from 'expo-sharing';
-import { Platform } from 'react-native';
+import { File, Paths } from "expo-file-system";
+import * as Sharing from "expo-sharing";
+import { Platform } from "react-native";
 
-import { getRule } from '@/content';
-import type { DrillData } from '@/features/drill/store';
+import { getRule } from "@/content";
+import type { DrillData } from "@/features/drill/store";
 
-export const EXPORT_FORMAT = 'brave-and-boundless-export/v1';
+export const EXPORT_FORMAT = "brave-and-boundless-export/v1";
 
 export function buildExport(
   data: DrillData,
-  opts: { now: Date; appVersion: string; email?: string; askMark?: { role: string; content: string }[] },
+  opts: {
+    now: Date;
+    appVersion: string;
+    email?: string;
+    askMark?: { role: string; content: string }[];
+  },
 ) {
-  const drills = Object.values(data.drills).sort((a, b) => a.day - b.day || a.scheduledFor.localeCompare(b.scheduledFor));
+  const drills = Object.values(data.drills).sort(
+    (a, b) => a.day - b.day || a.scheduledFor.localeCompare(b.scheduledFor),
+  );
   const ruleOf = new Map(drills.map((d) => [d.id, d]));
   return {
     format: EXPORT_FORMAT,
     exportedAt: opts.now.toISOString(),
     appVersion: opts.appVersion,
     account: opts.email ? { email: opts.email } : null,
-    settings: { startedOn: data.startedOn, morningPushAt: data.notifyAt, plannedReminder: data.plan },
+    settings: {
+      startedOn: data.startedOn,
+      morningPushAt: data.notifyAt,
+      plannedReminder: data.plan,
+    },
     savedPassages: Object.keys(data.savedPassages ?? {}),
     askMarkConversation: opts.askMark ?? [],
     afterDay45: data.practice,
     drills: drills.map((d) => ({
       id: d.id,
-      track: d.kind ?? 'spine',
+      track: d.kind ?? "spine",
       day: d.day,
       rule: d.ruleId,
       ruleTitle: getRule(d.ruleId).title,
@@ -58,11 +69,16 @@ export function exportFileName(now: Date): string {
 }
 
 /** Writes the export and opens the share sheet (download on web). */
-export async function shareExport(payload: object, fileName: string): Promise<void> {
+export async function shareExport(
+  payload: object,
+  fileName: string,
+): Promise<void> {
   const text = JSON.stringify(payload, null, 2);
-  if (Platform.OS === 'web') {
-    const url = URL.createObjectURL(new Blob([text], { type: 'application/json' }));
-    const a = document.createElement('a');
+  if (Platform.OS === "web") {
+    const url = URL.createObjectURL(
+      new Blob([text], { type: "application/json" }),
+    );
+    const a = document.createElement("a");
     a.href = url;
     a.download = fileName;
     a.click();
@@ -73,5 +89,9 @@ export async function shareExport(payload: object, fileName: string): Promise<vo
   if (file.exists) file.delete();
   file.create();
   await file.write(text);
-  await Sharing.shareAsync(file.uri, { mimeType: 'application/json', UTI: 'public.json', dialogTitle: fileName });
+  await Sharing.shareAsync(file.uri, {
+    mimeType: "application/json",
+    UTI: "public.json",
+    dialogTitle: fileName,
+  });
 }
