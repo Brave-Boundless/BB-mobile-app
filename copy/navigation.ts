@@ -1,6 +1,6 @@
 // status: approved — Mark, 2026-11-07
 //
-// Five tabs (Mark, 2026-11-07): Today · Rules · Ask Mark · Community · Journal.
+// Five tabs (Mark, 2026-11-07): Today · Rules · Ask Mark · Journal · Community.
 // Progress moves inside Rules. Settings moved off the tab bar into the
 // account icon at the top right of every tab (Mark, 2026-11-07).
 // Earlier labels (Today, Rules, Progress, Journal, Settings) live on as tab
