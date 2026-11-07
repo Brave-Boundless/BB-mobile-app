@@ -1,0 +1,54 @@
+# Every merge to main ships to iPhones (decisions log, 2026-11-07):
+# - native code unchanged (same fingerprint as an existing production build)
+#   -> publish an over-the-air update to the production channel; installed
+#      TestFlight/App Store builds pick it up on next launch.
+# - native code changed (new fingerprint) -> build iOS and submit to TestFlight.
+# iOS only for now: Android needs a Google Play service account before EAS can
+# submit; add the android jobs from Expo's deploy-to-production example then.
+# Put [eas skip] in a commit message to skip a run.
+
+name: Deploy to production
+
+on:
+  push:
+    branches: ['main']
+
+jobs:
+  fingerprint:
+    name: Fingerprint
+    type: fingerprint
+    environment: production
+
+  get_ios_build:
+    name: Find a production iOS build with this fingerprint
+    needs: [fingerprint]
+    type: get-build
+    params:
+      platform: ios
+      profile: production
+      fingerprint_hash: ${{ needs.fingerprint.outputs.ios_fingerprint_hash }}
+
+  build_ios:
+    name: Build iOS (native code changed)
+    needs: [get_ios_build]
+    if: ${{ !needs.get_ios_build.outputs.build_id }}
+    type: build
+    params:
+      platform: ios
+      profile: production
+
+  submit_ios_build:
+    name: Submit to TestFlight
+    needs: [build_ios]
+    type: submit
+    params:
+      build_id: ${{ needs.build_ios.outputs.build_id }}
+
+  publish_ios_update:
+    name: Publish update (native code unchanged)
+    needs: [get_ios_build]
+    if: ${{ needs.get_ios_build.outputs.build_id }}
+    type: update
+    params:
+      channel: production
+      platform: ios
