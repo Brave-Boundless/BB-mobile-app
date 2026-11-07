@@ -45,10 +45,18 @@ function dayIndex(today: LocalDate, n: number): number {
 export function lookBackFor(
   data: Pick<DrillData, 'drills' | 'journal' | 'lookBack'>,
   today: LocalDate,
+  /** Today's rule: its notes are already on screen (recap, history), so skip them. */
+  skipRule?: RuleId,
 ): { entry: JournalRow; day: number; isNew: boolean } | undefined {
   const cutoff = addDays(today, -MIN_AGE_DAYS);
   const old = Object.values(data.journal)
-    .filter((j) => !j.deleted && j.createdAt.slice(0, 10) <= cutoff && data.drills[j.drillDayId])
+    .filter(
+      (j) =>
+        !j.deleted &&
+        j.createdAt.slice(0, 10) <= cutoff &&
+        data.drills[j.drillDayId] &&
+        data.drills[j.drillDayId].ruleId !== skipRule,
+    )
     .sort((a, b) => a.createdAt.localeCompare(b.createdAt));
   if (old.length === 0) return undefined;
   if (data.lookBack?.on === today) {

@@ -320,7 +320,7 @@ function AnsweredView({ row, today }: { row: DrillDayRow; today: string }) {
       </Rise>
 
       <Rise base={done ? 640 : 360}>
-        <LookBack today={today} />
+        <LookBack today={today} ruleId={row.ruleId} />
       </Rise>
     </View>
   );

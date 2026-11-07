@@ -8,7 +8,7 @@ import { todayCopy } from '@copy/today';
 import { Button } from '@/components/button';
 import { Chips } from '@/components/chips';
 import { TimeField, formatTime } from '@/components/time-field';
-import { getRule } from '@/content';
+import { getRule, type RuleId } from '@/content';
 import { features } from '@/lib/features';
 import { fadeIn } from '@/theme/motion';
 
@@ -153,12 +153,12 @@ function PickTime({ onPick }: { onPick: (hhmm: string) => void }) {
 
 // ── On Day N you wrote ────────────────────────────────────────────────────
 
-export function LookBack({ today }: { today: LocalDate }) {
+export function LookBack({ today, ruleId }: { today: LocalDate; ruleId: RuleId }) {
   const drills = useDrillStore((s) => s.drills);
   const journal = useDrillStore((s) => s.journal);
   const lookBack = useDrillStore((s) => s.lookBack);
   const setLookBack = useDrillStore((s) => s.setLookBack);
-  const pick = lookBackFor({ drills, journal, lookBack }, today);
+  const pick = lookBackFor({ drills, journal, lookBack }, today, ruleId);
 
   useEffect(() => {
     if (pick?.isNew) setLookBack({ on: today, journalId: pick.entry.id });

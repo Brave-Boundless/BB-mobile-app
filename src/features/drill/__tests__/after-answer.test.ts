@@ -45,6 +45,10 @@ describe('look back', () => {
     expect(lookBackFor({ drills, journal, lookBack: null }, '2026-11-07')).toBeUndefined();
   });
 
+  it('skips notes from today’s rule', () => {
+    expect(lookBackFor({ drills, journal, lookBack: null }, '2026-11-09', 1)).toBeUndefined();
+  });
+
   it('keeps the same note all day', () => {
     expect(lookBackFor({ drills, journal, lookBack: { on: '2026-11-09', journalId: 'b' } }, '2026-11-09')).toMatchObject({
       entry: { id: 'b' },
