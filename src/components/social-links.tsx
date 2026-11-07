@@ -15,7 +15,7 @@ export function SocialLinks() {
         <Pressable
           key={s.key}
           accessibilityRole="link"
-          accessibilityLabel={socialCopy.a11y(s.name)}
+          accessibilityLabel={s.key === 'website' ? socialCopy.websiteA11y : socialCopy.a11y(s.name)}
           onPress={() => void Linking.openURL(s.url)}
           testID={`social-${s.key}`}
           className="h-12 w-12 items-center justify-center active:opacity-60">

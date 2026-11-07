@@ -8,8 +8,8 @@ import { socialLinks } from '@/content/social';
 import { SocialLinks } from '../social-links';
 
 describe('SocialLinks', () => {
-  it('links the four accounts from the website, all https', () => {
-    expect(socialLinks.map((s) => s.key)).toEqual(['instagram', 'tiktok', 'facebook', 'x']);
+  it('links the website and the four accounts from its footer, all https', () => {
+    expect(socialLinks.map((s) => s.key)).toEqual(['website', 'instagram', 'tiktok', 'facebook', 'x']);
     for (const s of socialLinks) expect(s.url).toMatch(/^https:\/\//);
   });
 
@@ -17,7 +17,7 @@ describe('SocialLinks', () => {
     const open = jest.spyOn(Linking, 'openURL').mockResolvedValue(undefined);
     await render(<SocialLinks />);
     for (const s of socialLinks) {
-      const button = screen.getByLabelText(socialCopy.a11y(s.name));
+      const button = screen.getByLabelText(s.key === 'website' ? socialCopy.websiteA11y : socialCopy.a11y(s.name));
       fireEvent.press(button);
       expect(open).toHaveBeenLastCalledWith(s.url);
     }
