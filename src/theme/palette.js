@@ -39,6 +39,14 @@ const palette = {
     foundation: '#4E5C5F',
     field: '#47553C',
   },
+  // Each part's colour lightened (same hue) until it reads on black at
+  // >= 4.5:1, for the part-name headline. The exact colours above are 1.8-4.3:1.
+  partText: {
+    fire: '#F31C38',
+    forge: '#D1542C',
+    foundation: '#6C7F83',
+    field: '#6C825C',
+  },
   crimson: '#8A1C1C', // stamp ink, on bone only
   gold: '#C8A24A', // brand gold
 };
@@ -59,6 +67,10 @@ const TEXT_PAIRS = [
   ['crimson', 'bone'], // stamp ink on the passport page
   ['charcoal.950', 'bone'], // text on the passport page
   ['charcoal.950', 'gold'],
+  ['partText.fire', 'charcoal.950'], // part-name headlines (Rules list, milestones)
+  ['partText.forge', 'charcoal.950'],
+  ['partText.foundation', 'charcoal.950'],
+  ['partText.field', 'charcoal.950'],
 ];
 
 module.exports = { palette, TEXT_PAIRS };

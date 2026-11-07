@@ -4,7 +4,7 @@ import { Pressable, ScrollView, Text, View } from 'react-native';
 
 import { rulesCopy as copy } from '@copy/rules';
 import { getRule, parts, type RuleCard } from '@/content';
-import { chapterArt, partArt, partColor } from '@/content/art';
+import { chapterArt, partArt, partColor, partTextColor } from '@/content/art';
 import { ArtThumb, PillarArt } from '@/components/art';
 import { Pips } from '@/features/drill/pips';
 import { useDrillStore } from '@/features/drill/store';
@@ -47,7 +47,9 @@ export function RulesScreen({ embedded }: { embedded?: boolean } = {}) {
                 <Text className="font-medium text-sm uppercase tracking-widest text-ash">
                   {copy.list.partLabel(ROMAN[part.id])}
                 </Text>
-                <Text className="mt-1 font-bold text-2xl tracking-wide text-ember-soft">{part.name}</Text>
+                <Text className="mt-1 font-bold text-2xl tracking-wide" style={{ color: partTextColor[part.id] }}>
+                  {part.name}
+                </Text>
                 <Text className="font-sans text-base text-ash">{part.subtitle}</Text>
               </View>
             </View>

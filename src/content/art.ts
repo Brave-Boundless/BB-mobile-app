@@ -43,6 +43,14 @@ export const partColor: Record<PartId, string> = {
   4: palette.part.field,
 };
 
+/** Each part's colour for its name in text, lightened to read on black (palette.partText). */
+export const partTextColor: Record<PartId, string> = {
+  1: palette.partText.fire,
+  2: palette.partText.forge,
+  3: palette.partText.foundation,
+  4: palette.partText.field,
+};
+
 export const partArt: Record<PartId, Art> = {
   1: { source: require('../../assets/images/parts/fire.webp'), ratio: 1 },
   2: { source: require('../../assets/images/parts/forge.webp'), ratio: 772 / 1024 },
