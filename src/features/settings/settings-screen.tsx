@@ -27,6 +27,7 @@ import { notificationsAllowed, rescheduleMorningPushes } from '@/features/drill/
 import { pendingCount, useDrillStore } from '@/features/drill/store';
 import { useSyncState } from '@/features/drill/use-sync';
 import { askMarkSettingsCopy } from '@copy/askmark';
+import { howItWorksCopy } from '@copy/howitworks';
 import { useAskMarkStore } from '@/features/askmark/store';
 import { getSupabase } from '@/lib/supabase';
 import { palette } from '@/theme';
@@ -105,6 +106,9 @@ export function SettingsScreen({ embedded }: { embedded?: boolean } = {}) {
         <AccountSection email={email} signedIn={!!session} />
         <DataSection email={email} />
         <DeleteSection signedIn={!!session} />
+        <View className="mt-10">
+          <Button variant="secondary" label={howItWorksCopy.link} onPress={() => router.push('/how-it-works')} testID="how-it-works-settings" />
+        </View>
         <View className="mt-12 items-center">
           <Text className="font-sans text-sm text-ash">{copy.about.book}</Text>
           <Text className="mt-1 font-sans text-sm text-ash">{copy.about.version(appVersion)}</Text>

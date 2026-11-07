@@ -50,8 +50,8 @@ Each rule card has these fields and the app must use all six:
 
 ### Screens — five tabs (Mark, 2026-11-07)
 1. **Today** — the drill, the two-tap response, evening prompt, the day's passage. This is the home screen.
-2. **Ask Mark** — the AI chat in Mark's voice (step 9).
-3. **Rules** — segments **Rules** (the 15 cards in four parts; tapping one shows all six fields and the user's history), **Progress** (streak, drills answered of 45, the 15-cell rule map, each rule's `scorecard`) and **Passages** (the book's passages by situation).
+2. **Rules** — segments **Rules** (the 15 cards in four parts; tapping one shows all six fields and the user's history), **Progress** (streak, drills answered of 45, the 15-cell rule map, each rule's `scorecard`) and **Passages** (the book's passages by situation).
+3. **Ask Mark** — the AI chat in Mark's voice (step 9).
 4. **Community** — Share Your Story (step 10); groups later (step 11).
 5. **You** — segments **Journal** (reverse-chronological report-backs, filterable by rule) and **Settings** (notification time, account, data export, delete account).
 
@@ -212,3 +212,5 @@ Seed `rules` from `content/bb-rule-cards.json` via a migration script; the JSON 
 - 2026-11-07 — **Step 11 design** drafted in `docs/community-design.md` for Mark's decisions: App Store 1.2 requirements (filter, report, block, contact, terms), account required, display names, matching by chosen rule into groups of 5–8, text posts + weekly prompt + optional check-ins + one reaction, no DMs at first, crisis-word handling with the 988 line, named moderator per group, admin view with a 24-hour target, data model with RLS, and a rollout of invite-only pilot → matching → extras.
 - 2026-11-07 — **Step 11 decisions** (Mark): invite-only **pilot** first (confirmed; readers join with an invite code Mark shares), **Mark moderates** it, groups run **3 weeks**, **anyone with an account** can join (no Day-12 gate), **no private messages** at first, **18+ only**.
 - 2026-11-07 — Step 11a copy drafted in `copy/groups.ts` (**draft**): Community tab segments (Groups · Share Your Story), invite-code join, display name, 18+ confirmation, the six group rules, the group screen (weekly prompt, posts, optional check-in, one "Respect" reaction, held-post notice, leave/delete), report reasons and block, the crisis screen with 988, a daily group push, moderator tools (held posts, reports, hide, mute 24h, remove, new group with invite code, close), and Settings additions (group name, Contact us).
+- 2026-11-07 — **How this works** (`copy/howitworks.ts`, approved by Mark): one static page (`/how-it-works`) explaining the daily drills, opened from a link under the drill position on Today, a link under "Start Day 1" on first run, and a button in You → Settings.
+- 2026-11-07 — **Tab order** (Mark): Today · Rules · Ask Mark · Community · You. Rules sits next to Today since they go together.

@@ -5,6 +5,7 @@ import Animated from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { deeperCopy } from '@copy/deeper';
+import { howItWorksCopy } from '@copy/howitworks';
 import { structureCopy as structure } from '@copy/structure';
 import { todayCopy as copy } from '@copy/today';
 import { Button } from '@/components/button';
@@ -155,6 +156,9 @@ function StartView({ today }: { today: string }) {
       <Rise index={4} base={120}>
         <View className="mt-10">
           <Button label={copy.start.cta} onPress={() => start(today, notifyAt)} testID="start-day-1" />
+          <View className="mt-4 items-center">
+            <Button variant="text" label={howItWorksCopy.link} onPress={() => router.push('/how-it-works')} testID="how-it-works-start" />
+          </View>
         </View>
       </Rise>
     </View>
@@ -213,6 +217,9 @@ function DrillView({ row, today }: { row: DrillDayRow; today: string }) {
           <Text className="font-medium text-sm uppercase tracking-widest text-ash" testID="drill-position">
             {structure.position(row.day, SPINE_LENGTH, rule.number, dayOfRule)}
           </Text>
+          <View className="flex-row">
+            <Button variant="text" label={howItWorksCopy.link} onPress={() => router.push('/how-it-works')} testID="how-it-works-today" />
+          </View>
         </Rise>
         <Rise index={1}>
           <View className="mt-6 flex-row items-end gap-4">

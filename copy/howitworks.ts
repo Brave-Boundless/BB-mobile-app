@@ -1,4 +1,4 @@
-// status: draft — for Mark's review, 2026-11-07
+// status: approved — Mark, 2026-11-07
 //
 // "How this works": one short page that explains the daily drills (Mark,
 // 2026-11-07: "so people know how to use the daily challenges").
@@ -13,7 +13,7 @@
 // Tone: short, imperative, no exclamation points, never shame a dodge.
 
 export const howItWorksCopy = {
-  status: 'draft',
+  status: 'approved',
 
   link: 'How this works',
   title: 'How this works',
@@ -71,5 +71,4 @@ export const howItWorksCopy = {
     },
   ],
 
-  close: 'Close',
 } as const;
