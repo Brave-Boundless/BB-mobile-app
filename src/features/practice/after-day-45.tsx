@@ -13,6 +13,7 @@ import { getRule, rules, type RuleId } from '@/content';
 import { EveningPrompt } from '@/features/drill/evening-prompt';
 import type { LocalDate } from '@/features/drill/local-date';
 import { reportFor, useDrillStore } from '@/features/drill/store';
+import { MorningPassage } from '@/features/inspiration/today-passages';
 
 import { dodgePattern, practiceToday, spineTally, wrapupDue, type PracticeSlot } from './plan';
 
@@ -241,6 +242,8 @@ function PracticeView({ today, onChange }: { today: LocalDate; onChange: () => v
       <View className="mt-6 items-start">
         <Button variant="text" label={copy.practice.change} onPress={onChange} testID="change-daily-set" />
       </View>
+
+      {plan.slots[0]?.row ? <MorningPassage row={plan.slots[0].row} today={today} /> : null}
     </View>
   );
 }

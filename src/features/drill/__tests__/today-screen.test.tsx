@@ -53,11 +53,11 @@ describe('Today screen', () => {
 
     // Four sentences is too long
     await fireEvent.changeText(screen.getByTestId('evening-input'), 'One. Two. Three. Four.');
-    await fireEvent.press(screen.getByText(copy.evening.save));
+    await fireEvent.press(screen.getByTestId('evening-save'));
     expect(screen.getByText(copy.evening.tooLong)).toBeTruthy();
 
     await fireEvent.changeText(screen.getByTestId('evening-input'), 'It cost me my excuse.');
-    await fireEvent.press(screen.getByText(copy.evening.save));
+    await fireEvent.press(screen.getByTestId('evening-save'));
     expect(await screen.findByText(copy.evening.saved)).toBeTruthy();
     expect(screen.getByText('It cost me my excuse.')).toBeTruthy();
   });
