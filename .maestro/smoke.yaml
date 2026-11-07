@@ -4,12 +4,12 @@ appId: com.braveandboundless.app
 ---
 - clearState
 - launchApp
-- assertVisible: "45 days. 15 rules. One drill a day."
+- assertVisible: "15 rules. 3 drills each. 45 days."
 - tapOn:
     id: "start-day-1"
 - tapOn:
     id: "notify-deny"
-- assertVisible: "Day 1 of 45"
+- assertVisible: "Drill 1 of 45 · Rule 1 · Drill 1 of 3"
 - assertVisible: "Move Before You’re Ready"
 - tapOn: "Did it. Log today’s drill as done."
 - assertVisible: "Done."

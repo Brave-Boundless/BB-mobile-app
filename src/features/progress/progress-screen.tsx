@@ -3,15 +3,17 @@ import { TabFrame } from '@/components/screen';
 import Animated from 'react-native-reanimated';
 
 import { progressCopy as copy } from '@copy/progress';
+import { structureCopy as structure } from '@copy/structure';
 import { getRule } from '@/content';
-import { SPINE_LENGTH } from '@/features/drill/spine';
+import { Grid45 } from '@/features/drill/pips';
+import { allPips, answeredCount } from '@/features/drill/structure';
 import { useDrillStore } from '@/features/drill/store';
 import { useToday } from '@/features/drill/use-today';
 import { Reveal, Rise } from '@/components/motion';
 import { pop } from '@/theme/motion';
 import { Passport } from '@/features/stamps/passport';
 
-import { position, ruleTallies, streak, streakMantra, type Position, type RuleTally, type Shade } from './stats';
+import { position, ruleTallies, streak, streakMantra, type RuleTally, type Shade } from './stats';
 
 const CELL: Record<Shade, { box: string; text: string }> = {
   all: { box: 'bg-ember', text: 'text-charcoal-950' },
@@ -19,12 +21,6 @@ const CELL: Record<Shade, { box: string; text: string }> = {
   some: { box: 'bg-ember-dim', text: 'text-bone' },
   none: { box: 'border border-charcoal-700 bg-charcoal-950', text: 'text-ash' },
 };
-
-function positionText(p: Position): string {
-  if (p.kind === 'notStarted') return copy.day.notStarted;
-  if (p.kind === 'complete') return copy.day.complete(SPINE_LENGTH);
-  return copy.day.value(p.day, SPINE_LENGTH);
-}
 
 function Heading({ children }: { children: string }) {
   return (
@@ -55,13 +51,15 @@ export function ProgressScreen({ embedded }: { embedded?: boolean } = {}) {
         )}
 
         <Rise index={0}>
-        <View className="mt-8 flex-row gap-3">
-          <View className="flex-1 bg-charcoal-900 p-4">
-            <Heading>{copy.day.label}</Heading>
-            <Text className="mt-2 font-bold text-2xl text-bone" testID="progress-day">
-              {positionText(pos)}
-            </Text>
+        <View className="mt-8 bg-charcoal-900 p-4">
+          <Text className="font-bold text-2xl text-bone" testID="progress-day">
+            {pos.kind === 'notStarted' ? copy.day.notStarted : structure.progress(answeredCount(data))}
+          </Text>
+          <View className="mt-4">
+            <Grid45 rows={allPips(data)} label={structure.progress(answeredCount(data))} testID="progress-grid" />
           </View>
+        </View>
+        <View className="mt-3 flex-row gap-3">
           <View className="flex-1 bg-charcoal-900 p-4">
             <Heading>{copy.streak.label}</Heading>
             <Text className="mt-2 font-bold text-2xl text-bone" testID="progress-streak">

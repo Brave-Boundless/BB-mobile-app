@@ -6,7 +6,9 @@ import { rulesCopy as copy } from '@copy/rules';
 import { getRule, parts, type RuleCard } from '@/content';
 import { chapterArt, partArt } from '@/content/art';
 import { ArtThumb, PillarArt } from '@/components/art';
+import { Pips } from '@/features/drill/pips';
 import { useDrillStore } from '@/features/drill/store';
+import { rulePips, type PipState } from '@/features/drill/structure';
 import { useToday } from '@/features/drill/use-today';
 import { Rise } from '@/components/motion';
 
@@ -51,7 +53,7 @@ export function RulesScreen({ embedded }: { embedded?: boolean } = {}) {
             </View>
             {partRules.map((rule, i) => (
               <Rise key={rule.number} index={i} base={p * 60 + 80}>
-                <RuleRow rule={rule} status={ruleStatus(data, rule.number, today)} />
+                <RuleRow rule={rule} status={ruleStatus(data, rule.number, today)} pips={rulePips(data, rule.number)} />
               </Rise>
             ))}
           </Rise>
@@ -61,7 +63,7 @@ export function RulesScreen({ embedded }: { embedded?: boolean } = {}) {
   );
 }
 
-function RuleRow({ rule, status }: { rule: RuleCard; status: RuleStatus }) {
+function RuleRow({ rule, status, pips }: { rule: RuleCard; status: RuleStatus; pips: readonly PipState[] }) {
   const current = status.kind === 'current';
   const label = statusText(status);
   const art = chapterArt[rule.number];
@@ -77,7 +79,10 @@ function RuleRow({ rule, status }: { rule: RuleCard; status: RuleStatus }) {
         <View className="flex-1">
           <Text className="font-medium text-sm text-ash">{copy.list.ruleLabel(rule.number)}</Text>
           <Text className="mt-1 font-bold text-lg text-bone">{rule.title}</Text>
-          <Text className={`mt-1 font-medium text-sm ${current ? 'text-ember-soft' : 'text-ash'}`}>{label}</Text>
+          <View className="mt-2 flex-row items-center gap-3">
+            <Pips pips={pips} label="" />
+            <Text className={`font-medium text-sm ${current ? 'text-ember-soft' : 'text-ash'}`}>{label}</Text>
+          </View>
         </View>
         {art ? <ArtThumb art={art} width={48} /> : null}
       </Pressable>
