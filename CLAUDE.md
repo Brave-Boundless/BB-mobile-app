@@ -52,8 +52,8 @@ Each rule card has these fields and the app must use all six:
 1. **Today** — the drill, the two-tap response, evening prompt, the day's passage. This is the home screen.
 2. **Rules** — segments **Rules** (the 15 cards in four parts; tapping one shows all six fields and the user's history), **Progress** (streak, drills answered of 45, the 15-cell rule map, each rule's `scorecard`) and **Passages** (the book's passages by situation).
 3. **Ask Mark** — the AI chat in Mark's voice (step 9).
-4. **Community** — Share Your Story (step 10); groups later (step 11).
-5. **Journal** — reverse-chronological report-backs, filterable by rule.
+4. **Journal** — reverse-chronological report-backs, filterable by rule.
+5. **Community** — Share Your Story (step 10); groups later (step 11).
 
 **Accounts are required** (Mark, 2026-11-07): sign-up comes right before Day 1, with an opt-in newsletter box.
 
@@ -229,3 +229,4 @@ Seed `rules` from `content/bb-rule-cards.json` via a migration script; the JSON 
 - 2026-11-07 — **Before required sign-up reaches outside testers:** custom SMTP for sign-in codes in Supabase (built-in email only reaches team members), Sign in with Apple switched on (`EXPO_PUBLIC_AUTH_APPLE=1` + Apple/Supabase setup) with the sending domain registered for Apple's private relay, and the App Store privacy label + website privacy policy updated for marketing use of email.
 - 2026-11-07 — **Social links** (Mark): Instagram, TikTok, Facebook and X, the same accounts as braveandboundless.com's footer (`src/content/social.ts`). A row of monochrome logos (Simple Icons, CC0, rendered to 96px white PNGs in `assets/images/social/` and tinted bone, so no SVG native module) in **Settings → Follow Brave & Boundless** (above the version line) and at the end of **Community → Follow along**; each opens its https link, which the phone hands to the installed app or the browser. The passage **share card** adds `@braveandboundless` under the site. Kept off Today and Ask Mark. `copy/social.ts` **approved** by Mark, with the Settings title changed from "Follow Mark" to "Follow Brave & Boundless" (the accounts are the brand's).
 - 2026-11-07 — **Website link** (Mark) leads the social row: a plain globe (drawn for the app, same white-PNG-tinted approach) opening https://braveandboundless.com; VoiceOver reads "braveandboundless.com".
+- 2026-11-07 — **Tab order** (Mark): Today · Rules · Ask Mark · **Journal** · Community.

@@ -49,8 +49,8 @@ export default function TabLayout() {
       <Tabs.Screen name="index" options={{ title: tabs.today }} />
       <Tabs.Screen name="rules" options={{ title: tabs.rules }} />
       <Tabs.Screen name="ask" options={{ title: tabs.askMark }} />
-      <Tabs.Screen name="community" options={{ title: tabs.community }} />
       <Tabs.Screen name="journal" options={{ title: tabs.journal }} />
+      <Tabs.Screen name="community" options={{ title: tabs.community }} />
     </Tabs>
   );
 }
