@@ -44,8 +44,7 @@ describe('Go deeper screen', () => {
     for (const p of deeperPassages(1, 'uncomfortable')) expect(screen.getByText(p.text)).toBeTruthy();
     expect(screen.getByTestId('exercise')).toBeTruthy();
     for (const h of [copy.whyItMatters, copy.whatItBuilds, copy.fromTheBook, copy.exercise]) expect(screen.getByText(h)).toBeTruthy();
-    // Ask Mark lands in build step 9.
-    expect(screen.queryByTestId('deeper-ask-mark')).toBeNull();
+    expect(screen.getByTestId('deeper-ask-mark')).toBeTruthy();
   });
 
   it('renders nothing for a bad link', async () => {

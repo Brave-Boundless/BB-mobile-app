@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
 import Animated from 'react-native-reanimated';
 
+import { askMarkCopy } from '@copy/askmark';
 import { practiceCopy as copy } from '@copy/practice';
 import { todayCopy } from '@copy/today';
 import { Button } from '@/components/button';
@@ -79,7 +80,12 @@ export function WhatGotInTheWay({ row }: { row: DrillDayRow }) {
           </Text>
           {features.askMark ? (
             <View className="mt-1 items-start">
-              <Button variant="text" label={copy.dodge.askMark} onPress={() => router.push('/ask')} />
+              <Button
+                variant="text"
+                label={copy.dodge.askMark}
+                onPress={() => router.push({ pathname: '/ask', params: { prefill: askMarkCopy.drillStarters.pattern } })}
+                testID="dodge-ask-mark"
+              />
             </View>
           ) : null}
         </Animated.View>

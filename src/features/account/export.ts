@@ -11,7 +11,10 @@ import type { DrillData } from '@/features/drill/store';
 
 export const EXPORT_FORMAT = 'brave-and-boundless-export/v1';
 
-export function buildExport(data: DrillData, opts: { now: Date; appVersion: string; email?: string }) {
+export function buildExport(
+  data: DrillData,
+  opts: { now: Date; appVersion: string; email?: string; askMark?: { role: string; content: string }[] },
+) {
   const drills = Object.values(data.drills).sort((a, b) => a.day - b.day || a.scheduledFor.localeCompare(b.scheduledFor));
   const ruleOf = new Map(drills.map((d) => [d.id, d]));
   return {
@@ -21,6 +24,7 @@ export function buildExport(data: DrillData, opts: { now: Date; appVersion: stri
     account: opts.email ? { email: opts.email } : null,
     settings: { startedOn: data.startedOn, morningPushAt: data.notifyAt, plannedReminder: data.plan },
     savedPassages: Object.keys(data.savedPassages ?? {}),
+    askMarkConversation: opts.askMark ?? [],
     afterDay45: data.practice,
     drills: drills.map((d) => ({
       id: d.id,
