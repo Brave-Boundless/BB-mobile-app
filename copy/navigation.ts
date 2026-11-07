@@ -1,6 +1,6 @@
 // status: approved — Mark, 2026-11-07
 //
-// Five tabs (Mark, 2026-11-07): Today · Ask Mark · Rules · Community · You.
+// Five tabs (Mark, 2026-11-07): Today · Rules · Ask Mark · Community · You.
 // Progress moves inside Rules; Journal and Settings move inside You.
 // Earlier labels (Today, Rules, Progress, Journal, Settings) live on as tab
 // and segment names.
