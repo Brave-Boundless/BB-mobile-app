@@ -42,7 +42,8 @@ export function ArtThumb({ art, width = 56, testID }: { art: Art; width?: number
  * A pillar illustration on its part's colour (FIRE red, FORGE orange,
  * FOUNDATION slate, FIELD olive), as on the book and the website. The icons
  * are transparent cut-outs with a lot of black, so they never sit directly on
- * the black ground. The icon is inset so it clears the circle's edge.
+ * the black ground. The files are trimmed to the drawing, so 78% of the circle
+ * fills it while every corner of the drawing stays inside the edge.
  */
 export function PillarArt({ art, size, color, testID }: { art: Art; size: number; color: string; testID?: string }) {
   // A circle, not a square (Mark, 2026-11-07): the one round shape in an
@@ -56,7 +57,7 @@ export function PillarArt({ art, size, color, testID }: { art: Art; size: number
         {...decorative}
         source={art.source}
         resizeMode="contain"
-        style={{ width: '70%', height: '70%' }}
+        style={{ width: '78%', height: '78%' }}
       />
     </View>
   );

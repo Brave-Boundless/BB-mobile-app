@@ -29,7 +29,7 @@ describe('book art', () => {
     for (const art of [...Object.values(chapterArt), ...Object.values(partArt), yourMoveArt]) {
       expect(art!.source).toBeTruthy();
       expect(art!.ratio).toBeGreaterThan(0.5);
-      expect(art!.ratio).toBeLessThan(1.5);
+      expect(art!.ratio).toBeLessThan(2); // the trimmed anvil is about 3:2
     }
   });
 });

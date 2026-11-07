@@ -52,10 +52,10 @@ export const partTextColor: Record<PartId, string> = {
 };
 
 export const partArt: Record<PartId, Art> = {
-  1: { source: require('../../assets/images/parts/fire.webp'), ratio: 1 },
-  2: { source: require('../../assets/images/parts/forge.webp'), ratio: 772 / 1024 },
-  3: { source: require('../../assets/images/parts/foundation.webp'), ratio: 772 / 1024 },
-  4: { source: require('../../assets/images/parts/field.webp'), ratio: 772 / 1024 },
+  1: { source: require('../../assets/images/parts/fire.webp'), ratio: 525 / 988 },
+  2: { source: require('../../assets/images/parts/forge.webp'), ratio: 697 / 464 },
+  3: { source: require('../../assets/images/parts/foundation.webp'), ratio: 597 / 792 },
+  4: { source: require('../../assets/images/parts/field.webp'), ratio: 509 / 860 },
 };
 
 /** "Your Move": the book's closing image. Shown on the Day 45 wrap-up. */
