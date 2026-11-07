@@ -80,6 +80,8 @@ export interface DrillData {
   notificationsAsked: boolean;
   /** Drill ids whose evening prompt the user skipped. */
   reportSkipped: Record<string, true>;
+  /** Drill ids whose "How hard was it?" / "What got in the way?" the user skipped. */
+  askSkipped: Record<string, true>;
   drills: Record<string, DrillDayRow>;
   journal: Record<string, JournalRow>;
   /** Null until the Day-45 wrap-up is locked in. */
@@ -106,6 +108,7 @@ export interface DrillActions {
   setDodgeReason(id: string, reason: DodgeReason | null): void;
   setPlan(plan: DrillPlan | null): void;
   setLookBack(v: { on: LocalDate; journalId: string }): void;
+  skipAsk(id: string): void;
   saveReport(drillDayId: string, body: string): void;
   skipReport(drillDayId: string): void;
   deleteReport(journalId: string): void;
@@ -140,6 +143,7 @@ export const initialDrillData: DrillData = {
   notifyAt: '07:00',
   notificationsAsked: false,
   reportSkipped: {},
+  askSkipped: {},
   drills: {},
   journal: {},
   practice: null,
@@ -283,6 +287,10 @@ export function drillActions(
       set(() => ({ lookBack: v }));
     },
 
+    skipAsk(id) {
+      set((s) => ({ askSkipped: { ...s.askSkipped, [id]: true } }));
+    },
+
     saveReport(drillDayId, body) {
       set((s) => {
         const existing = Object.values(s.journal).find((j) => j.drillDayId === drillDayId && !j.deleted);
@@ -397,7 +405,9 @@ export const useDrillStore = create<DrillStore>()(
         practiceDirty,
         plan,
         lookBack,
+        askSkipped,
       }) => ({
+        askSkipped,
         plan,
         lookBack,
         practice,

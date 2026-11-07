@@ -16,6 +16,7 @@ import { getRule, type DrillTier } from '@/content';
 import { fadeIn } from '@/theme/motion';
 import { AfterDay45 } from '@/features/practice/after-day-45';
 
+import { HowHard, LookBack, PlanTomorrow, RuleRecapCard, WhatGotInTheWay } from './after-answer-view';
 import { EveningPrompt } from './evening-prompt';
 import { Grid45, Pips } from './pips';
 import { requestNotifications, rescheduleMorningPushes } from './notifications';
@@ -74,7 +75,7 @@ export function TodayScreen() {
   else if (state.kind === 'complete') body = <AfterDay45 today={today} editing={editingSet} setEditing={setEditingSet} />;
   else {
     const row = records.find((r) => r.day === state.day && r.day <= SPINE_LENGTH);
-    body = !row ? null : row.status === 'pending' ? <DrillView row={row} /> : <AnsweredView row={row} />;
+    body = !row ? null : row.status === 'pending' ? <DrillView row={row} /> : <AnsweredView row={row} today={today} />;
   }
 
   return (
@@ -274,7 +275,7 @@ function DrillView({ row }: { row: DrillDayRow }) {
 
 // ── after answering ──────────────────────────────────────────────────────
 
-function AnsweredView({ row }: { row: DrillDayRow }) {
+function AnsweredView({ row, today }: { row: DrillDayRow; today: string }) {
   const undo = useDrillStore((s) => s.undo);
   const rule = getRule(row.ruleId);
   const done = row.status === 'done';
@@ -295,8 +296,18 @@ function AnsweredView({ row }: { row: DrillDayRow }) {
         </Reveal>
       ) : null}
 
+      <Rise base={done ? 420 : 200}>
+        {done ? <HowHard row={row} /> : <WhatGotInTheWay row={row} />}
+      </Rise>
+
       <Rise base={done ? 520 : 240}>
         <EveningPrompt row={row} />
+      </Rise>
+
+      <RuleRecapCard row={row} />
+
+      <Rise base={done ? 560 : 280}>
+        <PlanTomorrow row={row} today={today} />
       </Rise>
 
       <Rise base={done ? 600 : 320}>
@@ -306,6 +317,10 @@ function AnsweredView({ row }: { row: DrillDayRow }) {
           <Button variant="text" label={copy.answered.undo} onPress={() => undo(row.id)} testID="undo" />
         </View>
       </View>
+      </Rise>
+
+      <Rise base={done ? 640 : 360}>
+        <LookBack today={today} />
       </Rise>
     </View>
   );

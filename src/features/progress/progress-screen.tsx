@@ -2,9 +2,11 @@ import { ScrollView, Text, View, useWindowDimensions } from 'react-native';
 import { TabFrame } from '@/components/screen';
 import Animated from 'react-native-reanimated';
 
+import { practiceCopy } from '@copy/practice';
 import { progressCopy as copy } from '@copy/progress';
 import { structureCopy as structure } from '@copy/structure';
-import { getRule } from '@/content';
+import { getRule, rules } from '@/content';
+import { effortTrend } from '@/features/drill/after-answer';
 import { Grid45 } from '@/features/drill/pips';
 import { allPips, answeredCount } from '@/features/drill/structure';
 import { useDrillStore } from '@/features/drill/store';
@@ -37,6 +39,7 @@ export function ProgressScreen({ embedded }: { embedded?: boolean } = {}) {
   const run = streak(data);
   const mantra = streakMantra(data);
   const tallies = ruleTallies(data);
+  const trends = rules.flatMap((r) => effortTrend(data, r.number) ?? []);
   // Passport: 3 slots a row inside the 24pt gutters.
   const { width: screen } = useWindowDimensions();
   const slot = Math.floor((Math.min(screen, 560) - 48 - 24) / 3);
@@ -99,6 +102,20 @@ export function ProgressScreen({ embedded }: { embedded?: boolean } = {}) {
           </View>
         </Rise>
 
+        <Rise index={2}>
+          <View className="mt-10" testID="effort-trend">
+            <Heading>{practiceCopy.trend.title}</Heading>
+            {trends.length > 0 ? (
+              trends.map((t) => (
+                <Text key={t.ruleId} className="mt-2 font-sans text-base text-bone">
+                  {practiceCopy.trend.line(t.ruleId, practiceCopy.rating.scale[t.first - 1], t.firstDay, practiceCopy.rating.scale[t.last - 1])}
+                </Text>
+              ))
+            ) : (
+              <Text className="mt-2 font-sans text-base text-ash">{practiceCopy.trend.empty}</Text>
+            )}
+          </View>
+        </Rise>
         <Rise index={3}>
         <View className="mt-10">
           <Heading>{copy.scorecards.title}</Heading>
