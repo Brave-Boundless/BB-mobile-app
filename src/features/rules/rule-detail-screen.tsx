@@ -1,7 +1,9 @@
-import { Stack, useLocalSearchParams } from 'expo-router';
+import { Stack, router, useLocalSearchParams } from 'expo-router';
 import { ScrollView, Text, View } from 'react-native';
 
+import { deeperCopy } from '@copy/deeper';
 import { rulesCopy as copy } from '@copy/rules';
+import { Button } from '@/components/button';
 import { todayCopy } from '@copy/today';
 import { DRILL_TIERS, getPart, getRule, type RuleId } from '@/content';
 import { useDrillStore } from '@/features/drill/store';
@@ -67,6 +69,15 @@ export function RuleDetailScreen() {
             <View key={tier} className="mb-3 bg-charcoal-900 p-4">
               <Text className="font-medium text-sm text-ember-soft">{todayCopy.drill.tier[tier]}</Text>
               <Text className="mt-1 font-sans text-lg text-bone">{rule.drills[tier]}</Text>
+              <View className="mt-1 items-start">
+                <Button
+                  variant="text"
+                  label={deeperCopy.open}
+                  accessibilityLabel={deeperCopy.openA11y}
+                  onPress={() => router.push(`/drill/${rule.number}/${tier}`)}
+                  testID={`go-deeper-${tier}`}
+                />
+              </View>
             </View>
           ))}
         </Section>
