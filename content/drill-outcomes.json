@@ -1,0 +1,96 @@
+{
+  "status": "draft",
+  "note": "“What it builds” for each of the 45 drills, shown on the Go deeper page. New writing drafted from the rule cards for Mark to edit; NOT book text and not quoted as such. Keys match drills.five_minute / drills.uncomfortable / drills.daily in bb-rule-cards.json.",
+  "rules": [
+    {
+      "number": 1,
+      "five_minute": "Breaks the stall. One small, visible step proves you can move without the full plan, and that proof makes the next step easier.",
+      "uncomfortable": "Puts a date on it in front of witnesses. A public commitment turns “someday” into a deadline, and deadlines beat good intentions.",
+      "daily": "Builds a shipping habit. Imperfect work out the door before noon, every day, stacks into a body of work and starves perfectionism."
+    },
+    {
+      "number": 2,
+      "five_minute": "Gets the truth out of your head and into words. Saying it out loud shrinks it and shows you exactly what you’ve been avoiding.",
+      "uncomfortable": "Stops the damage from compounding. Owning it the same day keeps a problem a problem instead of a crisis, and earns trust most people never get.",
+      "daily": "Makes honesty routine instead of an event. Small truths cleared early mean fewer big, ugly ones later."
+    },
+    {
+      "number": 3,
+      "five_minute": "Teaches your body that hard is survivable. One rep that burns resets what you think you can handle.",
+      "uncomfortable": "Finds your real limit on purpose, on a schedule. Failing in practice is how you stop failing when it counts.",
+      "daily": "Compounds capacity. One more rep or one percent more every day is quiet and boring, and over a year it’s unbeatable."
+    },
+    {
+      "number": 4,
+      "five_minute": "Turns an ordinary day into one you showed up ready for. Three bullets of prep is the difference between reacting and performing.",
+      "uncomfortable": "Builds the nerve to act first. Going first when it matters gets easier every time, and people notice who moves.",
+      "daily": "Makes every day a lesson. Reviewing wins, fixes and the next rep turns experience into improvement instead of time served."
+    },
+    {
+      "number": 5,
+      "five_minute": "A fast reset for body and head. Water and movement are the cheapest energy you’ll ever buy.",
+      "uncomfortable": "Shows you what one habit has been costing you. Seven days without it is long enough to feel the difference and decide on evidence.",
+      "daily": "Builds the foundation everything else runs on. Consistent sleep means more energy, better decisions and a longer fuse."
+    },
+    {
+      "number": 6,
+      "five_minute": "Gives you something to point to. Proof of value beats a promise of potential.",
+      "uncomfortable": "Changes the conversation from asking to offering. Leading with work you’ve already done makes yes the easy answer.",
+      "daily": "Builds leverage. Every reusable asset keeps working after you stop, and together they add up to something you own."
+    },
+    {
+      "number": 7,
+      "five_minute": "Turns irritation into information. One written lesson means today’s frustration paid for something.",
+      "uncomfortable": "Proves failure isn’t final. Going back with one change is how a setback becomes a skill.",
+      "daily": "Builds the habit of converting bad days into something useful. Over time you start looking for the lesson instead of fearing the pain."
+    },
+    {
+      "number": 8,
+      "five_minute": "Gives you a filter. Written non-negotiables make big decisions faster and second-guessing quieter.",
+      "uncomfortable": "Frees your time for what fits. Every misaligned yes you decline makes room for one that matters.",
+      "daily": "Builds a life that looks like you. Small choices for values over vibes add up until you don’t need the costume."
+    },
+    {
+      "number": 9,
+      "five_minute": "Steadies you before the day starts pulling. A minute of stillness and purpose sets the anchor.",
+      "uncomfortable": "Makes your values visible. Holding a boundary out loud tells people who you are and makes the next one easier.",
+      "daily": "Trains you to notice provision. A written record of answered effort is fuel for the days doubt shows up."
+    },
+    {
+      "number": 10,
+      "five_minute": "Shows you where to point your effort. The overlap of what you’re good at, care about and get paid for is where work stops feeling like work.",
+      "uncomfortable": "Gets it out of your head and into the world. Shipping something you’d do for free tells you fast whether the obsession is real.",
+      "daily": "Keeps the fire fed. A little every day in the space you love compounds into skill, connections and chances the paycheck chasers never see."
+    },
+    {
+      "number": 11,
+      "five_minute": "Gives you a filter for who you build with. Knowing what you need makes the wrong fit obvious sooner.",
+      "uncomfortable": "Clears room for the right people. Ending one obligation relationship frees time and energy for someone who’s actually aligned.",
+      "daily": "Builds a team that tells each other the truth. Kind, direct feedback every day prevents the slow rot of things left unsaid."
+    },
+    {
+      "number": 12,
+      "five_minute": "Strengthens a relationship in three lines. Specific thanks lands harder than generic praise and costs you five minutes.",
+      "uncomfortable": "Repairs what pride broke. An apology without excuses earns respect that defending yourself never will.",
+      "daily": "Makes kindness a reflex. Solving one small friction for someone every day changes how people experience you."
+    },
+    {
+      "number": 13,
+      "five_minute": "Makes the standard clear. One sentence everyone understands beats a lecture nobody remembers.",
+      "uncomfortable": "Shows your standards are real. A boundary held calmly and consistently teaches more than any speech.",
+      "daily": "Balances weight with warmth. Daily moments of teaching and praise make standards feel like love, not control."
+    },
+    {
+      "number": 14,
+      "five_minute": "Turns a standard into a system. Trigger, action, track is what makes “I should” actually happen.",
+      "uncomfortable": "Raises the floor. Cutting one lazy shortcut for good lifts everything that runs through that process.",
+      "daily": "Catches mistakes before they happen. Checking first builds confidence you earned, not confidence you’re faking."
+    },
+    {
+      "number": 15,
+      "five_minute": "Reminds you who’s watching. Naming them makes your choices about more than you.",
+      "uncomfortable": "Opens a door for someone younger. One real conversation about the future can change the direction of a life.",
+      "daily": "Makes your example the lesson. Doing the hard thing where others can see it teaches more than anything you could tell them."
+    }
+  ]
+}
