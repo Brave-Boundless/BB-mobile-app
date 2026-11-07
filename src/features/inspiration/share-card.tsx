@@ -31,7 +31,7 @@ export function ShareCard({
       ref={ref}
       collapsable={false}
       style={{ width: CARD.width, height: CARD.height, backgroundColor: palette.charcoal[950], padding: 36, justifyContent: 'space-between' }}>
-      <Text style={{ fontFamily: 'Jost_700Bold', fontSize: 11, letterSpacing: 3, color: palette.ash }}>ONLY THE BRAVE BECOME BOUNDLESS</Text>
+      <Text style={{ fontFamily: 'Jost_700Bold', fontSize: 10, letterSpacing: 1.5, color: palette.ash }} numberOfLines={1}>ONLY THE BRAVE BECOME BOUNDLESS</Text>
       <View>
         <Text style={{ fontFamily: 'Jost_500Medium', fontSize: size, lineHeight: size * 1.35, color: palette.bone }}>{passage.text}</Text>
         <View style={{ marginTop: 24, width: 56, height: 3, backgroundColor: palette.ember.DEFAULT }} />
