@@ -42,7 +42,7 @@ const palette = {
   // Each part's colour lightened (same hue) until it reads on black at
   // >= 4.5:1, for the part-name headline. The exact colours above are 1.8-4.3:1.
   partText: {
-    fire: '#F31C38',
+    fire: '#D64A5D', // softer than the first pick, #F31C38 (Mark: too bright)
     forge: '#D1542C',
     foundation: '#6C7F83',
     field: '#6C825C',
