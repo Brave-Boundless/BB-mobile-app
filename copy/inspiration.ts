@@ -13,7 +13,21 @@ export const inspirationCopy = {
   source: (rule: number, chapter: string) => `Rule ${rule} · ${chapter}`,
   save: 'Save',
   saved: 'Saved',
-  share: 'Share',
+
+  // ── Share a passage (Mark, 2026-11-07) ─────────────────────────────────
+  // Builds a 1080 × 1920 image card (passage on black, ember rule line,
+  // attribution, site) and opens the phone's share sheet, which covers
+  // Instagram (Stories, feed, DM), Messages, WhatsApp, email and the rest.
+  share: {
+    button: 'Share',
+    a11y: 'Share this passage as an image.',
+    // On the card, under the passage
+    attribution: 'Mark A. Nead · Brave & Boundless',
+    site: 'braveandboundless.com',
+    // Text sent alongside the image where the app allows it (Messages, email)
+    message: (passage: string) => `“${passage}” — Mark A. Nead, Brave & Boundless. braveandboundless.com`,
+    failed: 'Couldn’t share. Try again.',
+  },
   library: {
     title: 'Passages',
     intro: 'Lines from the book, sorted by what you’re facing.',
