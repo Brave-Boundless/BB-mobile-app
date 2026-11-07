@@ -5,7 +5,7 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 
 import type { DrillTier, RuleId } from '@/content';
 import type { DrillStatus } from '@/features/drill/progress';
-import type { DrillKind, Practice, ServerSnapshot } from '@/features/drill/store';
+import type { DodgeReason, DrillKind, Effort, Practice, ServerSnapshot } from '@/features/drill/store';
 
 interface DrillDayDb {
   id: string;
@@ -16,6 +16,8 @@ interface DrillDayDb {
   scheduled_for: string;
   status: DrillStatus;
   responded_at: string | null;
+  effort: number | null;
+  dodge_reason: DodgeReason | null;
   updated_at: string;
 }
 
@@ -30,7 +32,7 @@ interface JournalDb {
 /** Everything this user has on the server, mapped to local row shape. RLS limits it to their own rows. */
 export async function pullServer(client: SupabaseClient): Promise<ServerSnapshot> {
   const [drills, journal, me] = await Promise.all([
-    client.from('drill_days').select('id, kind, day_number, rule_id, tier, scheduled_for, status, responded_at, updated_at'),
+    client.from('drill_days').select('id, kind, day_number, rule_id, tier, scheduled_for, status, responded_at, effort, dodge_reason, updated_at'),
     client.from('journal_entries').select('id, drill_day_id, body, created_at, updated_at'),
     client.from('users').select('daily_set, restart_rules, practice_started_on').maybeSingle(),
   ]);
@@ -51,6 +53,8 @@ export async function pullServer(client: SupabaseClient): Promise<ServerSnapshot
       scheduledFor: d.scheduled_for,
       status: d.status,
       respondedAt: d.responded_at,
+      effort: (d.effort ?? null) as Effort | null,
+      dodgeReason: d.dodge_reason ?? null,
       updatedAt: d.updated_at,
     })),
     journal: (journal.data as JournalDb[]).map((j) => ({

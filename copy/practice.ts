@@ -1,4 +1,4 @@
-// status: draft — 2026-11-07
+// status: approved — Mark, 2026-11-07
 //
 // What happens around the daily answer: rating a done drill, naming what got
 // in the way of a dodged one, planning tomorrow, the recap after each rule's
@@ -6,7 +6,7 @@
 // short, imperative, no exclamation points, never shame a dodge.
 
 export const practiceCopy = {
-  status: 'draft',
+  status: 'approved',
 
   // ── After Did it: how hard was it (optional, one tap) ──────────────────
   rating: {

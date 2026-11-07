@@ -1,11 +1,11 @@
-// status: draft — 2026-11-07
+// status: approved — Mark, 2026-11-07
 //
 // Makes the shape of the 45 days obvious (Mark, 2026-11-07: "make it more
 // clear that there are 45 drills, 3 per rule"). Used on first run, on Today,
 // on the Rules list and on Progress. Tier names reuse copy/today.ts.
 
 export const structureCopy = {
-  status: 'draft',
+  status: 'approved',
 
   // ── First run: one screen before "Start Day 1" ─────────────────────────
   // Shown with a 15 × 3 grid: one row per rule, three cells per row.

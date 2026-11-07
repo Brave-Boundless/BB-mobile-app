@@ -24,10 +24,10 @@ describe('export', () => {
     const out = buildExport(data, { now: new Date('2026-11-06T12:00:00Z'), appVersion: '1.0.0', email: 'a@b.co' });
     expect(out.format).toBe(EXPORT_FORMAT);
     expect(out.account).toEqual({ email: 'a@b.co' });
-    expect(out.settings).toEqual({ startedOn: '2026-10-01', morningPushAt: '06:30' });
+    expect(out.settings).toEqual({ startedOn: '2026-10-01', morningPushAt: '06:30', plannedReminder: null });
     expect(out.afterDay45).toBeNull();
     expect(out.drills).toEqual([
-      { id: 'd1', track: 'spine', day: 1, rule: 1, ruleTitle: 'Move Before You’re Ready', tier: 'five_minute', date: '2026-10-01', status: 'done', respondedAt: 'r' },
+      { id: 'd1', track: 'spine', day: 1, rule: 1, ruleTitle: 'Move Before You’re Ready', tier: 'five_minute', date: '2026-10-01', status: 'done', respondedAt: 'r', howHard: null, whatGotInTheWay: null },
     ]);
     expect(out.journal).toEqual([{ id: 'j1', drillId: 'd1', day: 1, rule: 1, writtenAt: '2026-10-01T20:00:00Z', body: 'Kept.' }]);
     expect(exportFileName(new Date('2026-11-06T12:00:00Z'))).toBe('brave-and-boundless-2026-11-06.json');
@@ -55,7 +55,7 @@ describe('server', () => {
     } as unknown as SupabaseClient;
     expect(await pullServer(client)).toEqual({
       practice: { dailySet: [3, 8], restartRules: [5], startedOn: '2026-12-15' },
-      drills: [{ id: 'd', kind: 'daily', day: 4, ruleId: 2, tier: 'five_minute', scheduledFor: '2026-10-04', status: 'dodged', respondedAt: 'r', updatedAt: 'u' }],
+      drills: [{ id: 'd', kind: 'daily', day: 4, ruleId: 2, tier: 'five_minute', scheduledFor: '2026-10-04', status: 'dodged', respondedAt: 'r', effort: null, dodgeReason: null, updatedAt: 'u' }],
       journal: [{ id: 'j', drillDayId: 'd', body: 'b', createdAt: 'c', updatedAt: 'u2' }],
     });
   });

@@ -1,4 +1,4 @@
-// status: draft — 2026-11-07, replaces the approved 2026-11-06 version
+// status: approved — Mark, 2026-11-07
 //
 // Five tabs (Mark, 2026-11-07): Today · Ask Mark · Rules · Community · You.
 // Progress moves inside Rules; Journal and Settings move inside You.
@@ -7,7 +7,7 @@
 // yet; it never ships to readers.
 
 export const navigationCopy = {
-  status: 'draft',
+  status: 'approved',
   // Current tabs (approved 2026-11-06), used until the new layout ships.
   tabs: {
     today: 'Today',
