@@ -13,14 +13,14 @@ export function initialsFor(email: string | undefined | null): string | null {
   return letters.length ? letters.join('') : null;
 }
 
-/** Plain head-and-shoulders outline, drawn with Views. */
-function PersonOutline() {
+/** Head and shoulders, solid, reversed out of the grey circle (Mark). */
+function PersonSilhouette() {
   return (
-    <View className="items-center" importantForAccessibility="no-hide-descendants">
-      <View className="h-2 w-2 border border-ash" style={{ borderRadius: 4 }} />
+    <View className="h-full w-full items-center justify-end" importantForAccessibility="no-hide-descendants">
+      <View className="bg-charcoal-950" style={{ width: 10, height: 10, borderRadius: 5, marginBottom: 1.5 }} />
       <View
-        className="mt-0.5 h-1.5 w-3.5 border border-b-0 border-ash"
-        style={{ borderTopLeftRadius: 7, borderTopRightRadius: 7 }}
+        className="bg-charcoal-950"
+        style={{ width: 20, height: 9, borderTopLeftRadius: 10, borderTopRightRadius: 10 }}
       />
     </View>
   );
@@ -29,7 +29,9 @@ function PersonOutline() {
 /**
  * Account icon at the top right of every tab. Opens Settings (push time,
  * Ask Mark, sign in / out, export, delete). A circle (Mark), like the part
- * pillars: one of the few round shapes in a square brand. 44 × 44 hit area.
+ * pillars: one of the few round shapes in a square brand. Solid grey with the
+ * person (or initials) reversed out, so it reads apart from the outlined "?".
+ * 44 × 44 hit area.
  */
 export function AccountIcon() {
   const session = useSession();
@@ -43,14 +45,14 @@ export function AccountIcon() {
       testID="account-icon"
       className="h-11 w-11 items-center justify-center active:opacity-60">
       <View
-        className={`h-7 w-7 items-center justify-center border ${initials ? 'border-ember bg-charcoal-800' : 'border-ash'}`}
+        className="h-7 w-7 items-center justify-center overflow-hidden bg-ash"
         style={{ borderRadius: 14 }}>
         {initials ? (
-          <Text className="font-bold text-xs text-bone" importantForAccessibility="no">
+          <Text className="font-bold text-xs text-charcoal-950" importantForAccessibility="no">
             {initials}
           </Text>
         ) : (
-          <PersonOutline />
+          <PersonSilhouette />
         )}
       </View>
     </Pressable>
