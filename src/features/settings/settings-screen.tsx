@@ -1,8 +1,8 @@
 import Constants from 'expo-constants';
+import { TabFrame } from '@/components/screen';
 import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Linking, Platform, ScrollView, Text, TextInput, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { settingsCopy as copy } from '@copy/settings';
 import { Button } from '@/components/button';
@@ -57,16 +57,18 @@ function Message({ text, tone = 'muted' }: { text: string | null; tone?: 'muted'
   );
 }
 
-export function SettingsScreen() {
+export function SettingsScreen({ embedded }: { embedded?: boolean } = {}) {
   const session = useSession();
   const email = session?.user.email ?? undefined;
 
   return (
-    <SafeAreaView edges={['top']} className="flex-1 bg-charcoal-950">
+    <TabFrame embedded={embedded}>
       <ScrollView contentContainerClassName="px-6 pb-16 pt-6" keyboardShouldPersistTaps="handled">
+        {embedded ? null : (
         <Text accessibilityRole="header" className="font-bold text-3xl uppercase tracking-wide text-bone">
           {copy.title}
         </Text>
+        )}
         <PushSection />
         <AccountSection email={email} signedIn={!!session} />
         <DataSection email={email} />
@@ -77,7 +79,7 @@ export function SettingsScreen() {
           <Text className="mt-4 font-bold text-sm tracking-widest text-ember-soft">{copy.about.tagline}</Text>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </TabFrame>
   );
 }
 

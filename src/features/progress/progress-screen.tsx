@@ -1,6 +1,6 @@
 import { ScrollView, Text, View, useWindowDimensions } from 'react-native';
+import { TabFrame } from '@/components/screen';
 import Animated from 'react-native-reanimated';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { progressCopy as copy } from '@copy/progress';
 import { getRule } from '@/content';
@@ -34,7 +34,7 @@ function Heading({ children }: { children: string }) {
   );
 }
 
-export function ProgressScreen() {
+export function ProgressScreen({ embedded }: { embedded?: boolean } = {}) {
   const today = useToday();
   const data = useDrillStore();
   const pos = position(data, today);
@@ -46,11 +46,13 @@ export function ProgressScreen() {
   const slot = Math.floor((Math.min(screen, 560) - 48 - 24) / 3);
 
   return (
-    <SafeAreaView edges={['top']} className="flex-1 bg-charcoal-950">
+    <TabFrame embedded={embedded}>
       <ScrollView contentContainerClassName="px-6 pb-12 pt-6">
+        {embedded ? null : (
         <Text accessibilityRole="header" className="font-bold text-3xl uppercase tracking-wide text-bone">
           {copy.title}
         </Text>
+        )}
 
         <Rise index={0}>
         <View className="mt-8 flex-row gap-3">
@@ -111,7 +113,7 @@ export function ProgressScreen() {
         </View>
         </Rise>
       </ScrollView>
-    </SafeAreaView>
+    </TabFrame>
   );
 }
 

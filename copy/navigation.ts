@@ -2,22 +2,15 @@
 //
 // Five tabs (Mark, 2026-11-07): Today · Ask Mark · Rules · Community · You.
 // Progress moves inside Rules; Journal and Settings move inside You.
-// Previously approved labels kept as-is: Today, Rules, Progress, Journal, Settings.
+// Earlier labels (Today, Rules, Progress, Journal, Settings) live on as tab
+// and segment names.
 // `building` is a developer placeholder shown on screens that are not built
 // yet; it never ships to readers.
 
 export const navigationCopy = {
   status: 'approved',
-  // Current tabs (approved 2026-11-06), used until the new layout ships.
+  // Five tabs (approved 2026-11-07).
   tabs: {
-    today: 'Today',
-    rules: 'Rules',
-    progress: 'Progress',
-    journal: 'Journal',
-    settings: 'Settings',
-  },
-  // New five-tab layout (draft).
-  nextTabs: {
     today: 'Today',
     askMark: 'Ask Mark',
     rules: 'Rules',

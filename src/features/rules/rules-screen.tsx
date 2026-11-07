@@ -1,6 +1,6 @@
 import { Link } from 'expo-router';
+import { TabFrame } from '@/components/screen';
 import { Pressable, ScrollView, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { rulesCopy as copy } from '@copy/rules';
 import { getRule, parts, type RuleCard } from '@/content';
@@ -23,18 +23,20 @@ function statusText(status: RuleStatus): string {
   }
 }
 
-export function RulesScreen() {
+export function RulesScreen({ embedded }: { embedded?: boolean } = {}) {
   const today = useToday();
   const data = useDrillStore();
 
   const sections = parts.map((part) => ({ part, data: part.rules.map((id) => getRule(id)) }));
 
   return (
-    <SafeAreaView edges={['top']} className="flex-1 bg-charcoal-950">
+    <TabFrame embedded={embedded}>
       <ScrollView contentContainerClassName="px-6 pb-10">
+        {embedded ? null : (
         <Text accessibilityRole="header" className="pt-6 font-bold text-3xl uppercase tracking-wide text-bone">
           {copy.list.title}
         </Text>
+        )}
         {sections.map(({ part, data: partRules }, p) => (
           <Rise key={part.id} index={p}>
             <View accessibilityRole="header" className="mb-3 mt-10 flex-row items-center gap-4">
@@ -55,7 +57,7 @@ export function RulesScreen() {
           </Rise>
         ))}
       </ScrollView>
-    </SafeAreaView>
+    </TabFrame>
   );
 }
 

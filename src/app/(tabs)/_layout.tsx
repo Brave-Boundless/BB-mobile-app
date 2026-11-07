@@ -23,10 +23,10 @@ export default function TabLayout() {
         sceneStyle: { backgroundColor: palette.charcoal[950] },
       }}>
       <Tabs.Screen name="index" options={{ title: tabs.today }} />
+      <Tabs.Screen name="ask" options={{ title: tabs.askMark }} />
       <Tabs.Screen name="rules" options={{ title: tabs.rules }} />
-      <Tabs.Screen name="progress" options={{ title: tabs.progress }} />
-      <Tabs.Screen name="journal" options={{ title: tabs.journal }} />
-      <Tabs.Screen name="settings" options={{ title: tabs.settings }} />
+      <Tabs.Screen name="community" options={{ title: tabs.community }} />
+      <Tabs.Screen name="you" options={{ title: tabs.you }} />
     </Tabs>
   );
 }
