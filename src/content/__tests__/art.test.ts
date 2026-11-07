@@ -1,6 +1,6 @@
 import { describe, expect, it } from '@jest/globals';
 
-import { chapterArt, partArt, yourMoveArt } from '../art';
+import { chapterArt, partArt, partColor, yourMoveArt } from '../art';
 import { parts, rules } from '..';
 
 describe('book art', () => {
@@ -11,6 +11,10 @@ describe('book art', () => {
 
   it('shows every rule’s illustration at the same 3:4 portrait shape', () => {
     for (const art of Object.values(chapterArt)) expect(art!.ratio).toBe(3 / 4);
+  });
+
+  it('puts each pillar on its part’s colour from the book and website', () => {
+    expect(partColor).toEqual({ 1: '#800717', 2: '#C9512A', 3: '#4E5C5F', 4: '#47553C' });
   });
 
   it('has a pillar illustration for every part', () => {

@@ -4,7 +4,7 @@ import { Pressable, ScrollView, Text, View } from 'react-native';
 
 import { rulesCopy as copy } from '@copy/rules';
 import { getRule, parts, type RuleCard } from '@/content';
-import { chapterArt, partArt } from '@/content/art';
+import { chapterArt, partArt, partColor } from '@/content/art';
 import { ArtThumb, PillarArt } from '@/components/art';
 import { Pips } from '@/features/drill/pips';
 import { useDrillStore } from '@/features/drill/store';
@@ -42,7 +42,7 @@ export function RulesScreen({ embedded }: { embedded?: boolean } = {}) {
         {sections.map(({ part, data: partRules }, p) => (
           <Rise key={part.id} index={p}>
             <View accessibilityRole="header" className="mb-3 mt-10 flex-row items-center gap-4">
-              <PillarArt art={partArt[part.id]} size={64} testID={`part-art-${part.id}`} />
+              <PillarArt art={partArt[part.id]} color={partColor[part.id]} size={64} testID={`part-art-${part.id}`} />
               <View className="flex-1">
                 <Text className="font-medium text-sm uppercase tracking-widest text-ash">
                   {copy.list.partLabel(ROMAN[part.id])}

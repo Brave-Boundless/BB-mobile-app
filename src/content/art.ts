@@ -1,5 +1,7 @@
 import type { ImageSourcePropType } from 'react-native';
 
+import { palette } from '@/theme';
+
 import type { PartId, RuleId } from './types';
 
 // Book illustrations from Box `Brave & Boundless/Book/art` (finals, confirmed by Mark).
@@ -33,6 +35,14 @@ export const chapterArt: Partial<Record<RuleId, Art>> = {
 };
 
 /** The four pillar illustrations. Transparent, made to sit on the dark ground. */
+/** Each part's colour (palette.part), behind its pillar icon. */
+export const partColor: Record<PartId, string> = {
+  1: palette.part.fire,
+  2: palette.part.forge,
+  3: palette.part.foundation,
+  4: palette.part.field,
+};
+
 export const partArt: Record<PartId, Art> = {
   1: { source: require('../../assets/images/parts/fire.webp'), ratio: 1 },
   2: { source: require('../../assets/images/parts/forge.webp'), ratio: 772 / 1024 },

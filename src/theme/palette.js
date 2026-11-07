@@ -31,6 +31,14 @@ const palette = {
     mid: '#964A1B', // mostly done
     dim: '#472612', // mostly dodged
   },
+  // The four parts' colours, from the book and braveandboundless.com (book
+  // page part cards). Tiles behind the pillar icons; never behind body text.
+  part: {
+    fire: '#800717',
+    forge: '#C9512A',
+    foundation: '#4E5C5F',
+    field: '#47553C',
+  },
   crimson: '#8A1C1C', // stamp ink, on bone only
   gold: '#C8A24A', // brand gold
 };
