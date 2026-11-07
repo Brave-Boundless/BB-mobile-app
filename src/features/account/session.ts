@@ -1,6 +1,7 @@
 import type { Session } from '@supabase/supabase-js';
 import { useEffect, useState } from 'react';
 
+import { features } from '@/lib/features';
 import { getSupabase, isSupabaseConfigured } from '@/lib/supabase';
 
 import { authOptions } from './auth';
@@ -9,7 +10,7 @@ import { authOptions } from './auth';
  * Accounts are required (Mark, 2026-11-07) wherever sign-in can work. Builds
  * without Supabase (local web previews) skip the gate.
  */
-export const accountsRequired = isSupabaseConfigured && authOptions.email;
+export const accountsRequired = features.requireAccounts && isSupabaseConfigured && authOptions.email;
 
 /** The current session, and whether the saved one has been read yet (so the gate doesn't flash). */
 export function useAuthState(): { loaded: boolean; session: Session | null } {

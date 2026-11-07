@@ -55,7 +55,7 @@ Each rule card has these fields and the app must use all six:
 4. **Journal** — reverse-chronological report-backs, filterable by rule.
 5. **Community** — Share Your Story (step 10); groups later (step 11).
 
-**Accounts are required** (Mark, 2026-11-07): sign-up comes right before Day 1, with an opt-in newsletter box.
+**Accounts are required** (Mark, 2026-11-07): sign-up comes right before Day 1, with an opt-in newsletter box. Built, but switched off (`features.requireAccounts`) until sign-in emails reach everyone.
 
 **Account icon** (top right of every tab): opens **Settings** (notification time, Ask Mark, account sign-in/out, data export, delete account, How this works).
 
@@ -230,3 +230,4 @@ Seed `rules` from `content/bb-rule-cards.json` via a migration script; the JSON 
 - 2026-11-07 — **Social links** (Mark): Instagram, TikTok, Facebook and X, the same accounts as braveandboundless.com's footer (`src/content/social.ts`). A row of monochrome logos (Simple Icons, CC0, rendered to 96px white PNGs in `assets/images/social/` and tinted bone, so no SVG native module) in **Settings → Follow Brave & Boundless** (above the version line) and at the end of **Community → Follow along**; each opens its https link, which the phone hands to the installed app or the browser. The passage **share card** adds `@braveandboundless` under the site. Kept off Today and Ask Mark. `copy/social.ts` **approved** by Mark, with the Settings title changed from "Follow Mark" to "Follow Brave & Boundless" (the accounts are the brand's).
 - 2026-11-07 — **Website link** (Mark) leads the social row: a plain globe (drawn for the app, same white-PNG-tinted approach) opening https://braveandboundless.com; VoiceOver reads "braveandboundless.com".
 - 2026-11-07 — **Tab order** (Mark): Today · Rules · Ask Mark · **Journal** · Community.
+- 2026-11-07 — **Required sign-up ships switched off** (Mark): `features.requireAccounts = false` in `src/lib/features.ts`, so PR #26 could merge (tabs, social links, Settings newsletter) before sign-in codes reach everyone. Off, accounts stay optional exactly as before. Turn it on, as an over-the-air update, once custom SMTP is connected in Supabase and a code reaches a non-team address.
