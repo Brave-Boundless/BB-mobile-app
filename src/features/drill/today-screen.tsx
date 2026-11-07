@@ -17,6 +17,7 @@ import { getRule, type DrillTier } from '@/content';
 import { fadeIn } from '@/theme/motion';
 import { AfterDay45 } from '@/features/practice/after-day-45';
 
+import { HowItWorksIcon } from '@/features/howitworks/how-it-works-icon';
 import { EveningPassage, MorningPassage } from '@/features/inspiration/today-passages';
 
 import { HowHard, LookBack, PlanTomorrow, RuleRecapCard, WhatGotInTheWay } from './after-answer-view';
@@ -214,11 +215,11 @@ function DrillView({ row, today }: { row: DrillDayRow; today: string }) {
     <View className="flex-1 justify-between">
       <View>
         <Rise index={0}>
-          <Text className="font-medium text-sm uppercase tracking-widest text-ash" testID="drill-position">
-            {structure.position(row.day, SPINE_LENGTH, rule.number, dayOfRule)}
-          </Text>
-          <View className="flex-row">
-            <Button variant="text" label={howItWorksCopy.link} onPress={() => router.push('/how-it-works')} testID="how-it-works-today" />
+          <View className="-my-2 flex-row items-center justify-between">
+            <Text className="flex-1 font-medium text-sm uppercase tracking-widest text-ash" testID="drill-position">
+              {structure.position(row.day, SPINE_LENGTH, rule.number, dayOfRule)}
+            </Text>
+            <HowItWorksIcon testID="how-it-works-today" />
           </View>
         </Rise>
         <Rise index={1}>
