@@ -25,7 +25,10 @@ import { buildExport, exportFileName, shareExport } from '@/features/account/exp
 import { EMAIL_RE, deleteAccountOnServer } from '@/features/account/server';
 import { notificationsAllowed, rescheduleMorningPushes } from '@/features/drill/notifications';
 import { pendingCount, useDrillStore } from '@/features/drill/store';
-import { useSyncState } from '@/features/drill/use-sync';
+import { syncNow, useSyncState } from '@/features/drill/use-sync';
+import { signupCopy } from '@copy/signup';
+import { useAccountStore } from '@/features/account/account-store';
+import { joinNewsletter } from '@/features/account/newsletter';
 import { askMarkSettingsCopy } from '@copy/askmark';
 import { howItWorksCopy } from '@copy/howitworks';
 import { useAskMarkStore } from '@/features/askmark/store';
@@ -166,14 +169,15 @@ function AccountSection({ signedIn, email }: { signedIn: boolean; email?: string
   if (signedIn) {
     const status = syncState === 'syncing' ? copy.account.syncing : pending > 0 ? copy.account.pending : copy.account.synced;
     return (
-      <Section title={copy.account.title}>
-        <Text className="font-medium text-lg text-bone">{copy.account.signedInAs(email ?? '')}</Text>
-        <Message text={status} />
-        <View className="mt-4">
-          <Button variant="secondary" label={copy.account.signOut} onPress={() => void signOut()} testID="sign-out" />
-        </View>
-        <Message text={copy.account.signOutNote} />
-      </Section>
+      <>
+        <Section title={copy.account.title}>
+          <Text className="font-medium text-lg text-bone">{copy.account.signedInAs(email ?? '')}</Text>
+          <Message text={status} />
+          <SignOutButton />
+          <Message text={signupCopy.settings.signOutNote} />
+        </Section>
+        <NewsletterSection email={email} />
+      </>
     );
   }
 
@@ -185,7 +189,79 @@ function AccountSection({ signedIn, email }: { signedIn: boolean; email?: string
   );
 }
 
-function SignIn() {
+/**
+ * Sign out. Accounts are required, so signing out returns to first run and
+ * clears the phone (the next person to sign in mustn't inherit this record).
+ * Everything is backed up first; if something can't go yet, nothing is cleared.
+ */
+function SignOutButton() {
+  const [busy, setBusy] = useState(false);
+  const [blocked, setBlocked] = useState(false);
+  const run = async () => {
+    setBusy(true);
+    setBlocked(false);
+    try {
+      await syncNow();
+      if (pendingCount(useDrillStore.getState()) > 0) {
+        setBlocked(true);
+        return;
+      }
+      await signOut();
+      await eraseLocalData();
+      router.replace('/');
+    } finally {
+      setBusy(false);
+    }
+  };
+  return (
+    <View className="mt-4">
+      <Button variant="secondary" label={copy.account.signOut} onPress={() => void run()} disabled={busy} testID="sign-out" />
+      {blocked ? <Message text={copy.account.pending} tone="error" /> : null}
+    </View>
+  );
+}
+
+/** Newsletter: join from here (Kit's public form); leave via Kit's unsubscribe link. */
+function NewsletterSection({ email }: { email?: string }) {
+  const joined = useAccountStore((s) => s.newsletterJoined);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const join = async () => {
+    if (!email) return;
+    setBusy(true);
+    setError(null);
+    try {
+      await joinNewsletter(email);
+      useAccountStore.getState().markNewsletterJoined();
+    } catch {
+      setError(copy.account.failed);
+    } finally {
+      setBusy(false);
+    }
+  };
+  return (
+    <Section title={signupCopy.settings.newsletterTitle}>
+      {joined ? (
+        <Text className="font-medium text-lg text-bone" testID="newsletter-joined">
+          {signupCopy.settings.newsletterJoined}
+        </Text>
+      ) : (
+        <Button
+          variant="secondary"
+          label={signupCopy.settings.newsletterJoin}
+          onPress={() => void join()}
+          disabled={busy || !email}
+          testID="newsletter-join"
+        />
+      )}
+      <Message text={error} tone="error" />
+      <Message text={signupCopy.settings.newsletterHint} />
+    </Section>
+  );
+}
+
+/** Apple / Google / email-code sign-in. Used in Settings and on the sign-up screen. */
+export function SignIn({ hideWhy }: { hideWhy?: boolean } = {}) {
   const [step, setStep] = useState<EmailStep>({ kind: 'closed' });
   const [emailText, setEmailText] = useState('');
   const [code, setCode] = useState('');
@@ -213,7 +289,7 @@ function SignIn() {
 
   return (
     <View>
-      <Message text={copy.account.why} />
+      {hideWhy ? null : <Message text={copy.account.why} />}
       <View className="mt-4 gap-3">
         {authOptions.apple ? (
           <Button label={copy.account.apple} onPress={() => void run(signInWithApple, copy.account.failed)} disabled={busy} />
