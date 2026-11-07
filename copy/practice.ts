@@ -11,7 +11,7 @@ export const practiceCopy = {
   // ── After Did it: how hard was it (optional, one tap) ──────────────────
   rating: {
     prompt: 'How hard was it?',
-    scale: ['Easy', 'Fine', 'Work', 'Hard', 'Brutal'] as const, // 1–5
+    scale: ['Easy', 'Doable', 'Challenging', 'Hard', 'Brutal'] as const, // 1–5 (Mark, 2026-11-07)
     a11y: (n: number, label: string) => `${n} of 5, ${label}`,
     skip: 'Skip',
   },

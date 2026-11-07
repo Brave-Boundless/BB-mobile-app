@@ -82,6 +82,8 @@ export interface DrillData {
   reportSkipped: Record<string, true>;
   /** Drill ids whose "How hard was it?" / "What got in the way?" the user skipped. */
   askSkipped: Record<string, true>;
+  /** Passage ids the reader saved, with when. Local to this phone. */
+  savedPassages: Record<string, string>;
   drills: Record<string, DrillDayRow>;
   journal: Record<string, JournalRow>;
   /** Null until the Day-45 wrap-up is locked in. */
@@ -109,6 +111,8 @@ export interface DrillActions {
   setPlan(plan: DrillPlan | null): void;
   setLookBack(v: { on: LocalDate; journalId: string }): void;
   skipAsk(id: string): void;
+  /** Saves a passage, or unsaves it if already saved. */
+  toggleSavedPassage(passageId: string): void;
   saveReport(drillDayId: string, body: string): void;
   skipReport(drillDayId: string): void;
   deleteReport(journalId: string): void;
@@ -144,6 +148,7 @@ export const initialDrillData: DrillData = {
   notificationsAsked: false,
   reportSkipped: {},
   askSkipped: {},
+  savedPassages: {},
   drills: {},
   journal: {},
   practice: null,
@@ -291,6 +296,15 @@ export function drillActions(
       set((s) => ({ askSkipped: { ...s.askSkipped, [id]: true } }));
     },
 
+    toggleSavedPassage(passageId) {
+      set((s) => {
+        const saved = { ...s.savedPassages };
+        if (saved[passageId]) delete saved[passageId];
+        else saved[passageId] = stamp();
+        return { savedPassages: saved };
+      });
+    },
+
     saveReport(drillDayId, body) {
       set((s) => {
         const existing = Object.values(s.journal).find((j) => j.drillDayId === drillDayId && !j.deleted);
@@ -406,8 +420,10 @@ export const useDrillStore = create<DrillStore>()(
         plan,
         lookBack,
         askSkipped,
+        savedPassages,
       }) => ({
         askSkipped,
+        savedPassages,
         plan,
         lookBack,
         practice,

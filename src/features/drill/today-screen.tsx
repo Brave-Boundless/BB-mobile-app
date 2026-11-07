@@ -16,6 +16,8 @@ import { getRule, type DrillTier } from '@/content';
 import { fadeIn } from '@/theme/motion';
 import { AfterDay45 } from '@/features/practice/after-day-45';
 
+import { EveningPassage, MorningPassage } from '@/features/inspiration/today-passages';
+
 import { HowHard, LookBack, PlanTomorrow, RuleRecapCard, WhatGotInTheWay } from './after-answer-view';
 import { EveningPrompt } from './evening-prompt';
 import { Grid45, Pips } from './pips';
@@ -75,7 +77,7 @@ export function TodayScreen() {
   else if (state.kind === 'complete') body = <AfterDay45 today={today} editing={editingSet} setEditing={setEditingSet} />;
   else {
     const row = records.find((r) => r.day === state.day && r.day <= SPINE_LENGTH);
-    body = !row ? null : row.status === 'pending' ? <DrillView row={row} /> : <AnsweredView row={row} today={today} />;
+    body = !row ? null : row.status === 'pending' ? <DrillView row={row} today={today} /> : <AnsweredView row={row} today={today} />;
   }
 
   return (
@@ -189,7 +191,7 @@ function NotifyAskView({ onDenied }: { onDenied: () => void }) {
 
 // ── the drill ────────────────────────────────────────────────────────────
 
-function DrillView({ row }: { row: DrillDayRow }) {
+function DrillView({ row, today }: { row: DrillDayRow; today: string }) {
   const answer = useDrillStore((s) => s.answer);
   const drills = useDrillStore((s) => s.drills);
   const [fiveMinute, setFiveMinute] = useState(false);
@@ -269,6 +271,10 @@ function DrillView({ row }: { row: DrillDayRow }) {
         />
       </View>
       </Rise>
+
+      <Rise index={4} base={160}>
+        <MorningPassage row={row} today={today} />
+      </Rise>
     </View>
   );
 }
@@ -300,9 +306,15 @@ function AnsweredView({ row, today }: { row: DrillDayRow; today: string }) {
         {done ? <HowHard row={row} /> : <WhatGotInTheWay row={row} />}
       </Rise>
 
+      <Rise base={done ? 480 : 220}>
+        <MorningPassage row={row} today={today} />
+      </Rise>
+
       <Rise base={done ? 520 : 240}>
         <EveningPrompt row={row} />
       </Rise>
+
+      <EveningPassage row={row} />
 
       <RuleRecapCard row={row} />
 
