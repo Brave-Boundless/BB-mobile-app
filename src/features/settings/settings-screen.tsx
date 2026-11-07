@@ -89,14 +89,15 @@ function Message({ text, tone = 'muted' }: { text: string | null; tone?: 'muted'
   );
 }
 
-export function SettingsScreen({ embedded }: { embedded?: boolean } = {}) {
+/** `stacked`: opened from the account icon on the root stack, under a back header. */
+export function SettingsScreen({ embedded, stacked }: { embedded?: boolean; stacked?: boolean } = {}) {
   const session = useSession();
   const email = session?.user.email ?? undefined;
 
   return (
-    <TabFrame embedded={embedded}>
+    <TabFrame embedded={embedded || stacked}>
       <ScrollView contentContainerClassName="px-6 pb-16 pt-6" keyboardShouldPersistTaps="handled">
-        {embedded ? null : (
+        {embedded && !stacked ? null : (
         <Text accessibilityRole="header" className="font-bold text-3xl uppercase tracking-wide text-bone">
           {copy.title}
         </Text>

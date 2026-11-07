@@ -61,6 +61,18 @@ export default function RootLayout() {
           }}
         />
         <Stack.Screen
+          name="settings"
+          options={{
+            headerShown: true,
+            headerTitle: '',
+            headerBackButtonDisplayMode: 'minimal',
+            headerTintColor: palette.ember.soft,
+            headerStyle: { backgroundColor: palette.charcoal[950] },
+            headerShadowVisible: false,
+            animation: 'slide_from_right',
+          }}
+        />
+        <Stack.Screen
           name="drill/[rule]/[tier]"
           options={{
             headerShown: true,

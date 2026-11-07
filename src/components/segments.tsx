@@ -28,7 +28,9 @@ export function SegmentedTab({
   const current = segments.find((s) => s.key === active) ?? segments[0];
   return (
     <SafeAreaView edges={["top"]} className="flex-1 bg-charcoal-950">
-      <View className="flex-row border-b border-charcoal-700 px-6 pt-4">
+      <View
+        className={`flex-row border-b border-charcoal-700 pt-4 ${accessory ? "pl-6 pr-1" : "px-6"}`}
+      >
         <View accessibilityRole="tablist" className="flex-row">
           {segments.map((s) => {
             const on = s.key === current.key;
@@ -39,7 +41,7 @@ export function SegmentedTab({
                 accessibilityState={{ selected: on }}
                 testID={`segment-${s.key}`}
                 onPress={() => setActive(s.key)}
-                className={`mr-6 min-h-12 justify-center border-b-2 ${on ? "border-ember" : "border-transparent"}`}
+                className={`${accessory ? "mr-4" : "mr-6"} min-h-12 justify-center border-b-2 ${on ? "border-ember" : "border-transparent"}`}
               >
                 <Text
                   className={`font-bold text-base uppercase tracking-wide ${on ? "text-bone" : "text-ash"}`}

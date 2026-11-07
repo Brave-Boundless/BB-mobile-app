@@ -9,6 +9,7 @@ import { howItWorksCopy } from '@copy/howitworks';
 import { structureCopy as structure } from '@copy/structure';
 import { todayCopy as copy } from '@copy/today';
 import { Button } from '@/components/button';
+import { TopBar } from '@/components/top-actions';
 import { ArtThumb } from '@/components/art';
 import { chapterArt } from '@/content/art';
 import { Reveal, Rise } from '@/components/motion';
@@ -17,7 +18,6 @@ import { getRule, type DrillTier } from '@/content';
 import { fadeIn } from '@/theme/motion';
 import { AfterDay45 } from '@/features/practice/after-day-45';
 
-import { HowItWorksIcon } from '@/features/howitworks/how-it-works-icon';
 import { EveningPassage, MorningPassage } from '@/features/inspiration/today-passages';
 
 import { HowHard, LookBack, PlanTomorrow, RuleRecapCard, WhatGotInTheWay } from './after-answer-view';
@@ -99,10 +99,11 @@ function Shell({ children, offline, scrollKey }: { children?: React.ReactNode; o
           <Text className="font-sans text-sm text-ash">{copy.offline}</Text>
         </View>
       ) : null}
+      <TopBar help helpTestID="how-it-works-today" />
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} className="flex-1">
         <ScrollView
           key={scrollKey}
-          contentContainerClassName="grow px-6 pb-8 pt-6"
+          contentContainerClassName="grow px-6 pb-8 pt-2"
           keyboardShouldPersistTaps="handled">
           {children}
         </ScrollView>
@@ -215,12 +216,9 @@ function DrillView({ row, today }: { row: DrillDayRow; today: string }) {
     <View className="flex-1 justify-between">
       <View>
         <Rise index={0}>
-          <View className="-my-2 flex-row items-center justify-between">
-            <Text className="flex-1 font-medium text-sm uppercase tracking-widest text-ash" testID="drill-position">
-              {structure.position(row.day, SPINE_LENGTH, rule.number, dayOfRule)}
-            </Text>
-            <HowItWorksIcon testID="how-it-works-today" />
-          </View>
+          <Text className="font-medium text-sm uppercase tracking-widest text-ash" testID="drill-position">
+            {structure.position(row.day, SPINE_LENGTH, rule.number, dayOfRule)}
+          </Text>
         </Rise>
         <Rise index={1}>
           <View className="mt-6 flex-row items-end gap-4">
