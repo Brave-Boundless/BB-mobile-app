@@ -1,4 +1,4 @@
-// status: draft — 2026-11-07
+// status: approved — Mark, 2026-11-07
 //
 // Copy for build step 10: Share Your Story, on the Community tab. Lines marked
 // (website) are the live braveandboundless.com/connect wording, reused as-is;
@@ -6,7 +6,7 @@
 // the website (9584762).
 
 export const storyCopy = {
-  status: 'draft',
+  status: 'approved',
 
   // ── Community tab, top ─────────────────────────────────────────────────
   // Until groups exist (step 11), the tab is Share Your Story.
