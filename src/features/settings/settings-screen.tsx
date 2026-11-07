@@ -27,6 +27,8 @@ import { notificationsAllowed, rescheduleMorningPushes } from '@/features/drill/
 import { pendingCount, useDrillStore } from '@/features/drill/store';
 import { syncNow, useSyncState } from '@/features/drill/use-sync';
 import { signupCopy } from '@copy/signup';
+import { socialCopy } from '@copy/social';
+import { SocialLinks } from '@/components/social-links';
 import { useAccountStore } from '@/features/account/account-store';
 import { joinNewsletter } from '@/features/account/newsletter';
 import { askMarkSettingsCopy } from '@copy/askmark';
@@ -113,6 +115,9 @@ export function SettingsScreen({ embedded, stacked }: { embedded?: boolean; stac
         <View className="mt-10">
           <Button variant="secondary" label={howItWorksCopy.link} onPress={() => router.push('/how-it-works')} testID="how-it-works-settings" />
         </View>
+        <Section title={socialCopy.settingsTitle}>
+          <SocialLinks />
+        </Section>
         <View className="mt-12 items-center">
           <Text className="font-sans text-sm text-ash">{copy.about.book}</Text>
           <Text className="mt-1 font-sans text-sm text-ash">{copy.about.version(appVersion)}</Text>

@@ -3,6 +3,7 @@ import { Text, View } from 'react-native';
 
 import { inspirationCopy as copy } from '@copy/inspiration';
 import type { Passage } from '@/content';
+import { socialCopy } from '@copy/social';
 import { palette } from '@/theme';
 
 // Layout size of the card. captureRef writes it out at 1080 x 1920 (9:16, the
@@ -40,6 +41,7 @@ export function ShareCard({
       <View>
         <Text style={{ fontFamily: 'Jost_700Bold', fontSize: 14, color: palette.bone }}>{copy.share.attribution}</Text>
         <Text style={{ marginTop: 4, fontFamily: 'Jost_500Medium', fontSize: 13, color: palette.ember.DEFAULT }}>{copy.share.site}</Text>
+        <Text style={{ marginTop: 2, fontFamily: 'Jost_500Medium', fontSize: 13, color: palette.ash }}>{socialCopy.shareHandle}</Text>
       </View>
     </View>
   );

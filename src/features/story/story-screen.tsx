@@ -4,6 +4,8 @@ import Animated from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { TopBar } from '@/components/top-actions';
+import { SocialLinks } from '@/components/social-links';
+import { socialCopy } from '@copy/social';
 
 import { storyCopy as copy } from '@copy/story';
 import { Button } from '@/components/button';
@@ -207,6 +209,18 @@ export function StoryScreen() {
               <Text className="mt-4 font-sans text-base leading-6 text-bone">{copy.privacy.crisis}</Text>
               <View className="mt-4">
                 <Button variant="secondary" label={copy.privacy.call988} onPress={() => void Linking.openURL('tel:988')} testID="story-988" />
+              </View>
+            </View>
+          </Rise>
+
+          <Rise index={5}>
+            <View className="mt-10">
+              <Text accessibilityRole="header" className="font-bold text-xl text-bone">
+                {socialCopy.communityTitle}
+              </Text>
+              <Text className="mt-2 font-sans text-base leading-6 text-ash">{socialCopy.communityBody}</Text>
+              <View className="mt-3">
+                <SocialLinks />
               </View>
             </View>
           </Rise>
