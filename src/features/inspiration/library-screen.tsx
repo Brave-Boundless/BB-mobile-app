@@ -4,20 +4,26 @@ import { FlatList, Pressable, ScrollView, Text, View } from 'react-native';
 import { inspirationCopy as copy } from '@copy/inspiration';
 import { Chips } from '@/components/chips';
 import { TabFrame } from '@/components/screen';
-import { SITUATIONS, getRule, passages, type Passage, type Situation } from '@/content';
+import { SITUATIONS, getRule, passages, type Passage, type RuleId, type Situation } from '@/content';
 import { useDrillStore } from '@/features/drill/store';
 
 import { PassageCard } from './passage-card';
 
-type View3 = 'all' | 'saved' | 'byRule';
+export type View3 = 'all' | 'saved' | 'byRule';
 type Row = { kind: 'header'; key: string; title: string } | { kind: 'passage'; key: string; passage: Passage };
 
 // Reading passages only. The chapter exercises live on each drill's Go deeper page.
 const READING = passages.filter((p) => p.use !== 'exercise');
 
 /** The Passages library: every reading passage, by what you're facing, by rule, or saved. */
-export function LibraryScreen({ embedded }: { embedded?: boolean } = {}) {
-  const [view, setView] = useState<View3>('all');
+export function LibraryScreen({
+  embedded,
+  initialView,
+  rule,
+}: { embedded?: boolean; initialView?: View3; rule?: RuleId } = {}) {
+  // Opened from a rule's "From the book": that rule's passages only, until another view is picked.
+  const [only, setOnly] = useState<RuleId | undefined>(rule);
+  const [view, setView] = useState<View3>(rule ? 'byRule' : (initialView ?? 'all'));
   const [situation, setSituation] = useState<Situation | null>(null);
   const saved = useDrillStore((s) => s.savedPassages);
 
@@ -29,7 +35,7 @@ export function LibraryScreen({ embedded }: { embedded?: boolean } = {}) {
     }
     if (view === 'byRule') {
       const out: Row[] = [];
-      for (let r = 1; r <= 15; r++) {
+      for (let r = only ?? 1; r <= (only ?? 15); r++) {
         const rule = getRule(r as Passage['rule']);
         out.push({ kind: 'header', key: `h${r}`, title: `Rule ${r} · ${rule.title}` });
         for (const p of READING.filter((x) => x.rule === r)) out.push({ kind: 'passage', key: p.id, passage: p });
@@ -37,7 +43,7 @@ export function LibraryScreen({ embedded }: { embedded?: boolean } = {}) {
       return out;
     }
     return READING.filter((p) => !situation || p.situations.includes(situation)).map((p) => ({ kind: 'passage', key: p.id, passage: p }));
-  }, [view, situation, saved]);
+  }, [view, situation, saved, only]);
 
   const header = (
     <View className="px-6 pt-6">
@@ -55,7 +61,10 @@ export function LibraryScreen({ embedded }: { embedded?: boolean } = {}) {
             { key: 'byRule', label: copy.library.byRule },
           ]}
           selected={view}
-          onSelect={(k) => setView(k as View3)}
+          onSelect={(k) => {
+            setOnly(undefined);
+            setView(k as View3);
+          }}
           testID="library-view"
         />
       </View>

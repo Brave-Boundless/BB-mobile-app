@@ -1,10 +1,10 @@
 import { afterEach, beforeEach, describe, expect, it, jest } from '@jest/globals';
-import { render, screen } from '@testing-library/react-native';
-import { useLocalSearchParams } from 'expo-router';
+import { fireEvent, render, screen } from '@testing-library/react-native';
+import { router, useLocalSearchParams } from 'expo-router';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { rulesCopy as copy } from '@copy/rules';
-import { rules } from '@/content';
+import { passages, rules } from '@/content';
 import { useDrillStore } from '@/features/drill/store';
 
 import { RuleDetailScreen } from '../rule-detail-screen';
@@ -42,6 +42,14 @@ describe('Rules screens', () => {
     expect(screen.getByLabelText('Rule 15. Make Your Life a Public Service Announcement.')).toBeTruthy();
     expect(screen.getByTestId('path-stats')).toBeTruthy();
     expect(screen.getByText('3 of 45 drills answered · 1 of 15 stamped')).toBeTruthy();
+    // Day 3 was a Did it after Day 2's dodge: a streak of one.
+    expect(screen.getByText('Streak · 1 drill')).toBeTruthy();
+  });
+
+  it('Path leaves the streak out when there is none', async () => {
+    useDrillStore.getState().reset();
+    await wrap(<PathScreen />);
+    expect(screen.queryByTestId('path-streak')).toBeNull();
   });
 
   it('shows all six card fields and the record for a rule', async () => {
@@ -58,12 +66,23 @@ describe('Rules screens', () => {
     expect(screen.getByText('Day 3 · Daily drill · Did it')).toBeTruthy();
     expect(screen.getByText('It cost me my excuse.')).toBeTruthy();
     expect(screen.getByTestId('rule-stamp')).toBeTruthy(); // all three days answered
+    expect(screen.getByTestId('rule-tally')).toHaveTextContent('2 of 3 done');
+  });
+
+  it('opens the rule\'s passages from "From the book"', async () => {
+    jest.mocked(useLocalSearchParams).mockReturnValue({ id: '1' });
+    await wrap(<RuleDetailScreen />);
+    const n = passages.filter((p) => p.rule === 1 && p.use !== 'exercise').length;
+    expect(screen.getByText(`${n} passages  ›`)).toBeTruthy();
+    await fireEvent.press(screen.getByTestId('rule-from-the-book'));
+    expect(router.push).toHaveBeenCalledWith({ pathname: '/passages', params: { rule: '1' } });
   });
 
   it('shows the empty record for a rule not reached', async () => {
     jest.mocked(useLocalSearchParams).mockReturnValue({ id: '4' });
     await wrap(<RuleDetailScreen />);
     expect(screen.getByText(copy.detail.historyEmpty(10))).toBeTruthy();
+    expect(screen.getByTestId('rule-tally')).toHaveTextContent('Not reached');
   });
 
   it('heads a rule with its chapter illustration', async () => {

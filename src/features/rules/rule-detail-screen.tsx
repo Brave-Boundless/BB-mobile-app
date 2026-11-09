@@ -1,12 +1,15 @@
 import { Stack, router, useLocalSearchParams } from 'expo-router';
-import { ScrollView, Text, View } from 'react-native';
+import { Pressable, ScrollView, Text, View } from 'react-native';
 
 import { deeperCopy } from '@copy/deeper';
 import { practiceCopy } from '@copy/practice';
 import { rulesCopy as copy } from '@copy/rules';
 import { Button } from '@/components/button';
 import { todayCopy } from '@copy/today';
-import { DRILL_TIERS, getPart, getRule, type RuleId } from '@/content';
+import { DRILL_TIERS, getPart, getRule, passages, type RuleId } from '@/content';
+import { progressCopy } from '@copy/progress';
+import { redesignCopy } from '@copy/redesign';
+import { ruleTallies } from '@/features/progress/stats';
 import { effortTrend } from '@/features/drill/after-answer';
 import { rulePips, type PipState } from '@/features/drill/structure';
 import { useDrillStore } from '@/features/drill/store';
@@ -44,6 +47,8 @@ export function RuleDetailScreen() {
   const stamp = stampFor(data, rule.number);
   const trend = effortTrend(data, rule.number);
   const pips = rulePips(data, rule.number);
+  const tally = ruleTallies(data).find((t) => t.ruleId === rule.number)!;
+  const bookCount = passages.filter((p) => p.rule === rule.number && p.use !== 'exercise').length;
 
   return (
     <>
@@ -92,13 +97,32 @@ export function RuleDetailScreen() {
 
         <Section title={copy.detail.scorecard} index={2}>
           <Text className="font-sans text-lg text-bone">{rule.scorecard}</Text>
+          <Text className="mt-2 font-medium text-base text-ember-soft" testID="rule-tally">
+            {tally.answered === 0
+              ? progressCopy.scorecards.notReached
+              : progressCopy.scorecards.tally(tally.done, tally.answered)}
+          </Text>
         </Section>
 
         <Section title={copy.detail.mantra} index={3}>
           <Text className="font-bold text-2xl text-ember-soft">{rule.mantra}</Text>
         </Section>
 
-        <Section title={copy.detail.history} index={4}>
+        {bookCount > 0 ? (
+          <Rise index={4} base={120}>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={`${redesignCopy.rule.fromTheBook}. ${redesignCopy.rule.fromTheBookCount(bookCount)}`}
+              onPress={() => router.push({ pathname: '/passages', params: { rule: String(rule.number) } })}
+              testID="rule-from-the-book"
+              className="mt-8 min-h-16 flex-row items-center justify-between border-2 border-bone px-5 active:opacity-80">
+              <Text className="font-bold text-lg uppercase tracking-wider text-bone">{redesignCopy.rule.fromTheBook}</Text>
+              <Text className="font-medium text-base text-ash">{`${redesignCopy.rule.fromTheBookCount(bookCount)}  ›`}</Text>
+            </Pressable>
+          </Rise>
+        ) : null}
+
+        <Section title={copy.detail.history} index={5}>
           {stamp ? (
             <View
               accessible

@@ -1,4 +1,4 @@
-// status: draft — step 1 lines approved by Mark (merged 2026-11-09); step 2 lines for review
+// status: draft — steps 1–2 and Journal lines approved by Mark (merged 2026-11-09); step 3 lines for review
 //
 // Redesign, step 1: the new Today and the screens after answering (Mark,
 // 2026-11-09: "simpler and more visual with less text"). Almost everything on
@@ -29,5 +29,17 @@ export const redesignCopy = {
     placeholder: 'What’s on your mind?',
     // Tag on a free note, where a report-back shows "Day 4 · Rule 2 · Did it".
     note: 'Note',
+    // Under Write, once a passage is saved: opens Passages → Saved.
+    saved: (n: number) => `Saved passages · ${n}`,
+  },
+
+  // ── Step 3: where streak, scorecards and passages live ──────────────────
+  // Path, under "N of 45 drills answered · N of 15 stamped", when a streak is live:
+  // e.g. "Streak · 4 drills" (reuses the approved streak wording).
+  streakLine: (value: string) => `Streak · ${value}`,
+  rule: {
+    // Rule screen, under the mantra: opens this rule's passages.
+    fromTheBook: 'From the book',
+    fromTheBookCount: (n: number) => (n === 1 ? '1 passage' : `${n} passages`),
   },
 } as const;

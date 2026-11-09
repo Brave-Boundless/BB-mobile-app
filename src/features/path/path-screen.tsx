@@ -2,6 +2,7 @@ import { Link, router } from 'expo-router';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 
 import { navigationCopy } from '@copy/navigation';
+import { progressCopy } from '@copy/progress';
 import { redesignCopy } from '@copy/redesign';
 import { rulesCopy } from '@copy/rules';
 import { stampsCopy } from '@copy/stamps';
@@ -16,6 +17,7 @@ import { Pips } from '@/features/drill/pips';
 import { useDrillStore, type DrillData } from '@/features/drill/store';
 import { answeredCount, rulePips } from '@/features/drill/structure';
 import { useToday } from '@/features/drill/use-today';
+import { streak } from '@/features/progress/stats';
 import { ruleStatus } from '@/features/rules/history';
 import { StampImage } from '@/features/stamps/passport';
 import { earnedStamps, stampFor } from '@/features/stamps/stamps';
@@ -29,6 +31,7 @@ export function PathScreen() {
   const today = useToday();
   const data = useDrillStore();
   const stamps = earnedStamps(data).length;
+  const streakNow = streak(data);
 
   return (
     <TabFrame>
@@ -41,6 +44,11 @@ export function PathScreen() {
             <Text className="mt-1 font-medium text-base text-ash" testID="path-stats">
               {`${structureCopy.progress(answeredCount(data))} · ${stampsCopy.passport.count(stamps)}`}
             </Text>
+            {streakNow > 0 ? (
+              <Text className="mt-1 font-medium text-base text-ember-soft" testID="path-streak">
+                {redesignCopy.streakLine(progressCopy.streak.value(streakNow))}
+              </Text>
+            ) : null}
           </View>
           <TopActions help helpTestID="how-it-works-path" />
         </View>
