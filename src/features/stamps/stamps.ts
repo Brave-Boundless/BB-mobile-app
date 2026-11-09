@@ -32,11 +32,11 @@ export function earnedStamps(data: DrillData): Stamp[] {
 /**
  * Stamp art, rendered from the brand's passport-stamp SVGs. Rules 1, 2, 3, 6,
  * 9, 14, 15 are the brand's own stamps; the other 8 were built from the same
- * template. The app shows them on the dark ground with no paper behind, so the
- * inks are lightened (same hue, ≥ 5:1 on black): crimson #7A1E22 → #D75A60,
- * orange #C64A1E → #DE5525, slate #4F5B61 → #74858E, olive #4F5B2A → #798C41.
- * Sources: assets/source/stamps (brand inks) and assets/source/stamps/dark
- * (what ships). `ratio` = width / height.
+ * template. On the dark ground each stamp is inked in its part's text colour
+ * (Mark, 2026-11-09), the same as the part headlines: FIRE (1–4) #D64A5D,
+ * FORGE (5–8) #D1542C, FOUNDATION (9–12) #6C7F83, FIELD (13–15) #6C825C,
+ * all ≥ 4.5:1 on black. Sources: assets/source/stamps (brand inks) and
+ * assets/source/stamps/dark (what ships). `ratio` = width / height.
  */
 export const stampArt: Record<RuleId, { source: ImageSourcePropType; ratio: number }> = {
   1: { source: require('../../../assets/images/stamps/01.webp'), ratio: 1 },
