@@ -8,6 +8,7 @@ import { Button } from '@/components/button';
 import { todayCopy } from '@copy/today';
 import { DRILL_TIERS, getPart, getRule, type RuleId } from '@/content';
 import { effortTrend } from '@/features/drill/after-answer';
+import { rulePips, type PipState } from '@/features/drill/structure';
 import { useDrillStore } from '@/features/drill/store';
 import { Rise } from '@/components/motion';
 import { ChapterArt } from '@/components/art';
@@ -42,6 +43,7 @@ export function RuleDetailScreen() {
   const history = ruleHistory(data, rule.number);
   const stamp = stampFor(data, rule.number);
   const trend = effortTrend(data, rule.number);
+  const pips = rulePips(data, rule.number);
 
   return (
     <>
@@ -68,8 +70,10 @@ export function RuleDetailScreen() {
         </Section>
 
         <Section title={copy.detail.drills} index={1}>
-          {DRILL_TIERS.map((tier) => (
-            <View key={tier} className="mb-3 bg-charcoal-900 p-4">
+          {DRILL_TIERS.map((tier, i) => (
+            <View key={tier} className="mb-3 flex-row gap-4 border-t border-charcoal-700 pt-3">
+              <DrillMark state={pips[i]} />
+              <View className="flex-1">
               <Text className="font-medium text-sm text-ember-soft">{todayCopy.drill.tier[tier]}</Text>
               <Text className="mt-1 font-sans text-lg text-bone">{rule.drills[tier]}</Text>
               <View className="mt-1 items-start">
@@ -80,6 +84,7 @@ export function RuleDetailScreen() {
                   onPress={() => router.push(`/drill/${rule.number}/${tier}`)}
                   testID={`go-deeper-${tier}`}
                 />
+              </View>
               </View>
             </View>
           ))}
@@ -141,6 +146,27 @@ function HistoryRow({ entry: { drill, tookFallback, report } }: { entry: History
           <Text className="font-sans text-base text-bone">{report.body}</Text>
         </View>
       ) : null}
+    </View>
+  );
+}
+
+/** A drill's state as a square: ✓ done, ✕ dodged, ember outline today, grey outline ahead. */
+function DrillMark({ state }: { state: PipState }) {
+  const box =
+    state === 'done'
+      ? 'bg-ember'
+      : state === 'dodged'
+        ? 'bg-charcoal-700'
+        : state === 'current'
+          ? 'border-[3px] border-ember'
+          : 'border-2 border-charcoal-700';
+  return (
+    <View
+      accessible
+      accessibilityLabel={state === 'done' ? todayCopy.drill.did : state === 'dodged' ? todayCopy.drill.dodged : state === 'current' ? copy.detail.pending : ''}
+      className={`h-7 w-7 items-center justify-center ${box}`}>
+      {state === 'done' ? <Text className="font-bold text-base text-charcoal-950">✓</Text> : null}
+      {state === 'dodged' ? <Text className="font-bold text-base text-bone">✕</Text> : null}
     </View>
   );
 }

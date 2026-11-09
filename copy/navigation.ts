@@ -15,6 +15,7 @@ export const navigationCopy = {
     today: 'Today',
     askMark: 'Ask Mark',
     rules: 'Rules',
+    path: 'Path', // redesign step 2 (draft)
     community: 'Community',
     journal: 'Journal',
   },
