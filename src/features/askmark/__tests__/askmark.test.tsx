@@ -3,6 +3,7 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react-nativ
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { askMarkCopy as copy } from '@copy/askmark';
+import { redesignCopy } from '@copy/redesign';
 import { useDrillStore } from '@/features/drill/store';
 
 import { AskMarkRequestError, askMark } from '../api';
@@ -92,9 +93,9 @@ describe('Ask Mark screen', () => {
       </SafeAreaProvider>,
     );
 
-  it('shows the welcome, three starters and the AI note', async () => {
+  it('asks what is in the way, with three starters and the AI note', async () => {
     await renderAsk();
-    expect(screen.getByText(copy.welcome.title)).toBeTruthy();
+    expect(screen.getByText(redesignCopy.ask.headline)).toBeTruthy();
     expect(screen.getByTestId('askmark-starter-2')).toBeTruthy();
     expect(screen.queryByTestId('askmark-starter-3')).toBeNull();
     expect(screen.getByText(copy.disclaimer)).toBeTruthy();

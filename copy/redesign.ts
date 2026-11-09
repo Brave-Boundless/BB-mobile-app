@@ -1,4 +1,4 @@
-// status: draft — steps 1–2 and Journal lines approved by Mark (merged 2026-11-09); step 3 lines for review
+// status: draft — steps 1–3 and Journal lines approved by Mark (merged 2026-11-09); step 4 lines for review
 //
 // Redesign, step 1: the new Today and the screens after answering (Mark,
 // 2026-11-09: "simpler and more visual with less text"). Almost everything on
@@ -41,5 +41,20 @@ export const redesignCopy = {
     // Rule screen, under the mantra: opens this rule's passages.
     fromTheBook: 'From the book',
     fromTheBookCount: (n: number) => (n === 1 ? '1 passage' : `${n} passages`),
+  },
+
+  // ── Step 4: Welcome (first run, before Start Day 1) ─────────────────────
+  // Over it: the book's brand line. Under the 45 squares: the part names.
+  // Push time, "Start Day 1" and "How this works" keep their approved copy.
+  welcome: {
+    headline: '45 days.',
+    gridA11y: '45 squares: 15 rules, three drills each, in four parts.',
+    steps: ['One drill a day.', 'Did it, or dodged it.', 'Watch the path fill in.'],
+  },
+
+  // ── Step 4: Ask Mark, before the first question ─────────────────────────
+  // The starters (approved) become big buttons; the drill one leads, in orange.
+  ask: {
+    headline: 'What’s in the way today?',
   },
 } as const;
