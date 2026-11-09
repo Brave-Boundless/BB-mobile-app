@@ -49,6 +49,11 @@ jobs:
     needs: [get_ios_build]
     if: ${{ needs.get_ios_build.outputs.build_id }}
     type: update
+    # Updates are bundled here, not by a build profile, so the app's public
+    # EXPO_PUBLIC_* values (Supabase URL and key, sign-in switches) must come
+    # from the EAS "production" environment. Without them the update ships
+    # with Supabase switched off: no sign-in, no sync, no groups.
+    environment: production
     params:
       channel: production
       platform: ios
