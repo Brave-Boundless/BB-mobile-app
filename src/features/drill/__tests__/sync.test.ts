@@ -41,3 +41,17 @@ describe('pushDirty', () => {
     expect(sent).toEqual({ drills: [{ id: 'a', updatedAt: 'u1' }], journal: [{ id: 'j1', updatedAt: 'u3' }, { id: 'j2', updatedAt: 'u4' }] });
   });
 });
+
+describe('pushDirty, free notes', () => {
+  it('sends a Journal note with no drill as drill_day_id null', async () => {
+    const data: DrillData = {
+      ...initialDrillData,
+      journal: { n1: { id: 'n1', drillDayId: null, body: 'Just a thought.', createdAt: 'c', updatedAt: 'u', dirty: true, deleted: false } },
+    };
+    const { client, calls } = fakeClient();
+    await pushDirty(client, 'user-1', data);
+    expect(calls).toEqual([
+      { table: 'journal_entries', op: 'upsert', payload: [{ id: 'n1', user_id: 'user-1', drill_day_id: null, body: 'Just a thought.', created_at: 'c' }] },
+    ]);
+  });
+});

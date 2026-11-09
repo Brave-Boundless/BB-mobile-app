@@ -56,8 +56,8 @@ export function buildExport(
       .map((j) => ({
         id: j.id,
         drillId: j.drillDayId,
-        day: ruleOf.get(j.drillDayId)?.day ?? null,
-        rule: ruleOf.get(j.drillDayId)?.ruleId ?? null,
+        day: (j.drillDayId && ruleOf.get(j.drillDayId)?.day) || null,
+        rule: (j.drillDayId && ruleOf.get(j.drillDayId)?.ruleId) || null,
         writtenAt: j.createdAt,
         body: j.body,
       })),

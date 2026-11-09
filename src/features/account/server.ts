@@ -29,7 +29,7 @@ interface DrillDayDb {
 
 interface JournalDb {
   id: string;
-  drill_day_id: string;
+  drill_day_id: string | null;
   body: string;
   created_at: string;
   updated_at: string;

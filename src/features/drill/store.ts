@@ -65,7 +65,8 @@ export interface DrillDayRow {
 
 export interface JournalRow {
   id: string;
-  drillDayId: string;
+  /** The drill this report-back answers; null for a free note written from the Journal. */
+  drillDayId: string | null;
   body: string;
   createdAt: string;
   updatedAt: string;
@@ -116,6 +117,10 @@ export interface DrillActions {
   saveReport(drillDayId: string, body: string): void;
   skipReport(drillDayId: string): void;
   deleteReport(journalId: string): void;
+  /** A free note from the Journal's Write button: no drill behind it. */
+  writeNote(body: string): void;
+  /** Edit a free note's text. */
+  editNote(journalId: string, body: string): void;
   /** Locks in (or edits) the post-Day-45 choices. */
   setPractice(p: Practice): void;
   /** Creates today's restart/daily-set rows if missing. Returns their ids. */
@@ -338,6 +343,22 @@ export function drillActions(
       });
     },
 
+    writeNote(body) {
+      set((s) => {
+        const at = stamp();
+        const row: JournalRow = { id: deps.newId(), drillDayId: null, body, createdAt: at, updatedAt: at, dirty: true, deleted: false };
+        return { journal: { ...s.journal, [row.id]: row } };
+      });
+    },
+
+    editNote(journalId, body) {
+      set((s) => {
+        const j = s.journal[journalId];
+        if (!j || j.deleted) return {};
+        return { journal: { ...s.journal, [journalId]: { ...j, body, updatedAt: stamp(), dirty: true } } };
+      });
+    },
+
     deleteReport(journalId) {
       set((s) => {
         const j = s.journal[journalId];
@@ -473,7 +494,7 @@ export function mergeServerRows(local: DrillData, server: ServerSnapshot): Parti
 
   const journal: Record<string, JournalRow> = {};
   for (const j of Object.values(local.journal)) {
-    if (dropped.has(j.drillDayId)) continue;
+    if (j.drillDayId && dropped.has(j.drillDayId)) continue;
     journal[j.id] = j;
   }
   for (const j of server.journal) {
@@ -481,7 +502,7 @@ export function mergeServerRows(local: DrillData, server: ServerSnapshot): Parti
     if (mine?.dirty) continue;
     // One live report per drill: a clean local entry on the same drill under another id gives way.
     for (const other of Object.values(journal)) {
-      if (other.drillDayId === j.drillDayId && other.id !== j.id && !other.deleted && !other.dirty) delete journal[other.id];
+      if (j.drillDayId && other.drillDayId === j.drillDayId && other.id !== j.id && !other.deleted && !other.dirty) delete journal[other.id];
     }
     journal[j.id] = { ...j, dirty: false, deleted: false };
   }
