@@ -54,6 +54,7 @@ describe('Today after answering (step 7)', () => {
     const row = Object.values(useDrillStore.getState().drills)[0];
     expect(row.effort).toBe(4);
 
+    await fireEvent.press(screen.getByTestId('flow-next'));
     expect(screen.getByText(copy.plan.headline(1, todayCopy.drill.tier.uncomfortable))).toBeTruthy();
     await fireEvent.press(screen.getByTestId('plan-midday'));
     expect(useDrillStore.getState().plan).toEqual({ forDate: '2026-11-11', at: '12:30' });
@@ -80,8 +81,11 @@ describe('Today after answering (step 7)', () => {
     s.markNotificationsAsked();
     await renderToday();
     await fireEvent.press(await screen.findByLabelText(todayCopy.drill.a11y.did));
-    await fireEvent.press(await screen.findByTestId('effort-skip'));
+    // Next without a rating counts as skipping: the resting screen doesn't ask again.
+    await fireEvent.press(await screen.findByTestId('flow-next'));
+    await fireEvent.press(await screen.findByTestId('flow-finish'));
     expect(screen.queryByText(copy.rating.prompt)).toBeNull();
+    expect(useDrillStore.getState().askSkipped[Object.keys(useDrillStore.getState().drills)[0]]).toBe(true);
   });
 
   it('shows the rule recap after a rule’s third drill', async () => {

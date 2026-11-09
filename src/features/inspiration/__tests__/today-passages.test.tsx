@@ -19,6 +19,13 @@ const renderToday = () =>
     </SafeAreaProvider>,
   );
 
+/** Redesign step 1: the morning passage moved from under the drill to the second screen after answering. */
+async function toPassageScreen() {
+  await renderToday();
+  await fireEvent.press(await screen.findByLabelText(todayCopy.drill.a11y.did));
+  await fireEvent.press(await screen.findByTestId('flow-next'));
+}
+
 describe('passages on Today', () => {
   beforeEach(() => {
     jest.useFakeTimers({ now: new Date(2026, 10, 10, 8, 0) });
@@ -31,8 +38,8 @@ describe('passages on Today', () => {
     jest.useRealTimers();
   });
 
-  it('shows this morning’s passage under the drill, verbatim', async () => {
-    await renderToday();
+  it('shows this morning’s passage after answering, verbatim', async () => {
+    await toPassageScreen();
     const expected = morningPassage({ drills: {} }, '2026-11-10', 1, 1)!.passage;
     expect(await screen.findByTestId('morning-passage')).toBeTruthy();
     expect(screen.getByText(copy.morning)).toBeTruthy();
@@ -45,13 +52,14 @@ describe('passages on Today', () => {
     await fireEvent.press(await screen.findByLabelText(todayCopy.drill.a11y.did));
     expect(screen.queryByTestId('evening-passage')).toBeNull();
     await fireEvent.changeText(screen.getByTestId('evening-input'), 'Small step, done.');
-    await fireEvent.press(screen.getByTestId('evening-save'));
+    await fireEvent.press(screen.getByTestId('flow-next'));
+    await fireEvent.press(await screen.findByTestId('flow-finish'));
     expect(await screen.findByTestId('evening-passage')).toBeTruthy();
     expect(screen.getByText(eveningPassage(1, 1)!.text)).toBeTruthy();
   });
 
   it('saves and unsaves a passage', async () => {
-    await renderToday();
+    await toPassageScreen();
     const id = morningPassage({ drills: {} }, '2026-11-10', 1, 1)!.passage.id;
     await fireEvent.press(await screen.findByTestId('morning-passage-save'));
     expect(useDrillStore.getState().savedPassages[id]).toBeTruthy();
@@ -62,7 +70,7 @@ describe('passages on Today', () => {
 
   it('shares the passage as a 1080 x 1920 image with the text alongside (iOS)', async () => {
     const share = jest.spyOn(Share, 'share').mockResolvedValue({ action: 'sharedAction', activityType: undefined });
-    await renderToday();
+    await toPassageScreen();
     await fireEvent.press(await screen.findByTestId('morning-passage-share'));
     await act(async () => {});
     await waitFor(() => expect(captureRef).toHaveBeenCalled());
