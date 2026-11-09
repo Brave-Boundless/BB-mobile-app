@@ -13,10 +13,12 @@ import { Button } from '@/components/button';
 import { TopBar } from '@/components/top-actions';
 import { SignUpScreen } from '@/features/account/signup-screen';
 import { accountsRequired, useAuthState } from '@/features/account/session';
-import { chapterArt, partTextColor } from '@/content/art';
+import { chapterArt, partColor, partTextColor } from '@/content/art';
+import { settingsCopy } from '@copy/settings';
+import { palette } from '@/theme';
 import { Reveal, Rise } from '@/components/motion';
 import { TimeField } from '@/components/time-field';
-import { getPart, getRule, type DrillTier } from '@/content';
+import { getPart, getRule, parts, type DrillTier, type RuleId } from '@/content';
 import { fadeIn } from '@/theme/motion';
 import { AfterDay45 } from '@/features/practice/after-day-45';
 
@@ -151,39 +153,54 @@ function Shell({ children, offline, scrollKey }: { children?: React.ReactNode; o
 
 // ── first run ────────────────────────────────────────────────────────────
 
-const EMPTY_GRID = Array.from({ length: 15 }, () => ['ahead', 'ahead', 'ahead'] as const);
-
+/** First run (redesign step 4): the 45 days as a picture, three lines, push time, Start Day 1. */
 function StartView({ onStart }: { onStart: (notifyAt: string) => void }) {
   const [notifyAt, setNotifyAt] = useState(useDrillStore.getState().notifyAt);
+  const w = redesignCopy.welcome;
 
   return (
     <View className="flex-1 justify-between">
       <View>
         <Rise index={0}>
-          <Text accessibilityRole="header" className="font-bold text-3xl text-bone">
-            {structure.intro.headline}
+          <Text className="font-bold text-xs uppercase tracking-[3px] text-ash">{settingsCopy.about.tagline}</Text>
+          <Text accessibilityRole="header" className="mt-4 font-bold text-7xl uppercase leading-[68px] text-bone">
+            {w.headline}
           </Text>
         </Rise>
         <Rise index={1}>
-          <Text className="mt-4 font-sans text-lg text-ash">{structure.intro.body}</Text>
-          <View className="mt-6">
-            <Grid45 rows={EMPTY_GRID} label={structure.intro.headline} testID="intro-grid" />
-          </View>
-        </Rise>
-        <Rise index={2}>
-          <View className="mt-6 gap-3">
-            {(['five_minute', 'uncomfortable', 'daily'] as const).map((t, i) => (
-              <View key={t} className="flex-row items-start gap-3">
-                <Pips pips={(['ahead', 'ahead', 'ahead'] as const).map((p, j) => (j === i ? 'done' : p))} label="" />
-                <Text className="flex-1 font-medium text-base leading-6 text-bone">{structure.intro.tiers[t]}</Text>
+          <View accessible accessibilityRole="image" accessibilityLabel={w.gridA11y} className="mt-6" style={{ gap: 5 }} testID="intro-grid">
+            {[0, 1, 2, 3, 4].map((row) => (
+              <View key={row} className="flex-row" style={{ gap: 5 }}>
+                {Array.from({ length: 9 }, (_, col) => (
+                  <View
+                    key={col}
+                    style={{ flex: 1, aspectRatio: 1, backgroundColor: partColor[getRule((Math.floor((row * 9 + col) / 3) + 1) as RuleId).part] }}
+                  />
+                ))}
               </View>
             ))}
           </View>
-          <Text className="mt-4 font-sans text-base text-ash">{structure.intro.pace}</Text>
+          <View className="mt-3 flex-row flex-wrap gap-x-4" importantForAccessibility="no-hide-descendants" accessibilityElementsHidden>
+            {parts.map((p) => (
+              <Text key={p.id} style={{ color: partTextColor[p.id] }} className="font-bold text-xs uppercase tracking-widest">
+                {p.name}
+              </Text>
+            ))}
+          </View>
+        </Rise>
+        <Rise index={2}>
+          <View className="mt-8 gap-4">
+            {w.steps.map((line, i) => (
+              <View key={line} className="flex-row items-center gap-4">
+                <StepMark index={i} />
+                <Text className="flex-1 font-bold text-xl text-bone">{line}</Text>
+              </View>
+            ))}
+          </View>
         </Rise>
 
         <Rise index={3}>
-          <View className="mt-10 bg-charcoal-900 p-5">
+          <View className="mt-8 bg-charcoal-900 p-5">
             <Text className="font-medium text-base text-bone">{copy.start.notifyLabel}</Text>
             <TimeField value={notifyAt} onChange={setNotifyAt} />
             <Text className="mt-2 font-sans text-sm text-ash">{copy.start.notifyHint}</Text>
@@ -192,13 +209,35 @@ function StartView({ onStart }: { onStart: (notifyAt: string) => void }) {
       </View>
 
       <Rise index={4} base={120}>
-        <View className="mt-10">
+        <View className="mt-8">
           <Button label={copy.start.cta} onPress={() => onStart(notifyAt)} testID="start-day-1" />
           <View className="mt-4 items-center">
             <Button variant="text" label={howItWorksCopy.link} onPress={() => router.push('/how-it-works')} testID="how-it-works-start" />
           </View>
         </View>
       </Rise>
+    </View>
+  );
+}
+
+/** The three marks beside the Welcome lines: a day (1), a Did it (✓), the path. */
+function StepMark({ index }: { index: number }) {
+  const box = 'h-11 w-11 items-center justify-center';
+  if (index === 0)
+    return (
+      <View className={`${box} bg-ember`}>
+        <Text className="font-bold text-xl text-charcoal-950">1</Text>
+      </View>
+    );
+  if (index === 1)
+    return (
+      <View className={`${box} bg-bone`}>
+        <Text className="font-bold text-xl text-charcoal-950">✓</Text>
+      </View>
+    );
+  return (
+    <View className={`${box} border-2 border-charcoal-700`}>
+      <Image source={require('../../../assets/images/tabs/path.png')} style={{ width: 24, height: 24, tintColor: palette.bone }} />
     </View>
   );
 }

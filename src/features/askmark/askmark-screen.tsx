@@ -19,6 +19,7 @@ import { fadeIn } from '@/theme/motion';
 
 import { AskMarkRequestError, askMark, sendTranscript, type AskMarkError, type ChatMessage } from './api';
 import { askMarkContext, drillStarter } from './context';
+import { redesignCopy } from '@copy/redesign';
 import { AnswerText } from './format';
 import { useAskMarkStore } from './store';
 
@@ -129,28 +130,29 @@ export function AskMarkScreen() {
 
           {empty ? (
             <View>
-              <Text className="font-bold text-2xl text-bone">{copy.welcome.title}</Text>
-              <Text className="mt-3 font-sans text-base leading-6 text-ash">{copy.welcome.body}</Text>
-
-              <View className="mt-8 flex-row items-center justify-between">
-                <Text className="font-medium text-sm uppercase tracking-widest text-ash">{copy.welcome.startersLabel}</Text>
+              <Text accessibilityRole="header" className="mt-4 font-bold text-4xl uppercase leading-[42px] text-bone">
+                {redesignCopy.ask.headline}
+              </Text>
+              <View className="mt-6 gap-2">
+                {starters.map((q, i) => {
+                  const lead = i === 0 && !!starterKey;
+                  return (
+                    <Pressable
+                      key={q}
+                      accessibilityRole="button"
+                      onPress={() => void send(q)}
+                      testID={`askmark-starter-${i}`}
+                      className={`min-h-16 justify-center px-5 py-3 active:opacity-80 ${lead ? 'bg-ember' : 'border-2 border-charcoal-700'}`}>
+                      <Text className={`font-bold text-lg ${lead ? 'text-charcoal-950' : 'text-bone'}`}>{q}</Text>
+                    </Pressable>
+                  );
+                })}
+              </View>
+              <View className="mt-2 items-start">
                 <Button variant="text" label={copy.welcome.shuffle} onPress={() => setSeed((s) => (s * 7 + 13) % 233280)} testID="askmark-shuffle" />
               </View>
-              <View className="mt-2 gap-2">
-                {starters.map((q, i) => (
-                  <Pressable
-                    key={q}
-                    accessibilityRole="button"
-                    onPress={() => void send(q)}
-                    testID={`askmark-starter-${i}`}
-                    className="min-h-12 justify-center border border-charcoal-700 bg-charcoal-900 px-4 py-3 active:opacity-80">
-                    <Text className="font-medium text-base text-bone">{q}</Text>
-                  </Pressable>
-                ))}
-              </View>
-              <Text className="mt-8 font-medium text-sm uppercase tracking-widest text-ash">{copy.welcome.ownLabel}</Text>
 
-              <View className="mt-10 border-t border-charcoal-700 pt-4">
+              <View className="mt-8 border-t border-charcoal-700 pt-4">
                 <Text className="font-sans text-sm leading-5 text-ash">{copy.disclaimer}</Text>
                 <Text className="mt-2 font-medium text-sm text-bone">{copy.crisis}</Text>
               </View>

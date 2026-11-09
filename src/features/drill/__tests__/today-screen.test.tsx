@@ -3,6 +3,7 @@ import { act, fireEvent, render, screen } from '@testing-library/react-native';
 import { router } from 'expo-router';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
+import { redesignCopy } from '@copy/redesign';
 import { todayCopy as copy } from '@copy/today';
 
 import { useDrillStore } from '../store';
@@ -29,7 +30,9 @@ describe('Today screen', () => {
     await renderToday();
 
     // First run
-    expect(await screen.findByText('15 rules. 3 drills each. 45 days.')).toBeTruthy();
+    expect(await screen.findByText(redesignCopy.welcome.headline)).toBeTruthy();
+    expect(screen.getByLabelText(redesignCopy.welcome.gridA11y)).toBeTruthy();
+    for (const line of redesignCopy.welcome.steps) expect(screen.getByText(line)).toBeTruthy();
     await fireEvent.press(screen.getByText(copy.start.cta));
 
     // Push ask: decline
