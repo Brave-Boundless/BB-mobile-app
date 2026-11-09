@@ -41,4 +41,20 @@ describe('Passages library', () => {
     const ex = passages.find((p) => p.use === 'exercise' && p.rule === 1)!;
     expect(screen.queryByText(ex.text)).toBeNull();
   });
+
+  it('opened from a rule, shows only that rule until another view is picked', async () => {
+    await render(<LibraryScreen embedded rule={5} />);
+    const five = reading.find((p) => p.rule === 5)!;
+    const one = reading.find((p) => p.rule === 1)!;
+    expect(screen.getByText(five.text)).toBeTruthy();
+    expect(screen.queryByText(one.text)).toBeNull();
+    expect(screen.queryByText('Rule 1 · Move Before You’re Ready')).toBeNull();
+    await fireEvent.press(screen.getByTestId('library-view-byRule'));
+    expect(screen.getByText('Rule 1 · Move Before You’re Ready')).toBeTruthy();
+  });
+
+  it('can open on Saved', async () => {
+    await render(<LibraryScreen embedded initialView="saved" />);
+    expect(screen.getByText(copy.library.empty)).toBeTruthy();
+  });
 });

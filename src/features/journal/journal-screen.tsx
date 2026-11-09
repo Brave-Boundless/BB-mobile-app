@@ -1,3 +1,4 @@
+import { router } from 'expo-router';
 import { useState } from 'react';
 import { TabFrame } from '@/components/screen';
 import { AccountIcon } from '@/features/account/account-icon';
@@ -11,7 +12,7 @@ import { confirmDestructive } from '@/components/confirm';
 import { Rise } from '@/components/motion';
 import { fadeIn, fadeOut } from '@/theme/motion';
 import Animated from 'react-native-reanimated';
-import { rules, type RuleId } from '@/content';
+import { passages, rules, type RuleId } from '@/content';
 import { checkReport } from '@/features/drill/journal-rules';
 import { useDrillStore } from '@/features/drill/store';
 import { palette } from '@/theme';
@@ -23,6 +24,8 @@ export function JournalScreen({ embedded }: { embedded?: boolean } = {}) {
   const [filter, setFilter] = useState<RuleId | undefined>(undefined);
   const items = journalItems(data, filter);
   const anyAtAll = journalItems(data).length > 0;
+  // Reading passages only, the same set Passages → Saved lists.
+  const savedCount = passages.filter((p) => p.use !== 'exercise' && data.savedPassages?.[p.id]).length;
 
   return (
     <TabFrame embedded={embedded}>
@@ -37,6 +40,20 @@ export function JournalScreen({ embedded }: { embedded?: boolean } = {}) {
         )}
 
         <Composer />
+        {savedCount > 0 ? (
+          <View className="px-6 pt-3">
+            <Pressable
+              accessibilityRole="button"
+              onPress={() => router.push({ pathname: '/passages', params: { view: 'saved' } })}
+              testID="journal-saved-passages"
+              className="min-h-12 flex-row items-center justify-between border border-charcoal-700 px-5 active:opacity-80">
+              <Text className="font-bold text-base uppercase tracking-wider text-bone">
+                {redesignCopy.journal.saved(savedCount)}
+              </Text>
+              <Text className="font-bold text-lg text-ash">›</Text>
+            </Pressable>
+          </View>
+        ) : null}
 
         {anyAtAll ? (
           <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerClassName="gap-2 px-6 pt-6">

@@ -1,8 +1,10 @@
 import { afterEach, beforeEach, describe, expect, it, jest } from '@jest/globals';
 import { fireEvent, render, screen } from '@testing-library/react-native';
+import { router } from 'expo-router';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { redesignCopy } from '@copy/redesign';
+import { passages } from '@/content';
 import { buildExport } from '@/features/account/export';
 import { useDrillStore } from '@/features/drill/store';
 
@@ -35,6 +37,24 @@ describe('Journal free notes', () => {
     expect(notes[0]).toMatchObject({ drillDayId: null, body: 'Long day. Still showed up.', dirty: true });
     expect(await screen.findByText('Long day. Still showed up.')).toBeTruthy();
     expect(screen.getByText(redesignCopy.journal.note)).toBeTruthy();
+  });
+
+  it('links to saved passages once there are any', async () => {
+    const wrapJ = () =>
+      render(
+        <SafeAreaProvider initialMetrics={metrics}>
+          <JournalScreen />
+        </SafeAreaProvider>,
+      );
+    await wrapJ();
+    expect(screen.queryByTestId('journal-saved-passages')).toBeNull();
+    const reading = passages.filter((p) => p.use !== 'exercise');
+    useDrillStore.getState().toggleSavedPassage(reading[0].id);
+    useDrillStore.getState().toggleSavedPassage(reading[1].id);
+    await wrapJ();
+    expect(screen.getByText(redesignCopy.journal.saved(2))).toBeTruthy();
+    await fireEvent.press(screen.getByTestId('journal-saved-passages'));
+    expect(router.push).toHaveBeenCalledWith({ pathname: '/passages', params: { view: 'saved' } });
   });
 
   it('lists notes with report-backs, but not under a rule filter; export marks them with no day or rule', () => {
