@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, jest } from '@jest/globals';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react-native';
 import { router } from 'expo-router';
 import * as Sharing from 'expo-sharing';
@@ -24,9 +25,11 @@ jest.mock('@/features/account/auth', () => ({
 const metrics = { frame: { x: 0, y: 0, width: 390, height: 3000 }, insets: { top: 0, left: 0, right: 0, bottom: 0 } };
 const show = () =>
   render(
-    <SafeAreaProvider initialMetrics={metrics}>
-      <SettingsScreen />
-    </SafeAreaProvider>,
+    <QueryClientProvider client={new QueryClient({ defaultOptions: { queries: { gcTime: Infinity } } })}>
+      <SafeAreaProvider initialMetrics={metrics}>
+        <SettingsScreen />
+      </SafeAreaProvider>
+    </QueryClientProvider>,
   );
 
 describe('Settings screen (signed out)', () => {
@@ -42,6 +45,7 @@ describe('Settings screen (signed out)', () => {
 
   it('shows the signed-out account state, About and tagline', async () => {
     await show();
+    expect(screen.getByTestId('settings-contact')).toBeTruthy();
     expect(screen.getByText(copy.account.signedOut)).toBeTruthy();
     expect(screen.getByText(copy.delete.bodySignedOut)).toBeTruthy();
     expect(screen.getByText(copy.about.tagline)).toBeTruthy();

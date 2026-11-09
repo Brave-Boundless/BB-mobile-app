@@ -2,7 +2,8 @@ import Constants from 'expo-constants';
 import { TabFrame } from '@/components/screen';
 import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { Linking, Platform, ScrollView, Switch, Text, TextInput, View } from 'react-native';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { Linking, Platform, Pressable, ScrollView, Switch, Text, TextInput, View } from 'react-native';
 
 import { settingsCopy as copy } from '@copy/settings';
 import { Button } from '@/components/button';
@@ -34,7 +35,10 @@ import { joinNewsletter } from '@/features/account/newsletter';
 import { askMarkSettingsCopy } from '@copy/askmark';
 import { howItWorksCopy } from '@copy/howitworks';
 import { useAskMarkStore } from '@/features/askmark/store';
-import { getSupabase } from '@/lib/supabase';
+import { getSupabase, isSupabaseConfigured } from '@/lib/supabase';
+import { groupsCopy } from '@copy/groups';
+import { journalCopy } from '@copy/journal';
+import { fetchMine, fetchMyCommunity, renameMe } from '@/features/groups/api';
 import { palette } from '@/theme';
 
 const appVersion = Constants.expoConfig?.version ?? '1.0.0';
@@ -110,6 +114,7 @@ export function SettingsScreen({ embedded, stacked }: { embedded?: boolean; stac
         <PushSection />
         <AskMarkSection />
         <AccountSection email={email} signedIn={!!session} />
+        <CommunitySection signedIn={!!session} />
         <DataSection email={email} />
         <DeleteSection signedIn={!!session} />
         <View className="mt-10">
@@ -404,8 +409,10 @@ function DataSection({ email }: { email?: string }) {
     setError(null);
     try {
       const now = new Date();
+      // Groups live on the server only; a failed fetch leaves them out rather than stopping the export.
+      const community = email ? await fetchMyCommunity().catch(() => null) : null;
       await shareExport(
-        buildExport(useDrillStore.getState(), { now, appVersion, email, askMark: useAskMarkStore.getState().messages }),
+        buildExport(useDrillStore.getState(), { now, appVersion, email, askMark: useAskMarkStore.getState().messages, community }),
         exportFileName(now),
       );
     } catch {
@@ -419,6 +426,53 @@ function DataSection({ email }: { email?: string }) {
         <Button variant="secondary" label={copy.data.export} onPress={() => void onExport()} testID="export" />
       </View>
       <Message text={error} tone="error" />
+    </Section>
+  );
+}
+
+// ── Community (groups pilot) ──────────────────────────────────────────────
+
+function CommunitySection({ signedIn }: { signedIn: boolean }) {
+  const qc = useQueryClient();
+  const mine = useQuery({ queryKey: ['groups', 'mine', 'settings'], queryFn: fetchMine, enabled: signedIn && isSupabaseConfigured });
+  const [name, setName] = useState<string | null>(null);
+  const current = mine.data?.displayName ?? null;
+  const value = name ?? current ?? '';
+  const save = async () => {
+    await renameMe(value);
+    setName(null);
+    void qc.invalidateQueries({ queryKey: ['groups'] });
+  };
+  return (
+    <Section title={groupsCopy.settings.title}>
+      {current ? (
+        <>
+          <Text className="font-medium text-base text-bone">{groupsCopy.settings.displayName}</Text>
+          <TextInput
+            accessibilityLabel={groupsCopy.settings.displayName}
+            value={value}
+            onChangeText={setName}
+            maxLength={40}
+            className="mt-2 min-h-12 border border-charcoal-700 bg-charcoal-950 px-3 py-3 font-sans text-base text-bone"
+            testID="settings-group-name"
+          />
+          {name !== null && name.trim() && name.trim() !== current ? (
+            <View className="mt-2 items-start">
+              <Button variant="text" label={journalCopy.save} onPress={() => void save()} testID="settings-group-name-save" />
+            </View>
+          ) : null}
+        </>
+      ) : null}
+      <View className={current ? 'mt-4' : ''}>
+        <Text className="font-medium text-base text-bone">{groupsCopy.settings.contact}</Text>
+        <Pressable
+          accessibilityRole="link"
+          onPress={() => void Linking.openURL(`mailto:${groupsCopy.settings.contactHint}`)}
+          testID="settings-contact"
+          className="min-h-11 justify-center">
+          <Text className="font-medium text-base text-ember-soft underline">{groupsCopy.settings.contactHint}</Text>
+        </Pressable>
+      </View>
     </Section>
   );
 }

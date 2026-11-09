@@ -1,4 +1,4 @@
-import { StoryScreen } from '@/features/story/story-screen';
+import { CommunityScreen } from '@/features/community/community-screen';
 
-// Share Your Story (step 10). Groups come with step 11.
-export default StoryScreen;
+// Community: Groups (step 11a, invite-only pilot) and Share Your Story (step 10).
+export default CommunityScreen;

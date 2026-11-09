@@ -18,6 +18,8 @@ export function buildExport(
     appVersion: string;
     email?: string;
     askMark?: { role: string; content: string }[];
+    /** Groups (step 11a): from the server, when signed in. */
+    community?: unknown;
   },
 ) {
   const drills = Object.values(data.drills).sort(
@@ -36,6 +38,7 @@ export function buildExport(
     },
     savedPassages: Object.keys(data.savedPassages ?? {}),
     askMarkConversation: opts.askMark ?? [],
+    community: opts.community ?? null,
     afterDay45: data.practice,
     drills: drills.map((d) => ({
       id: d.id,

@@ -30,8 +30,8 @@ function Field({ label, children, hint }: { label: string; children: React.React
 
 const input = 'min-h-12 border border-charcoal-700 bg-charcoal-950 px-3 py-3 font-sans text-base text-bone';
 
-/** Community tab: Share Your Story (step 10). Groups come in step 11. */
-export function StoryScreen() {
+/** Share Your Story (step 10). `embedded` under the Community tab's segment bar: no own safe area or top bar. */
+export function StoryScreen({ embedded }: { embedded?: boolean } = {}) {
   const session = useSession();
   const draft = useStoryStore((s) => s.draft);
   const edit = useStoryStore((s) => s.edit);
@@ -67,9 +67,7 @@ export function StoryScreen() {
 
   const kinds = (Object.keys(copy.form.kinds) as StoryKind[]).map((k) => ({ key: k, label: copy.form.kinds[k] }));
 
-  return (
-    <SafeAreaView edges={['top']} className="flex-1 bg-charcoal-950">
-      <TopBar />
+  const body = (
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} className="flex-1">
         <ScrollView contentContainerClassName="px-6 pb-16 pt-2" keyboardShouldPersistTaps="handled">
           <Rise index={0}>
@@ -226,6 +224,12 @@ export function StoryScreen() {
           </Rise>
         </ScrollView>
       </KeyboardAvoidingView>
+  );
+  if (embedded) return body;
+  return (
+    <SafeAreaView edges={['top']} className="flex-1 bg-charcoal-950">
+      <TopBar />
+      {body}
     </SafeAreaView>
   );
 }
