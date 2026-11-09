@@ -171,7 +171,7 @@ export function LookBack({ today, ruleId }: { today: LocalDate; ruleId: RuleId }
   }, [pick?.isNew, pick?.entry.id, today, setLookBack]);
 
   if (!pick) return null;
-  const rule = getRule(drills[pick.entry.drillDayId].ruleId);
+  const rule = getRule(drills[pick.entry.drillDayId!].ruleId);
   return (
     <View className="mt-10 border-l-2 border-ember pl-4" testID="look-back">
       <Text className="font-medium text-sm uppercase tracking-widest text-ash">{copy.lookBack.label(pick.day)}</Text>

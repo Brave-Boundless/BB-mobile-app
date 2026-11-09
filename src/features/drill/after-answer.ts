@@ -54,17 +54,18 @@ export function lookBackFor(
       (j) =>
         !j.deleted &&
         j.createdAt.slice(0, 10) <= cutoff &&
-        data.drills[j.drillDayId] &&
+        !!j.drillDayId &&
+        !!data.drills[j.drillDayId] &&
         data.drills[j.drillDayId].ruleId !== skipRule,
     )
     .sort((a, b) => a.createdAt.localeCompare(b.createdAt));
   if (old.length === 0) return undefined;
   if (data.lookBack?.on === today) {
     const kept = old.find((j) => j.id === data.lookBack!.journalId);
-    return kept ? { entry: kept, day: data.drills[kept.drillDayId].day, isNew: false } : undefined;
+    return kept ? { entry: kept, day: data.drills[kept.drillDayId!].day, isNew: false } : undefined;
   }
   const entry = old[dayIndex(today, old.length)];
-  return { entry, day: data.drills[entry.drillDayId].day, isNew: true };
+  return { entry, day: data.drills[entry.drillDayId!].day, isNew: true };
 }
 
 /** The planned-time reminder, if one is set for a future time and that day's drill is still open. */

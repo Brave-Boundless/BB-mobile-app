@@ -3,15 +3,20 @@ import type { DrillData, DrillDayRow, JournalRow } from '@/features/drill/store'
 
 export interface JournalItem {
   entry: JournalRow;
-  drill: DrillDayRow;
+  /** The drill a report-back answers; undefined for a free note. */
+  drill?: DrillDayRow;
 }
 
-/** Report-backs, newest first, optionally for one rule. Entries whose drill is gone are skipped. */
+/**
+ * Report-backs and free notes, newest first. Filtered to one rule, only that
+ * rule's report-backs. A report-back whose drill is gone is skipped.
+ */
 export function journalItems(data: DrillData, ruleId?: RuleId): JournalItem[] {
   return Object.values(data.journal)
     .filter((j) => !j.deleted)
-    .map((entry) => ({ entry, drill: data.drills[entry.drillDayId] }))
-    .filter((i): i is JournalItem => !!i.drill && (ruleId === undefined || i.drill.ruleId === ruleId))
+    .map((entry) => ({ entry, drill: entry.drillDayId ? data.drills[entry.drillDayId] : undefined }))
+    .filter((i) => (i.entry.drillDayId ? !!i.drill : true))
+    .filter((i) => ruleId === undefined || (!!i.drill && i.drill.ruleId === ruleId))
     .sort((a, b) => b.entry.createdAt.localeCompare(a.entry.createdAt));
 }
 

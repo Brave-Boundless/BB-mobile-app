@@ -21,4 +21,13 @@ export const redesignCopy = {
   path: {
     title: 'Your path',
   },
+
+  // ── Journal: write anything, any time (Mark) ────────────────────────────
+  journal: {
+    write: 'Write',
+    writeHint: 'Anything, any time',
+    placeholder: 'What’s on your mind?',
+    // Tag on a free note, where a report-back shows "Day 4 · Rule 2 · Did it".
+    note: 'Note',
+  },
 } as const;
