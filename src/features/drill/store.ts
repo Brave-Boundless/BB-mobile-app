@@ -326,20 +326,27 @@ export function drillActions(
     },
 
     markSynced(sent) {
+      // Only a row that actually changes gets copied, and nothing changes the
+      // store when there was nothing to clean. Otherwise every sync would
+      // write the store, which starts another sync: an endless loop that froze
+      // the app for any signed-in reader.
       set((s) => {
-        const drills = { ...s.drills };
+        let drills = s.drills;
         for (const { id, updatedAt } of sent.drills) {
           const d = drills[id];
-          if (d && d.updatedAt === updatedAt) drills[id] = { ...d, dirty: false };
+          if (!d || !d.dirty || d.updatedAt !== updatedAt) continue;
+          if (drills === s.drills) drills = { ...s.drills };
+          drills[id] = { ...d, dirty: false };
         }
-        const journal = { ...s.journal };
+        let journal = s.journal;
         for (const { id, updatedAt } of sent.journal) {
           const j = journal[id];
-          if (!j || j.updatedAt !== updatedAt) continue;
+          if (!j || j.updatedAt !== updatedAt || (!j.dirty && !j.deleted)) continue;
+          if (journal === s.journal) journal = { ...s.journal };
           if (j.deleted) delete journal[id];
           else journal[id] = { ...j, dirty: false };
         }
-        return { drills, journal };
+        return drills === s.drills && journal === s.journal ? {} : { drills, journal };
       });
     },
 

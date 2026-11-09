@@ -1,6 +1,6 @@
 # Community groups — design (build step 11)
 
-Status: **decided by Mark, 2026-11-07** (see the end). Nothing here is built yet. The brief (`CLAUDE.md` §1, §6) sets the shape: small groups of 5–8, matched by a shared rule struggle, moderated, and designed so phase 1 doesn't get in the way. This document turns that into concrete choices. The "Decisions" section at the end lists what Mark needs to decide; everything else follows from those answers.
+Status: **decided by Mark, 2026-11-07** (see the end). **11a (invite-only pilot) built 2026-11-09**; the daily group push and the urgent moderator alert are next. 11b and 11c are not built. The brief (`CLAUDE.md` §1, §6) sets the shape: small groups of 5–8, matched by a shared rule struggle, moderated, and designed so phase 1 doesn't get in the way. This document turns that into concrete choices. The "Decisions" section at the end lists what Mark needs to decide; everything else follows from those answers.
 
 ## 1. What a group is for
 

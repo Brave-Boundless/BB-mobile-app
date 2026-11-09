@@ -81,6 +81,16 @@ describe('drill store', () => {
     expect(s.get().drills[id].dirty).toBe(false);
   });
 
+  it('leaves the store untouched when a sync had nothing to clean (no endless sync loop)', () => {
+    const id = s.actions.openToday(D1)!;
+    s.actions.markSynced({ drills: [{ id, updatedAt: s.get().drills[id].updatedAt }], journal: [] });
+    const { drills, journal } = s.get();
+    s.actions.markSynced({ drills: [{ id, updatedAt: drills[id].updatedAt }], journal: [] });
+    s.actions.markSynced({ drills: [], journal: [] });
+    expect(s.get().drills).toBe(drills);
+    expect(s.get().journal).toBe(journal);
+  });
+
   it('drops journal tombstones once the server delete is confirmed', () => {
     const id = s.actions.openToday(D1)!;
     s.actions.answer(id, 'done', 'five_minute');

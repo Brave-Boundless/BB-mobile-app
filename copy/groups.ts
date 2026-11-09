@@ -1,11 +1,11 @@
-// status: draft — 2026-11-07
+// status: approved — Mark, 2026-11-09 (lines marked "new" below are for review)
 //
 // Copy for build step 11a: the invite-only community-groups pilot
-// (docs/community-design.md). All new; needs Mark's approval. Rule titles,
-// drills and part names come from content/ verbatim.
+// (docs/community-design.md). Rule titles, drills and part names come from
+// content/ verbatim.
 
 export const groupsCopy = {
-  status: 'draft',
+  status: 'approved',
 
   // ── Community tab segments ─────────────────────────────────────────────
   tabs: { groups: 'Groups', story: 'Share Your Story' },
@@ -20,7 +20,11 @@ export const groupsCopy = {
     join: 'Join',
     badCode: 'That code doesn’t match an open group. Check it and try again.',
     full: 'That group is full.',
-    signIn: 'Groups need an account so people know who they’re talking to. Sign in under You → Settings.',
+    // new: Settings moved behind the account icon (was "Sign in under You → Settings").
+    signIn: 'Groups need an account so people know who they’re talking to.',
+    signInButton: 'Sign in', // new
+    offline: 'Groups need a connection. Try again when you’re back online.', // new
+    retry: 'Try again', // new
   },
 
   // ── Joining (one time) ─────────────────────────────────────────────────
@@ -68,6 +72,10 @@ export const groupsCopy = {
     leaveNo: 'Stay',
     deletePost: 'Delete post',
     deleteConfirm: 'Delete this post?',
+    sendFailed: 'Couldn’t post. Check your connection and try again.', // new
+    muted: 'A moderator paused your posting for 24 hours.', // new
+    more: 'More', // new: the menu on each post (Report, Block, Delete)
+    removed: 'You were removed from this group.', // new
   },
 
   // ── Report / block ─────────────────────────────────────────────────────
@@ -124,6 +132,11 @@ export const groupsCopy = {
     code: (code: string) => `Invite code: ${code}`,
     shareCode: 'Share the code',
     closeGroup: 'Close group now',
+    open: 'Open moderation', // new: button on the Groups tab, moderators only
+    groups: 'Groups', // new
+    readGroup: 'Read the group', // new
+    closedTag: 'Closed', // new
+    noGroups: 'No groups yet.', // new
   },
 
   // ── Settings additions ─────────────────────────────────────────────────
