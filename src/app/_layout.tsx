@@ -12,7 +12,7 @@ import { Grain } from '@/components/grain';
 import { useBackgroundSync } from '@/features/drill/use-sync';
 import { useNewsletterOnSignIn } from '@/features/account/use-account-effects';
 import { queryClient } from '@/lib/query-client';
-import { appFonts, palette } from '@/theme';
+import { appFonts, fontFamily, palette } from '@/theme';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -67,6 +67,30 @@ export default function RootLayout() {
           options={{
             headerShown: true,
             headerTitle: '',
+            headerBackButtonDisplayMode: 'minimal',
+            headerTintColor: palette.ember.soft,
+            headerStyle: { backgroundColor: palette.charcoal[950] },
+            headerShadowVisible: false,
+            animation: 'slide_from_right',
+          }}
+        />
+        <Stack.Screen
+          name="passages"
+          options={{
+            headerShown: true,
+            headerTitleStyle: { fontFamily: fontFamily.bold, color: palette.bone },
+            headerBackButtonDisplayMode: 'minimal',
+            headerTintColor: palette.ember.soft,
+            headerStyle: { backgroundColor: palette.charcoal[950] },
+            headerShadowVisible: false,
+            animation: 'slide_from_right',
+          }}
+        />
+        <Stack.Screen
+          name="progress"
+          options={{
+            headerShown: true,
+            headerTitleStyle: { fontFamily: fontFamily.bold, color: palette.bone },
             headerBackButtonDisplayMode: 'minimal',
             headerTintColor: palette.ember.soft,
             headerStyle: { backgroundColor: palette.charcoal[950] },

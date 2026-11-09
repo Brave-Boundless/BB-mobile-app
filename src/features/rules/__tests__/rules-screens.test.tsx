@@ -8,7 +8,8 @@ import { rules } from '@/content';
 import { useDrillStore } from '@/features/drill/store';
 
 import { RuleDetailScreen } from '../rule-detail-screen';
-import { RulesScreen } from '../rules-screen';
+import { PathScreen } from '@/features/path/path-screen';
+import { stampsCopy } from '@copy/stamps';
 
 const metrics = { frame: { x: 0, y: 0, width: 390, height: 2000 }, insets: { top: 0, left: 0, right: 0, bottom: 0 } };
 const wrap = (el: React.ReactElement) => render(<SafeAreaProvider initialMetrics={metrics}>{el}</SafeAreaProvider>);
@@ -30,13 +31,17 @@ describe('Rules screens', () => {
     jest.useRealTimers();
   });
 
-  it('lists all 15 rules under the four parts with the user’s status', async () => {
-    await wrap(<RulesScreen />);
+  it('Path shows all 15 rules as tiles in the four parts, stamps and today marked', async () => {
+    await wrap(<PathScreen />);
     for (const name of ['FIRE', 'FORGE', 'FOUNDATION', 'FIELD']) expect(screen.getByText(name)).toBeTruthy();
-    for (const r of rules) expect(screen.getByText(r.title)).toBeTruthy();
-    expect(screen.getByLabelText(`Rule 1. Move Before You’re Ready. ${copy.list.tally(2, 1)}.`)).toBeTruthy();
+    for (const r of rules) expect(screen.getByTestId(`rule-${r.number}`)).toBeTruthy();
+    // Rule 1: all three days answered, so its tile is the stamp.
+    expect(screen.getByLabelText(stampsCopy.a11y.earned(1, 'Move Before You’re Ready', 2))).toBeTruthy();
+    expect(screen.getByTestId('tile-stamp-1')).toBeTruthy();
     expect(screen.getByLabelText(`Rule 2. Tell the Brutal Truth Fast. ${copy.list.current}.`)).toBeTruthy();
-    expect(screen.getByLabelText(`Rule 15. Make Your Life a Public Service Announcement. ${copy.list.notStarted(43)}.`)).toBeTruthy();
+    expect(screen.getByLabelText('Rule 15. Make Your Life a Public Service Announcement.')).toBeTruthy();
+    expect(screen.getByTestId('path-stats')).toBeTruthy();
+    expect(screen.getByText('3 of 45 drills answered · 1 of 15 stamped')).toBeTruthy();
   });
 
   it('shows all six card fields and the record for a rule', async () => {

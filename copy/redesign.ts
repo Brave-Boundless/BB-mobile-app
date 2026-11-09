@@ -1,4 +1,4 @@
-// status: draft — for Mark's review, 2026-11-09
+// status: draft — step 1 lines approved by Mark (merged 2026-11-09); step 2 lines for review
 //
 // Redesign, step 1: the new Today and the screens after answering (Mark,
 // 2026-11-09: "simpler and more visual with less text"). Almost everything on
@@ -16,4 +16,9 @@ export const redesignCopy = {
   // The screens after Did it / Dodged it, one at a time.
   next: 'Next',
   finish: 'See you tomorrow',
+
+  // ── Step 2: Path (replaces the Rules tab) ───────────────────────────────
+  path: {
+    title: 'Your path',
+  },
 } as const;
