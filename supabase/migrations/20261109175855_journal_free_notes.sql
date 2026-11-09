@@ -1,10 +1,6 @@
 -- Journal free notes (redesign, Mark 2026-11-09): an entry can stand alone,
 -- written from the Journal tab's Write button, with no drill behind it.
 -- Drill report-backs keep their drill_day_id exactly as before.
---
--- NOTE: not yet applied to the hosted project (the apply needs Mark's
--- confirmation). Once applied, rename this file to the version the hosted
--- history records, as for the other migrations.
 
 alter table public.journal_entries alter column drill_day_id drop not null;
 
