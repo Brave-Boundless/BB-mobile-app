@@ -41,6 +41,7 @@ describe('Rules screens', () => {
     expect(screen.getByLabelText(`Rule 2. Tell the Brutal Truth Fast. ${copy.list.current}.`)).toBeTruthy();
     expect(screen.getByLabelText('Rule 15. Make Your Life a Public Service Announcement.')).toBeTruthy();
     expect(screen.getByTestId('path-stats')).toBeTruthy();
+    expect(screen.getByTestId('open-soundtrack')).toBeTruthy();
     expect(screen.getByText('3 of 45 drills answered · 1 of 15 stamped')).toBeTruthy();
     // Day 3 was a Did it after Day 2's dodge: a streak of one.
     expect(screen.getByText('Streak · 1 drill')).toBeTruthy();
