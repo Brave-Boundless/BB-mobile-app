@@ -3,6 +3,7 @@ import { Pressable, ScrollView, Text, View } from 'react-native';
 
 import { navigationCopy } from '@copy/navigation';
 import { progressCopy } from '@copy/progress';
+import { soundtrackCopy } from '@copy/soundtrack';
 import { redesignCopy } from '@copy/redesign';
 import { rulesCopy } from '@copy/rules';
 import { stampsCopy } from '@copy/stamps';
@@ -56,6 +57,7 @@ export function PathScreen() {
         <View className="mt-3 flex-row gap-3 px-6">
           <PathLink label={navigationCopy.rulesTabs.progress} onPress={() => router.push('/progress')} testID="open-progress" />
           <PathLink label={navigationCopy.rulesTabs.passages} onPress={() => router.push('/passages')} testID="open-passages" />
+          <PathLink label={soundtrackCopy.pathButton} onPress={() => router.push('/soundtrack')} testID="open-soundtrack" />
         </View>
 
         {parts.map((part, p) => (
@@ -94,7 +96,9 @@ function PathLink({ label, onPress, testID }: { label: string; onPress: () => vo
       onPress={onPress}
       testID={testID}
       className="min-h-11 flex-1 items-center justify-center border border-charcoal-700 active:opacity-70">
-      <Text className="font-bold text-sm uppercase tracking-widest text-bone">{label}</Text>
+      <Text numberOfLines={1} adjustsFontSizeToFit className="font-bold text-sm uppercase tracking-wide text-bone">
+        {label}
+      </Text>
     </Pressable>
   );
 }

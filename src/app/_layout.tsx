@@ -111,6 +111,18 @@ export default function RootLayout() {
           }}
         />
         <Stack.Screen
+          name="soundtrack"
+          options={{
+            headerShown: true,
+            headerTitle: '',
+            headerBackButtonDisplayMode: 'minimal',
+            headerTintColor: palette.ember.soft,
+            headerStyle: { backgroundColor: palette.charcoal[950] },
+            headerShadowVisible: false,
+            animation: 'slide_from_right',
+          }}
+        />
+        <Stack.Screen
           name="moderation"
           options={{
             headerShown: true,
