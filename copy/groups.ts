@@ -10,6 +10,18 @@ export const groupsCopy = {
   // ── Community tab segments ─────────────────────────────────────────────
   tabs: { groups: 'Groups', story: 'Share Your Story' },
 
+  // ── Before groups open (features.groups off; Mark, 2026-11-11) — draft ──
+  soon: {
+    title: 'Groups are coming.',
+    body: 'Small groups of readers working the same rule, checking in on each other for three weeks. We’ll open them once there are enough of you to fill them.',
+    emailLabel: 'Your email',
+    notify: 'Tell me when they open',
+    done: 'You’re on the list. We’ll tell you when groups open.',
+    badEmail: 'Enter a valid email.',
+    offline: 'Offline. Try again when you’re back.',
+    // A failed send reuses Share Your Story's (website) line: email hello@….
+  },
+
   // ── No group yet ───────────────────────────────────────────────────────
   none: {
     title: 'Groups',

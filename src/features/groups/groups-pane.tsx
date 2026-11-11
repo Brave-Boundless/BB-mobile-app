@@ -5,6 +5,7 @@ import { KeyboardAvoidingView, Linking, Platform, Pressable, ScrollView, Text, T
 import Animated from 'react-native-reanimated';
 
 import { groupsCopy as copy } from '@copy/groups';
+import { storyCopy } from '@copy/story';
 import { todayCopy } from '@copy/today';
 import { Button } from '@/components/button';
 import { Chips } from '@/components/chips';
@@ -13,7 +14,10 @@ import { getRule } from '@/content';
 import { useSession } from '@/features/account/auth';
 import { useDrillStore } from '@/features/drill/store';
 import { useToday } from '@/features/drill/use-today';
+import { features } from '@/lib/features';
 import { isSupabaseConfigured } from '@/lib/supabase';
+import { STORY_EMAIL_RE, StoryRequestError, joinCommunityWaitlist } from '@/features/story/kit';
+import { useStoryStore } from '@/features/story/store';
 import { palette } from '@/theme';
 import { fadeIn } from '@/theme/motion';
 
@@ -45,6 +49,20 @@ export function GroupsPane() {
   const session = useSession();
   const signedIn = isSupabaseConfigured && !!session;
   const mine = useQuery({ queryKey: ['groups', 'mine', session?.user.id], queryFn: fetchMine, enabled: signedIn });
+
+  // Groups wait for the book to build momentum (Mark, 2026-11-11). Moderators keep their tools.
+  if (!features.groups) {
+    return (
+      <>
+        {mine.data?.isModerator ? (
+          <View className="px-6 pt-2">
+            <Button variant="secondary" label={copy.moderator.open} onPress={() => router.push('/moderation')} testID="groups-moderation" />
+          </View>
+        ) : null}
+        <ComingSoon accountEmail={session?.user.email ?? ''} />
+      </>
+    );
+  }
 
   if (!signedIn) {
     return (
@@ -101,6 +119,76 @@ function Offline({ onRetry }: { onRetry: () => void }) {
       <View className="mt-4 items-start">
         <Button variant="text" label={copy.none.retry} onPress={onRetry} />
       </View>
+    </Pane>
+  );
+}
+
+// ── Before groups open ───────────────────────────────────────────────────
+
+function ComingSoon({ accountEmail }: { accountEmail: string }) {
+  const waitlisted = useStoryStore((s) => s.waitlisted);
+  const setWaitlisted = useStoryStore((s) => s.setWaitlisted);
+  const [email, setEmail] = useState(accountEmail);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  if (accountEmail && !email) setEmail(accountEmail);
+
+  const send = async () => {
+    if (!STORY_EMAIL_RE.test(email.trim())) {
+      setError(copy.soon.badEmail);
+      return;
+    }
+    setBusy(true);
+    setError(null);
+    try {
+      await joinCommunityWaitlist(email);
+      setWaitlisted(true);
+    } catch (e) {
+      setError(e instanceof StoryRequestError && e.kind === 'offline' ? copy.soon.offline : storyCopy.errors.failed);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <Pane>
+      <Text accessibilityRole="header" className="font-bold text-3xl uppercase leading-9 text-bone" testID="groups-soon">
+        {copy.soon.title}
+      </Text>
+      <Text className="mt-3 font-sans text-lg leading-7 text-bone">{copy.soon.body}</Text>
+      {waitlisted ? (
+        <Animated.View entering={fadeIn()}>
+          <Text className="mt-8 font-bold text-lg text-ember-soft" testID="groups-soon-done">
+            {copy.soon.done}
+          </Text>
+        </Animated.View>
+      ) : (
+        <View className="mt-8">
+          <Text className="font-medium text-base text-bone">{copy.soon.emailLabel}</Text>
+          <TextInput
+            accessibilityLabel={copy.soon.emailLabel}
+            value={email}
+            onChangeText={(t) => {
+              setEmail(t);
+              if (error) setError(null);
+            }}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            autoCorrect={false}
+            autoComplete="email"
+            className={`mt-2 ${input}`}
+            testID="groups-soon-email"
+          />
+          {error ? (
+            <Text accessibilityRole="alert" className="mt-2 font-medium text-base text-ember-soft" testID="groups-soon-error">
+              {error}
+            </Text>
+          ) : null}
+          <View className="mt-4">
+            <Button label={copy.soon.notify} onPress={() => void send()} disabled={busy || !email.trim()} testID="groups-soon-notify" />
+          </View>
+        </View>
+      )}
     </Pane>
   );
 }

@@ -11,6 +11,9 @@ interface StoryState {
   draft: StoryInput;
   edit(patch: Partial<StoryInput>): void;
   clear(): void;
+  /** On the community waitlist (Kit form 10173540). */
+  waitlisted: boolean;
+  setWaitlisted(on: boolean): void;
 }
 
 export const emptyStory: StoryInput = { name: '', email: '', kind: null, story: '', newsletter: false };
@@ -19,6 +22,8 @@ export const useStoryStore = create<StoryState>()(
   persist(
     (set) => ({
       draft: emptyStory,
+      waitlisted: false,
+      setWaitlisted: (on) => set({ waitlisted: on }),
       edit: (patch) => set((s) => ({ draft: { ...s.draft, ...patch } })),
       // Keeps name and email for next time; the story and choices start fresh.
       clear: () => set((s) => ({ draft: { ...emptyStory, name: s.draft.name, email: s.draft.email } })),
