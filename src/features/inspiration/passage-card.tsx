@@ -47,33 +47,56 @@ export function PassageCard({ passage, label, testID }: { passage: Passage; labe
 /**
  * Share as an image: render the card off screen, capture it at 1080 x 1920,
  * hand it to the share sheet (which includes Instagram, Messages, WhatsApp).
- * On web there is no file share, so it shares the text instead.
+ * Capture waits for the card's first layout plus a frame, so the native view
+ * exists, and on iOS draws the layer directly (`useRenderInContext`) because
+ * iOS won't snapshot a view that sits off screen. If the image still can't be
+ * made, the passage is shared as text. On web there is no file share, so it
+ * shares the text.
  */
 function useSharePassage(passage: Passage) {
   const ref = useRef<ComponentRef<typeof View>>(null);
   const [active, setActive] = useState(false);
+  const [laidOut, setLaidOut] = useState(false);
   const [error, setError] = useState(false);
   const message = copy.share.message(passage.text);
 
   useEffect(() => {
-    if (!active) return;
+    if (!active || !laidOut) return;
     let cancelled = false;
     (async () => {
       try {
-        const uri = await captureRef(ref, { format: 'png', width: 1080, height: 1920, result: 'tmpfile' });
+        await nextFrame();
         if (cancelled) return;
-        if (Platform.OS === 'ios') await Share.share({ url: uri, message });
+        let uri: string | null = null;
+        try {
+          uri = await captureRef(ref, {
+            format: 'png',
+            width: 1080,
+            height: 1920,
+            result: 'tmpfile',
+            useRenderInContext: Platform.OS === 'ios',
+          });
+        } catch (e) {
+          console.warn('Share card capture failed', e);
+        }
+        if (cancelled) return;
+        if (!uri) await Share.share({ message });
+        else if (Platform.OS === 'ios') await Share.share({ url: uri, message });
         else await Sharing.shareAsync(uri, { mimeType: 'image/png', dialogTitle: copy.share.button });
-      } catch {
+      } catch (e) {
+        console.warn('Share failed', e);
         if (!cancelled) setError(true);
       } finally {
-        if (!cancelled) setActive(false);
+        if (!cancelled) {
+          setActive(false);
+          setLaidOut(false);
+        }
       }
     })();
     return () => {
       cancelled = true;
     };
-  }, [active, message]);
+  }, [active, laidOut, message]);
 
   const start = async () => {
     setError(false);
@@ -85,7 +108,7 @@ function useSharePassage(passage: Passage) {
       }
       return;
     }
-    setActive(true);
+    if (!active) setActive(true);
   };
 
   const card = active ? (
@@ -94,10 +117,16 @@ function useSharePassage(passage: Passage) {
       pointerEvents="none"
       accessibilityElementsHidden
       importantForAccessibility="no-hide-descendants"
+      onLayout={() => setLaidOut(true)}
+      testID="share-card-host"
       style={{ position: 'absolute', left: -CARD.width * 4, top: 0 }}>
       <ShareCard ref={ref} passage={passage} ruleTitle={getRule(passage.rule).title} />
     </View>
   ) : null;
 
   return { start, card, error };
+}
+
+function nextFrame() {
+  return new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
 }
