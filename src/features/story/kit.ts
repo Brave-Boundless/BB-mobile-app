@@ -5,6 +5,8 @@
 
 export const KIT_STORY_FORM = '9584762';
 export const KIT_NEWSLETTER_FORM = '9157427';
+/** "Community Signup": readers who want to hear when groups open (Mark, 2026-11-11). */
+export const KIT_COMMUNITY_FORM = '10173540';
 
 /** Kit's custom-field values, as the website sends them. */
 export const KIND_VALUES = { made: 'Made it through', inIt: 'In it right now', other: 'Other' } as const;
@@ -69,4 +71,9 @@ export function checkStory(input: StoryInput): 'missing' | 'empty' | null {
   if (!input.name.trim() || !STORY_EMAIL_RE.test(input.email.trim())) return 'missing';
   if (!input.story.trim()) return 'empty';
   return null;
+}
+
+/** Adds an email to the community waitlist (Kit form "Community Signup"). */
+export async function joinCommunityWaitlist(email: string, f: Fetch = fetch): Promise<void> {
+  await post(KIT_COMMUNITY_FORM, { email_address: email.trim() }, f);
 }

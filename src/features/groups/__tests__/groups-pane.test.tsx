@@ -12,6 +12,8 @@ import { GroupsPane } from '../groups-pane';
 let mockSession: { user: { id: string; email: string } } | null = null;
 jest.mock('@/features/account/auth', () => ({ useSession: () => mockSession }));
 jest.mock('@/lib/supabase', () => ({ isSupabaseConfigured: true, getSupabase: jest.fn() }));
+// These tests cover groups as built; the coming-soon screen (groups off) is in coming-soon.test.tsx.
+jest.mock('@/lib/features', () => ({ features: { askMark: true, requireAccounts: false, groups: true } }));
 jest.mock('../api', () => {
   const actual = jest.requireActual<typeof import('../api')>('../api');
   return {
