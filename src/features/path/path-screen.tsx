@@ -25,7 +25,7 @@ import { earnedStamps, stampFor } from '@/features/stamps/stamps';
 
 /**
  * Path (redesign step 2): the 15 rules as tiles in their four parts. An earned
- * stamp fills its tile; today's rule is outlined in ember. Tap a tile to open
+ * stamp fills its tile; today's rule is outlined in its part's colour. Tap a tile to open
  * the rule. Replaces the Rules tab; Progress and Passages open from the top.
  */
 export function PathScreen() {
@@ -117,20 +117,21 @@ function RuleTile({ rule, data, today }: { rule: RuleCard; data: DrillData; toda
         accessibilityLabel={label}
         testID={`rule-${rule.number}`}
         className={`h-20 flex-1 items-center justify-center overflow-hidden active:opacity-80 ${
-          current ? 'border-2 border-ember bg-charcoal-800' : 'border border-charcoal-700 bg-charcoal-900'
-        }`}>
+          current ? 'border-2 bg-charcoal-800' : 'border border-charcoal-700 bg-charcoal-900'
+        }`}
+        style={current ? { borderColor: partTextColor[rule.part] } : undefined}>
         {stamp ? (
           <StampImage ruleId={rule.number} width={72} testID={`tile-stamp-${rule.number}`} />
         ) : (
           <>
             <Text className={`font-bold text-2xl ${current ? 'text-bone' : 'text-ash'}`}>{rule.number}</Text>
             <View className="mt-1">
-              <Pips pips={rulePips(data, rule.number)} size={8} label="" />
+              <Pips pips={rulePips(data, rule.number)} size={8} label="" color={partTextColor[rule.part]} />
             </View>
           </>
         )}
         {current ? (
-          <View className="absolute left-0 top-0 bg-ember px-1">
+          <View className="absolute left-0 top-0 px-1" style={{ backgroundColor: partTextColor[rule.part] }}>
             <Text className="font-bold text-[9px] uppercase tracking-widest text-charcoal-950">{rulesCopy.list.current}</Text>
           </View>
         ) : null}
