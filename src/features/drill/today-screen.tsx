@@ -335,8 +335,8 @@ function DrillView({ row, onAnswered }: { row: DrillDayRow; onAnswered: (id: str
           className="mt-5 border border-charcoal-700 p-4 active:opacity-80">
           <Animated.View key={tier} entering={fadeIn()}>
             <View className="flex-row items-center gap-3">
-              <Pips pips={[0, 1, 2].map((i) => (i < dayOfRule - 1 ? 'done' : i === dayOfRule - 1 ? 'current' : 'ahead'))} size={10} label="" />
-              <Text className="flex-1 font-bold text-xs uppercase tracking-widest text-ember-soft">{copy.drill.tier[tier]}</Text>
+              <Pips pips={[0, 1, 2].map((i) => (i < dayOfRule - 1 ? 'done' : i === dayOfRule - 1 ? 'current' : 'ahead'))} size={10} label="" color={partTextColor[rule.part]} />
+              <Text className="flex-1 font-bold text-xs uppercase tracking-widest" style={{ color: partTextColor[rule.part] }}>{copy.drill.tier[tier]}</Text>
               <Text className="font-bold text-lg text-ash">›</Text>
             </View>
             <Text className="mt-2 font-medium text-xl leading-7 text-bone" testID="drill-text">
