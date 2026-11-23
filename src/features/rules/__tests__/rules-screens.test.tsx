@@ -79,6 +79,20 @@ describe('Rules screens', () => {
     expect(router.push).toHaveBeenCalledWith({ pathname: '/passages', params: { rule: '1' } });
   });
 
+  it('sends today\'s open drill to Today, and only that one', async () => {
+    jest.mocked(useLocalSearchParams).mockReturnValue({ id: '2' });
+    await wrap(<RuleDetailScreen />);
+    expect(screen.getAllByTestId('do-today')).toHaveLength(1);
+    await fireEvent.press(screen.getByTestId('do-today'));
+    expect(router.navigate).toHaveBeenCalledWith('/');
+  });
+
+  it('offers no Today button on a rule already worked', async () => {
+    jest.mocked(useLocalSearchParams).mockReturnValue({ id: '1' });
+    await wrap(<RuleDetailScreen />);
+    expect(screen.queryByTestId('do-today')).toBeNull();
+  });
+
   it('shows the empty record for a rule not reached', async () => {
     jest.mocked(useLocalSearchParams).mockReturnValue({ id: '4' });
     await wrap(<RuleDetailScreen />);

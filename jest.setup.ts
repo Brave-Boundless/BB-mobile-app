@@ -29,7 +29,7 @@ jest.mock('expo-crypto', () => ({
 jest.mock('expo-router', () => {
   const Stack = Object.assign(() => null, { Screen: () => null });
   return {
-    router: { push: jest.fn(), back: jest.fn(), replace: jest.fn() },
+    router: { push: jest.fn(), back: jest.fn(), replace: jest.fn(), navigate: jest.fn() },
     useLocalSearchParams: jest.fn(() => ({})),
     // asChild Link: render the child; tests assert on hrefs via the child's props.
     Link: ({ children }: { children: unknown }) => children,
