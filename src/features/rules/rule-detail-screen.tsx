@@ -81,6 +81,16 @@ export function RuleDetailScreen() {
               <View className="flex-1">
               <Text className="font-medium text-sm text-ember-soft">{todayCopy.drill.tier[tier]}</Text>
               <Text className="mt-1 font-sans text-lg text-bone">{rule.drills[tier]}</Text>
+              {pips[i] === 'current' ? (
+                <View className="mt-3">
+                  <Button
+                    label={redesignCopy.rule.doToday}
+                    accessibilityLabel={redesignCopy.rule.doTodayA11y}
+                    onPress={() => router.navigate('/')}
+                    testID="do-today"
+                  />
+                </View>
+              ) : null}
               <View className="mt-1 items-start">
                 <Button
                   variant="text"

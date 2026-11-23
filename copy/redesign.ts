@@ -41,6 +41,9 @@ export const redesignCopy = {
     // Rule screen, under the mantra: opens this rule's passages.
     fromTheBook: 'From the book',
     fromTheBookCount: (n: number) => (n === 1 ? '1 passage' : `${n} passages`),
+    // Rule screen, under today's drill (still open): goes to Today to answer it.
+    doToday: 'Do today’s drill',
+    doTodayA11y: 'Go to Today to answer this drill.',
   },
 
   // ── Step 4: Welcome (first run, before Start Day 1) ─────────────────────
